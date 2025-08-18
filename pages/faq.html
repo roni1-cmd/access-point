@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Point - FAQs</title>
+    <link rel="icon" href="/src/godc.png" type="image/x-icon">
+    <!-- Google Fonts - Google Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', Arial, sans-serif;
+            background-color: errorffffff;
+            color: error353539;
+            line-height: 1.5;
+        }
+
+        .header {
+            background: errorffffff;
+            border-bottom: 1px solid error4a7c59;
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 500;
+            color: error353539;
+        }
+
+        .logo-text {
+            color: errorf1ec33;
+            margin-right: 8px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 80px 24px 40px;
+        }
+
+        .hero-section {
+            text-align: center;
+            margin-bottom: 80px;
+            padding: 60px 40px;
+            border-radius: 16px;
+            color: error353539;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            font-weight: 400;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+
+        .faq-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 60px;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+            padding: 32px 24px;
+            border-radius: 12px;
+        }
+
+        .sidebar-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: error353539;
+            margin-bottom: 32px;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 16px;
+        }
+
+        .sidebar-nav button {
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 16px;
+            color: error353539;
+            cursor: pointer;
+            padding: 12px 16px;
+            text-align: left;
+            width: 100%;
+            transition: all 0.2s;
+            border-radius: 8px;
+        }
+
+        .sidebar-nav button:hover {
+            background-color: error4a7c59;
+            color: errorffffff;
+        }
+
+        .sidebar-nav button.active {
+            background-color: transparent;
+            color: error5fb14c;
+            font-weight: 500;
+        }
+
+        .content-area {
+            min-height: 600px;
+        }
+
+        .section-content {
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: error006936;
+            margin-bottom: 32px;
+            border-bottom: 3px solid error5fb14c;
+            padding-bottom: 16px;
+        }
+
+        .faq-item {
+            margin-bottom: 16px;
+        }
+
+        .faq-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 24px 0;
+            cursor: pointer;
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            font-size: 18px;
+            color: error006936;
+            font-weight: 500;
+            background-color: transparent;
+            transition: color 0.2s;
+            border-bottom: 1px solid error4a7c59;
+        }
+
+        .faq-question:hover {
+            background-color: transparent;
+            color: error006936;
+        }
+
+        .faq-question:focus {
+            outline: 2px solid error5fb14c;
+            outline-offset: -2px;
+        }
+
+        .expand-icon {
+            color: error4a7c59;
+            transition: transform 0.3s ease;
+            font-size: 24px;
+        }
+
+        .faq-item.expanded .expand-icon {
+            transform: rotate(180deg);
+            color: error5fb14c;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background-color: errorffffff;
+            border-bottom: 1px solid error4a7c59;
+        }
+
+        .faq-answer.show {
+            max-height: 800px;
+            padding: 16px 0 24px; /* Increased top padding for better separation */
+        }
+
+        .answer-content {
+            color: error353539;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-top: 8px; /* Added margin to separate answer from question */
+        }
+
+        .answer-content strong {
+            color: error006936;
+        }
+
+        .answer-content a {
+            color: error5fb14c;
+            text-decoration: none;
+        }
+
+        .answer-content a:hover {
+            text-decoration: underline;
+        }
+
+        .checkmark {
+            color: error5fb14c;
+            margin-right: 8px;
+        }
+
+        .celebration {
+            color: errorf1ec33;
+            margin: 0 4px;
+        }
+
+        .footer {
+            background-color: error353539;
+            margin-top: 80px;
+            padding: 40px 0;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .footer-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: errorf1ec33;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 8px;
+        }
+
+        .footer-links a {
+            color: errorffffff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: error5fb14c;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid error4a7c59;
+            padding-top: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            color: errorffffff;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .footer-logo .logo-text {
+            color: errorf1ec33;
+            margin-right: 4px;
+        }
+
+        .footer-legal {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .footer-legal a {
+            color: errorffffff;
+            text-decoration: none;
+            font-size: 12px;
+            transition: color 0.2s;
+        }
+
+        .footer-legal a:hover {
+            color: error5fb14c;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                padding: 40px 16px 24px;
+            }
+
+            .hero-section {
+                padding: 40px 24px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+            }
+
+            .faq-section {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .sidebar {
+                position: static;
+                padding: 24px 20px;
+            }
+
+            .sidebar-title {
+                font-size: 20px;
+            }
+
+            .sidebar-nav {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 8px;
+                margin-bottom: 32px;
+            }
+
+            .sidebar-nav li {
+                margin-bottom: 0;
+            }
+
+            .sidebar-nav button {
+                border: 1px solid error5fb14c;
+                border-radius: 20px;
+                padding: 8px 16px;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+
+            .sidebar-nav button.active {
+                background-color: transparent;
+                color: error5fb14c;
+                border-color: error5fb14c;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .faq-question {
+                padding: 20px 0;
+                font-size: 16px;
+                background-color: transparent;
+            }
+
+            .faq-question:hover {
+                background-color: transparent;
+                color: error006936;
+            }
+
+            .faq-answer.show {
+                padding: 16px 0 20px; /* Adjusted for mobile consistency */
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="/src/godc.png" alt="CTU DevCom Logo" style="height:36px;width:auto;margin-right:12px;vertical-align:middle;">
+                <span>Access Point</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <section class="hero-section">
+            <h1 class="hero-title">Frequently Asked Questions</h1>
+            <p class="hero-subtitle">Here's a quick guide to help you with your concerns.</p>
+        </section>
+
+        <section class="faq-section">
+            <aside class="sidebar">
+                <h2 class="sidebar-title">Quick Navigation</h2>
+                <ul class="sidebar-nav">
+                    <li><button class="nav-btn active" onclick="showSection('enrollment', this)">Enrollment Process</button></li>
+                    <li><button class="nav-btn" onclick="showSection('requirements', this)">Requirements</button></li>
+                    <li><button class="nav-btn" onclick="showSection('offices', this)">Offices & Locations</button></li>
+                </ul>
+            </aside>
+
+            <div class="content-area">
+                <div id="enrollment" class="section-content active">
+                    <h2 class="section-title">Enrollment Process</h2>
+                    
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            What documents do I need to bring?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                <strong>For First Years:</strong> SHS Report Card (SF9), Good Moral Certificate, PSA Birth Certificate, Marriage Certificate (if married), and for ALS Passers: A&E Certificate + Eligibility to College.
+                                <br><br>
+                                <strong>For Transferees:</strong> Transfer Credentials/TOR, Good Moral Certificate, RO Form 14.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            How do I submit my documents?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                Put everything in a long brown envelope. At the back, write your:
+                                <br><br>
+                                • Full name<br>
+                                • Program (e.g., BS DevCom)<br>
+                                • Session (Day or Evening)<br>
+                                • Contact number
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            Where do I get my student ID number?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                After your documents are checked, go to the <strong>Dean's Office (3rd Floor, ST Building)</strong>. Only qualified applicants will get their official ID number.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            How will I know my class schedule and block section?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                Check with the <strong>Dean's Office (3rd Floor, ST Building)</strong>. Blocks are assigned randomly or by department.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            When do I get my COR (Certificate of Registration)?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                After block assignment, go to the <strong>Registrar's Office (Ground Floor, New Admin Building)</strong>. They'll issue your COR. That's your proof you're officially enrolled! <span class="checkmark">✅</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            Do I need to pay tuition?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                Nope! Regular undergrad students are covered by the <strong>Free Higher Education Program (RA 10931)</strong>. Just visit the <strong>Scholarship Office (2nd Floor, New Admin Building)</strong> to confirm.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            When am I officially a CTU DevCom student?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                Once you:
+                                <br><br>
+                                <span class="checkmark">✔️</span> Submit your documents<br>
+                                <span class="checkmark">✔️</span> Get your ID number<br>
+                                <span class="checkmark">✔️</span> Finish medical clearance<br>
+                                <span class="checkmark">✔️</span> Receive your schedule/block<br>
+                                <span class="checkmark">✔️</span> Get your COR<br>
+                                <span class="checkmark">✔️</span> Verify at CAS Office<br><br>
+                                <span class="celebration">🎉</span> Congratulations, you're officially part of CTU DevCom! <span class="celebration">🌻📸</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="requirements" class="section-content">
+                    <h2 class="section-title">Requirements & Medical</h2>
+                    
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            What about the medical requirements?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                <strong>Download the form:</strong> <a href="http://bit.ly/44tAMS1" target="_blank">http://bit.ly/44tAMS1</a>
+                                <br><br>
+                                <strong>Pick a lab from this list:</strong> <a href="http://bit.ly/4k853dM" target="_blank">http://bit.ly/4k853dM</a>
+                                <br><br>
+                                Submit results to the <strong>CTU Main Medical Clinic</strong> for clearance.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            What's the last step after enrollment?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                Drop by the <strong>CAS Office</strong> for enrollment verification. This is your final confirmation as a CTU student.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="offices" class="section-content">
+                    <h2 class="section-title">Offices & Locations</h2>
+                    
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleFAQ(this)">
+                            Where can I find the offices I need?
+                            <span class="material-icons expand-icon">keyboard_arrow_down</span>
+                        </button>
+                        <div class="faq-answer">
+                            <div class="answer-content">
+                                <strong>Dean's Office</strong> – 3rd Floor, ST Building<br>
+                                <strong>Registrar's Office</strong> – Ground Floor, New Admin Building<br>
+                                <strong>Scholarship Office</strong> – 2nd Floor, New Admin Building<br>
+                                <strong>Medical Clinic</strong> – CTU Main Clinic<br>
+                                <strong>CAS Office</strong> – for final check
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-sections">
+                <div class="footer-section">
+                    <h3>Enrollment</h3>
+                    <ul class="footer-links">
+                        <li><a href="error">Requirements</a></li>
+                        <li><a href="error">Process Guide</a></li>
+                        <li><a href="error">Medical Forms</a></li>
+                        <li><a href="error">Schedule</a></li>
+                        <li><a href="error">Registration</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Student Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="error">Dean's Office</a></li>
+                        <li><a href="error">Registrar</a></li>
+                        <li><a href="error">Scholarship Office</a></li>
+                        <li><a href="error">Medical Clinic</a></li>
+                        <li><a href="error">CAS Office</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Programs</h3>
+                    <ul class="footer-links">
+                        <li><a href="error">BS DevCom</a></li>
+                        <li><a href="error">Course Curriculum</a></li>
+                        <li><a href="error">Faculty</a></li>
+                        <li><a href="error">Facilities</a></li>
+                        <li><a href="error">Student Organizations</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="error">Contact Us</a></li>
+                        <li><a href="error">Campus Map</a></li>
+                        <li><a href="error">Academic Calendar</a></li>
+                        <li><a href="error">Student Handbook</a></li>
+                        <li><a href="error">Help Center</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <div class="footer-logo">
+                    <span>CTU-MC | BS-DEVCOM - Access Point</span>
+                </div>
+                <div class="footer-legal">
+                    <a href="/pages/ToS">Privacy Policy</a>
+                    <a href="/pages/ToS">Terms of Service</a>
+                    <a href="/pages/about">About</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showSection(sectionId, button) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update active nav button
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+            
+            // Close any open FAQs when switching sections
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('expanded');
+                item.querySelector('.faq-answer').classList.remove('show');
+            });
+        }
+
+        function toggleFAQ(button) {
+            const faqItem = button.parentElement;
+            const answer = faqItem.querySelector('.faq-answer');
+            const isExpanded = faqItem.classList.contains('expanded');
+
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if (item !== faqItem) {
+                    item.classList.remove('expanded');
+                    item.querySelector('.faq-answer').classList.remove('show');
+                }
+            });
+
+            // Toggle current item
+            if (isExpanded) {
+                faqItem.classList.remove('expanded');
+                answer.classList.remove('show');
+            } else {
+                faqItem.classList.add('expanded');
+                answer.classList.add('show');
+            }
+        }
+
+        // Add keyboard support
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                if (e.target.classList.contains('faq-question')) {
+                    e.preventDefault();
+                    toggleFAQ(e.target);
+                }
+            }
+        });
+
+        // Show the Enrollment section by default
+        document.addEventListener('DOMContentLoaded', () => {
+            showSection('enrollment', document.querySelector('.nav-btn'));
+        });
+    </script>
+</body>
+</html>
