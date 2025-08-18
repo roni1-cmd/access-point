@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Point - Terms of Service</title>
+    <link rel="icon" type="image/x-icon" href="/src/godc.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#353539',
+                        'green-dark': '#0e3521',
+                        'green-medium': '#006936',
+                        'green-light': '#5fb14c',
+                        'accent-yellow': '#f1ec33',
+                        'green-muted': '#4a7c59'
+                    },
+                    fontFamily: {
+                        'sans': ['Google Sans', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white font-sans">
+    <!-- Mobile Menu Button -->
+    <div class="lg:hidden fixed top-4 left-4 z-50">
+        <button id="mobile-menu-btn" class="p-2 bg-white border border-gray-200 rounded-lg shadow-sm">
+            <svg class="w-6 h-6 text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobile-overlay" class="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+    <!-- Header -->
+    <!-- Increased z-index to prevent sidebar overlap -->
+    <header class="border-b border-gray-200 bg-white sticky top-0 z-50">
+        <div class="flex items-center justify-between px-4 lg:px-6 py-4">
+            <div class="flex items-center space-x-4 lg:space-x-8">
+                <div class="flex items-center space-x-2">
+                    <img src="/src/godc.png" alt="Student's Helpdesk Logo" class="w-8 h-8 rounded-full object-cover" />
+                    <!-- Updated school name to Cebu Technological University -->
+                    <h1 class="text-lg lg:text-xl text-primary-dark font-normal">Access Point | Privacy & Terms</h1>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+            </div>
+        </div>
+        
+        <!-- Navigation Tabs -->
+        <!-- Updated mobile navigation to use proper button instead of sliding items -->
+        <nav class="px-4 lg:px-6">
+            <!-- Mobile Navigation Button -->
+            <div class="lg:hidden">
+                <button id="mobile-nav-toggle" class="flex items-center justify-between w-full py-3 text-left">
+                    <span class="text-primary-dark font-medium">Navigation Menu</span>
+                    <svg id="mobile-nav-icon" class="w-5 h-5 text-primary-dark transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </button>
+                <div id="mobile-nav-menu" class="hidden pb-3">
+                    <div class="flex flex-col space-y-2">
+                        <a href="#" onclick="showTab('overview')" id="tab-overview-mobile" class="py-2 px-3 text-primary-dark hover:text-green-medium hover:bg-gray-50 rounded">Overview</a>
+                        <a href="#" onclick="showTab('privacy-notice')" id="tab-privacy-notice-mobile" class="py-2 px-3 text-primary-dark hover:text-green-medium hover:bg-gray-50 rounded">Privacy Notice</a>
+                        <a href="#" onclick="showTab('privacy-policy')" id="tab-privacy-policy-mobile" class="py-2 px-3 text-primary-dark hover:text-green-medium hover:bg-gray-50 rounded">Privacy Policy</a>
+                        <a href="#" onclick="showTab('terms')" id="tab-terms-mobile" class="py-2 px-3 text-green-medium bg-green-light bg-opacity-10 rounded font-medium">Terms of Service</a>
+                        <a href="#" onclick="showTab('guidelines')" id="tab-guidelines-mobile" class="py-2 px-3 text-primary-dark hover:text-green-medium hover:bg-gray-50 rounded">Platform Guidelines</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <div class="hidden lg:flex space-x-8">
+                <a href="#" onclick="showTab('overview')" id="tab-overview" class="py-3 text-primary-dark hover:text-green-medium border-b-2 border-transparent hover:border-green-medium whitespace-nowrap">Overview</a>
+                <a href="#" onclick="showTab('privacy-notice')" id="tab-privacy-notice" class="py-3 text-primary-dark hover:text-green-medium border-b-2 border-transparent hover:border-green-medium whitespace-nowrap">Privacy Notice</a>
+                <a href="#" onclick="showTab('privacy-policy')" id="tab-privacy-policy" class="py-3 text-primary-dark hover:text-green-medium border-b-2 border-transparent hover:border-green-medium whitespace-nowrap">Privacy Policy</a>
+                <a href="#" onclick="showTab('terms')" id="tab-terms" class="py-3 text-green-medium border-b-2 border-green-medium font-medium whitespace-nowrap">Terms of Service</a>
+                <a href="#" onclick="showTab('guidelines')" id="tab-guidelines" class="py-3 text-primary-dark hover:text-green-medium border-b-2 border-transparent hover:border-green-medium whitespace-nowrap">Platform Guidelines</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="flex">
+        <!-- Sidebar -->
+        <!-- Reduced z-index to prevent header overlap -->
+        <aside id="sidebar" class="w-80 bg-white border-r border-gray-200 min-h-screen fixed lg:static top-0 left-0 z-30 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
+            <div class="lg:hidden p-4 border-b border-gray-200">
+                <button id="close-sidebar" class="p-2 hover:bg-gray-100 rounded">
+                    <svg class="w-6 h-6 text-primary-dark" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <nav class="p-6">
+                <!-- Overview Sidebar -->
+                <div id="sidebar-overview" class="sidebar-content hidden">
+                    <h3 class="text-sm font-semibold text-green-muted mb-4 uppercase tracking-wide">Overview Sections</h3>
+                    <ul class="space-y-1">
+                        <li><a href="#overview-intro" onclick="scrollToSection('overview-intro')" class="block py-2 px-3 text-green-medium bg-green-light bg-opacity-10 rounded hover:bg-green-light hover:bg-opacity-20 text-sm">Introduction</a></li>
+                        <li><a href="#overview-services" onclick="scrollToSection('overview-services')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Our Services</a></li>
+                        <li><a href="#overview-commitment" onclick="scrollToSection('overview-commitment')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Our Commitment</a></li>
+                        <li><a href="#overview-compliance" onclick="scrollToSection('overview-compliance')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Legal Compliance</a></li>
+                        <li><a href="#overview-contact" onclick="scrollToSection('overview-contact')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Privacy Notice Sidebar -->
+                <div id="sidebar-privacy-notice" class="sidebar-content hidden">
+                    <h3 class="text-sm font-semibold text-green-muted mb-4 uppercase tracking-wide">Privacy Notice</h3>
+                    <ul class="space-y-1">
+                        <li><a href="#notice-commitment" onclick="scrollToSection('notice-commitment')" class="block py-2 px-3 text-green-medium bg-green-light bg-opacity-10 rounded hover:bg-green-light hover:bg-opacity-20 text-sm">Our Commitment</a></li>
+                        <li><a href="#notice-collection" onclick="scrollToSection('notice-collection')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Information Collection</a></li>
+                        <li><a href="#notice-usage" onclick="scrollToSection('notice-usage')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">How We Use Data</a></li>
+                        <li><a href="#notice-protection" onclick="scrollToSection('notice-protection')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Data Protection</a></li>
+                        <li><a href="#notice-sharing" onclick="scrollToSection('notice-sharing')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Information Sharing</a></li>
+                        <li><a href="#notice-rights" onclick="scrollToSection('notice-rights')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Your Rights</a></li>
+                    </ul>
+                </div>
+
+                <!-- Privacy Policy Sidebar -->
+                <div id="sidebar-privacy-policy" class="sidebar-content hidden">
+                    <h3 class="text-sm font-semibold text-green-muted mb-4 uppercase tracking-wide">Privacy Policy</h3>
+                    <ul class="space-y-1">
+                        <li><a href="#policy-compliance" onclick="scrollToSection('policy-compliance')" class="block py-2 px-3 text-green-medium bg-green-light bg-opacity-10 rounded hover:bg-green-light hover:bg-opacity-20 text-sm">DPA Compliance</a></li>
+                        <li><a href="#policy-purpose" onclick="scrollToSection('policy-purpose')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Purpose of Processing</a></li>
+                        <li><a href="#policy-lawful-basis" onclick="scrollToSection('policy-lawful-basis')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Lawful Basis</a></li>
+                        <li><a href="#policy-security" onclick="scrollToSection('policy-security')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Security Measures</a></li>
+                        <li><a href="#policy-retention" onclick="scrollToSection('policy-retention')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Data Retention</a></li>
+                        <li><a href="#policy-user-rights" onclick="scrollToSection('policy-user-rights')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">User Rights</a></li>
+                        <li><a href="#policy-updates" onclick="scrollToSection('policy-updates')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Policy Updates</a></li>
+                    </ul>
+                </div>
+
+                <!-- Terms Sidebar -->
+                <div id="sidebar-terms" class="sidebar-content">
+                    <h3 class="text-sm font-semibold text-green-muted mb-4 uppercase tracking-wide">Terms of Service</h3>
+                    <ul class="space-y-1">
+                        <li><a href="#terms-introduction" onclick="scrollToSection('terms-introduction')" class="block py-2 px-3 text-green-medium bg-green-light bg-opacity-10 rounded hover:bg-green-light hover:bg-opacity-20 text-sm">Introduction</a></li>
+                        <li><a href="#terms-acceptance" onclick="scrollToSection('terms-acceptance')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Acceptance</a></li>
+                        <li><a href="#terms-services" onclick="scrollToSection('terms-services')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Use of Services</a></li>
+                        <li><a href="#terms-academic" onclick="scrollToSection('terms-academic')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Academic Integrity</a></li>
+                        <li><a href="#terms-prohibited" onclick="scrollToSection('terms-prohibited')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Prohibited Uses</a></li>
+                        <li><a href="#terms-intellectual" onclick="scrollToSection('terms-intellectual')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Intellectual Property</a></li>
+                        <li><a href="#terms-liability" onclick="scrollToSection('terms-liability')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Limitation of Liability</a></li>
+                        <li><a href="#terms-termination" onclick="scrollToSection('terms-termination')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Termination</a></li>
+                        <li><a href="#terms-governing" onclick="scrollToSection('terms-governing')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Governing Law</a></li>
+                    </ul>
+                </div>
+
+                <!-- Guidelines Sidebar -->
+                <div id="sidebar-guidelines" class="sidebar-content hidden">
+                    <h3 class="text-sm font-semibold text-green-muted mb-4 uppercase tracking-wide">Platform Guidelines</h3>
+                    <ul class="space-y-1">
+                        <li><a href="#guidelines-respect" onclick="scrollToSection('guidelines-respect')" class="block py-2 px-3 text-green-medium bg-green-light bg-opacity-10 rounded hover:bg-green-light hover:bg-opacity-20 text-sm">Respect & Integrity</a></li>
+                        <li><a href="#guidelines-accuracy" onclick="scrollToSection('guidelines-accuracy')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Information Accuracy</a></li>
+                        <li><a href="#guidelines-resources" onclick="scrollToSection('guidelines-resources')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Resource Usage</a></li>
+                        <li><a href="#guidelines-compliance" onclick="scrollToSection('guidelines-compliance')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Policy Compliance</a></li>
+                        <li><a href="#guidelines-conduct" onclick="scrollToSection('guidelines-conduct')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Code of Conduct</a></li>
+                        <li><a href="#guidelines-violations" onclick="scrollToSection('guidelines-violations')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Violations</a></li>
+                        <li><a href="#guidelines-reporting" onclick="scrollToSection('guidelines-reporting')" class="block py-2 px-3 text-primary-dark hover:bg-gray-100 rounded text-sm">Reporting Issues</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 lg:p-8 lg:ml-0">
+            <!-- Overview Tab -->
+            <div id="content-overview" class="tab-content hidden">
+                <div class="flex justify-center mb-8 lg:mb-12">
+                    <img 
+                        src="/src/overview.png" 
+                        alt="Student's Helpdesk services overview" 
+                        class="w-full max-w-md lg:w-96 h-48 lg:h-72 object-contain"
+                    />
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <section id="overview-intro" class="mb-12">
+                        <h2 class="text-sm font-medium text-green-muted mb-6 tracking-wide uppercase">Overview</h2>
+                        <h3 class="text-2xl lg:text-3xl font-normal text-primary-dark mb-6">Welcome to Access Point: A Student's Helpdesk Privacy & Terms</h3>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-4">
+                            <!-- Updated content to reference Cebu Technological University -->
+                            Student's Helpdesk at Cebu Technological University is committed to providing comprehensive academic support and assistance while protecting your privacy and maintaining the highest standards of data security and academic integrity.
+                        </p>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-4">
+                            Our platform offers a wide range of academic resources, interactive forms, educational widgets, and specialized tools designed to support your educational journey at Cebu Technological University from enrollment to graduation.
+                        </p>
+                    </section>
+
+                    <section id="overview-services" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Our Comprehensive Services</h4>
+                        <div class="grid md:grid-cols-2 gap-6 mb-6">
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Academic Support</h5>
+                                <ul class="text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>• Personalized tutoring assistance</li>
+                                    <li>• Study guides and resources</li>
+                                    <li>• Assignment help and guidance</li>
+                                    <li>• Research methodology support</li>
+                                </ul>
+                            </div>
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Digital Tools</h5>
+                                <ul class="text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>• Interactive learning widgets</li>
+                                    <li>• Progress tracking systems</li>
+                                    <li>• Collaborative study platforms</li>
+                                    <li>• Mobile-responsive interface</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="overview-commitment" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Our Commitment to Excellence</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-4">
+                            We operate with unwavering commitment to academic excellence, ethical practices, and student success. Our team of qualified educators and support staff work tirelessly to ensure that every student receives the guidance and resources they need to achieve their academic goals.
+                        </p>
+                        <div class="bg-accent-yellow bg-opacity-20 p-6 rounded-lg mb-6">
+                            <p class="text-base text-primary-dark leading-relaxed font-medium">
+                                <strong>Quality Assurance:</strong> All our resources and guidance are reviewed by qualified academic professionals to ensure accuracy, relevance, and adherence to current educational standards.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section id="overview-compliance" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Legal Compliance & Data Protection</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-4">
+                            We operate in full compliance with the Philippines Data Privacy Act of 2012 (Republic Act No. 10173) and maintain strict adherence to international data protection standards. Your personal information is handled with the utmost care and security.
+                        </p>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            This comprehensive overview explains how we collect, use, and protect your information when you use our services, ensuring complete transparency and giving you full control over your data.
+                        </p>
+                    </section>
+
+                    <section id="overview-contact" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Get in Touch</h4>
+                        <div class="bg-green-medium bg-opacity-10 p-6 rounded-lg">
+                            <p class="text-base text-primary-dark leading-relaxed mb-4">
+                                Have questions about our services, privacy practices, or terms? Our dedicated support team is here to help you navigate any concerns or inquiries you may have.
+                            </p>
+                            <p class="text-base text-primary-dark leading-relaxed">
+                                <strong>Contact us:</strong> ctudevcom@gmail.com
+                            </p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Privacy Notice Tab -->
+            <div id="content-privacy-notice" class="tab-content hidden">
+                <div class="flex justify-center mb-8 lg:mb-12">
+                    <img 
+                        src="/src/privacy.png" 
+                        alt="Privacy notice illustration" 
+                        class="w-full max-w-md lg:w-96 h-48 lg:h-72 object-contain"
+                    />
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <section id="notice-commitment" class="mb-12">
+                        <h2 class="text-sm font-medium text-green-muted mb-6 tracking-wide uppercase">Student's Helpdesk Privacy Notice</h2>
+                        <div class="mb-6 text-sm text-primary-dark bg-gray-50 p-4 rounded-lg">
+                            <span><strong>Last Updated:</strong> August 16, 2025</span>
+                        </div>
+                        <h3 class="text-2xl lg:text-3xl font-normal text-primary-dark mb-6">Our Unwavering Commitment to Your Privacy</h3>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            Student's Helpdesk ("we," "our," "us") is deeply committed to protecting the privacy and personal information of all students and users who access our comprehensive educational platform. This Privacy Notice provides clear, transparent information about how we collect, use, store, and safeguard your personal information.
+                        </p>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            We believe that privacy is a fundamental right, and we have designed our systems and processes to respect and protect your personal information while providing you with exceptional academic support services.
+                        </p>
+                    </section>
+
+                    <section id="notice-collection" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Information We Collect</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            When you use our Student's Helpdesk services, we may collect various types of information to provide you with personalized and effective academic support. We are transparent about what we collect and why:
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Personal Information You Provide</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Name, email address, and contact information</li>
+                                    <li>Student ID number (when applicable)</li>
+                                    <li>Educational institution and program details</li>
+                                    <li>Academic level and areas of study</li>
+                                    <li>Specific academic questions and requests for assistance</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Academic Information</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Course materials and assignments you share for assistance</li>
+                                    <li>Academic goals and learning objectives</li>
+                                    <li>Progress tracking and performance metrics</li>
+                                    <li>Feedback and evaluation responses</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Technical Information</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>IP address and device information</li>
+                                    <li>Browser type and operating system</li>
+                                    <li>Usage patterns and platform interactions</li>
+                                    <li>Session duration and feature utilization</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="notice-usage" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">How We Use Your Information</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            We use the information we collect exclusively to provide, improve, and personalize our academic support services. Every use of your data is purposeful and directly related to enhancing your educational experience:
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Primary Uses</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Provide personalized academic support and tutoring</li>
+                                    <li>Respond to your questions and requests promptly</li>
+                                    <li>Track your academic progress and achievements</li>
+                                    <li>Customize learning resources to your needs</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Service Enhancement</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Improve platform functionality and user experience</li>
+                                    <li>Develop new educational tools and resources</li>
+                                    <li>Ensure platform security and prevent misuse</li>
+                                    <li>Communicate important updates and announcements</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-accent-yellow bg-opacity-20 p-6 rounded-lg mt-6">
+                            <p class="text-base text-primary-dark leading-relaxed font-medium">
+                                <strong>Important Commitment:</strong> We will never use your personal information for purposes unrelated to academic support services without your explicit consent. Your educational data remains confidential and is never shared for commercial purposes.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section id="notice-protection" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Comprehensive Data Protection</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            Your information security is our top priority. We implement multiple layers of protection to ensure your personal and academic data remains safe and secure at all times.
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="border-l-4 border-green-medium pl-6">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Technical Safeguards</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    All data is encrypted both in transit and at rest using industry-standard encryption protocols. Our servers are protected by advanced firewalls and intrusion detection systems.
+                                </p>
+                            </div>
+                            
+                            <div class="border-l-4 border-green-medium pl-6">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Access Controls</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Access to your information is strictly limited to authorized personnel who require it to provide academic support services. All access is logged and monitored.
+                                </p>
+                            </div>
+                            
+                            <div class="border-l-4 border-green-medium pl-6">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Regular Security Audits</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    We conduct regular security assessments and updates to ensure our protection measures remain effective against evolving threats.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="notice-sharing" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Information Sharing Policy</h4>
+                        <div class="bg-green-medium bg-opacity-10 p-6 rounded-lg mb-6">
+                            <p class="text-base lg:text-lg text-primary-dark leading-relaxed font-medium">
+                                <strong>Our Commitment:</strong> We will never sell, rent, or trade your personal data to third parties. Your information is shared only in very limited circumstances as outlined below.
+                            </p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Legal Requirements</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Information may be disclosed when required by law, legal process, or to protect the rights, safety, and security of our users and platform.
+                                </p>
+                            </div>
+                            
+                            <div>
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Service Providers</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    We may share limited information with trusted service providers who assist in platform operations, subject to strict confidentiality agreements.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="notice-rights" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Your Privacy Rights</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            You have comprehensive rights regarding your personal information. We are committed to honoring these rights and making it easy for you to exercise them.
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <div class="bg-white border border-green-light p-4 rounded-lg">
+                                    <h5 class="text-base font-medium text-primary-dark mb-2">Right to Access</h5>
+                                    <p class="text-sm text-primary-dark">Request copies of your personal information</p>
+                                </div>
+                                <div class="bg-white border border-green-light p-4 rounded-lg">
+                                    <h5 class="text-base font-medium text-primary-dark mb-2">Right to Correction</h5>
+                                    <p class="text-sm text-primary-dark">Update inaccurate or incomplete information</p>
+                                </div>
+                                <div class="bg-white border border-green-light p-4 rounded-lg">
+                                    <h5 class="text-base font-medium text-primary-dark mb-2">Right to Deletion</h5>
+                                    <p class="text-sm text-primary-dark">Request removal of your personal data</p>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="bg-white border border-green-light p-4 rounded-lg">
+                                    <h5 class="text-base font-medium text-primary-dark mb-2">Right to Object</h5>
+                                    <p class="text-sm text-primary-dark">Object to certain processing activities</p>
+                                </div>
+                                <div class="bg-white border border-green-light p-4 rounded-lg">
+                                    <h5 class="text-base font-medium text-primary-dark mb-2">Right to Portability</h5>
+                                    <p class="text-sm text-primary-dark">Receive your data in a portable format</p>
+                                </div>
+                                <div class="bg-white border border-green-light p-4 rounded-lg">
+                                    <h5 class="text-base font-medium text-primary-dark mb-2">Right to Withdraw Consent</h5>
+                                    <p class="text-sm text-primary-dark">Withdraw consent for data processing</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Privacy Policy Tab -->
+            <div id="content-privacy-policy" class="tab-content hidden">
+                <div class="flex justify-center mb-8 lg:mb-12">
+                    <img 
+                        src="/src/Priv.jpg" 
+                        alt="Privacy policy illustration" 
+                        class="w-full max-w-md lg:w-96 h-48 lg:h-72 object-contain"
+                    />
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <section id="policy-compliance" class="mb-12">
+                        <h2 class="text-sm font-medium text-green-muted mb-6 tracking-wide uppercase">Student's Helpdesk Privacy Policy</h2>
+                        <div class="mb-6 text-sm text-primary-dark bg-gray-50 p-4 rounded-lg">
+                            <span><strong>Effective Date:</strong> August 16, 2025</span>
+                        </div>
+                        <h3 class="text-2xl lg:text-3xl font-normal text-primary-dark mb-6">Data Privacy Act Compliance Framework</h3>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            Student's Helpdesk ("we," "our," "us") operates with the highest regard for your privacy rights and maintains strict compliance with the Philippines' Data Privacy Act of 2012 (Republic Act No. 10173) and its implementing rules and regulations issued by the National Privacy Commission (NPC).
+                        </p>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            This Privacy Policy serves as our formal commitment to transparent data handling practices and outlines the comprehensive measures we have implemented to protect your personal information while providing exceptional academic support services.
+                        </p>
+                        
+                        <div class="bg-green-dark bg-opacity-10 p-6 rounded-lg mb-6">
+                            <h4 class="text-lg font-medium text-primary-dark mb-3">Legal Foundation</h4>
+                            <p class="text-base text-primary-dark leading-relaxed">
+                                By accessing or using our platform, you acknowledge that you have read, understood, and agree to the practices described in this Privacy Policy. Your continued use of our services constitutes ongoing consent to these practices, subject to your right to withdraw consent at any time.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section id="policy-purpose" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Comprehensive Purpose of Data Processing</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            We process your personal information for specific, legitimate purposes that directly support your educational journey and enhance your academic success. All processing activities are conducted with transparency and accountability:
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-white border-l-4 border-green-medium p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Primary Educational Purposes</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Provide personalized academic support and tutoring services tailored to your specific needs and learning style</li>
+                                    <li>Develop and deliver customized educational resources, study materials, and learning tools</li>
+                                    <li>Track your academic progress and provide meaningful feedback to support your educational goals</li>
+                                    <li>Facilitate communication between you and our qualified academic support team</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white border-l-4 border-green-medium p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Service Enhancement and Quality Assurance</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Continuously improve our platform functionality, user interface, and overall service quality</li>
+                                    <li>Conduct research and analysis to develop innovative educational tools and methodologies</li>
+                                    <li>Ensure the security, integrity, and optimal performance of our platform and services</li>
+                                    <li>Provide timely customer support and respond to your inquiries and feedback</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white border-l-4 border-green-medium p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Communication and Updates</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Send important service-related announcements, policy updates, and educational resources</li>
+                                    <li>Notify you of new features, tools, or services that may benefit your academic pursuits</li>
+                                    <li>Provide technical support and troubleshooting assistance when needed</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-accent-yellow bg-opacity-20 p-6 rounded-lg mt-6">
+                            <p class="text-base text-primary-dark leading-relaxed font-medium">
+                                <strong>Commitment to Purpose Limitation:</strong> All processing of your personal data is strictly limited to these stated objectives and is conducted in accordance with Philippine law. We will never use your information for purposes beyond these objectives without obtaining your prior, informed consent.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section id="policy-lawful-basis" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Lawful Basis for Processing</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            Under the Data Privacy Act of 2012, we process your personal information based on the following lawful grounds:
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Consent</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Your voluntary registration and use of our services constitutes informed consent to process your personal information for the purposes outlined in this policy.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Legitimate Interest</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Processing necessary for our legitimate business interests in providing quality educational services while respecting your privacy rights.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Contractual Necessity</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Processing required to fulfill our service obligations and provide the academic support you have requested.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Legal Compliance</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Processing necessary to comply with applicable laws, regulations, and legal obligations in the Philippines.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="policy-security" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Advanced Security Measures</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            We implement comprehensive organizational, physical, and technical security measures that meet or exceed the standards required by the National Privacy Commission. Our multi-layered security approach includes:
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Technical Security Controls</h5>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li>End-to-end encryption for data transmission</li>
+                                        <li>Advanced encryption at rest for stored data</li>
+                                        <li>Multi-factor authentication systems</li>
+                                        <li>Regular security vulnerability assessments</li>
+                                    </ul>
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li>Intrusion detection and prevention systems</li>
+                                        <li>Automated backup and disaster recovery</li>
+                                        <li>Secure API endpoints and data interfaces</li>
+                                        <li>Regular security patches and updates</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Organizational Security Measures</h5>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li>Strict access controls and authorization protocols</li>
+                                        <li>Regular staff training on data protection</li>
+                                        <li>Comprehensive privacy impact assessments</li>
+                                        <li>Incident response and breach notification procedures</li>
+                                    </ul>
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li>Third-party security audits and certifications</li>
+                                        <li>Data minimization and retention policies</li>
+                                        <li>Secure disposal of obsolete data</li>
+                                        <li>Continuous monitoring and logging systems</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="policy-retention" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Data Retention and Disposal</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            We retain your personal information only for as long as necessary to fulfill the purposes for which it was collected, comply with legal obligations, and protect our legitimate interests. Our retention practices are guided by the principles of data minimization and purpose limitation.
+                        </p>
+                        
+                        <div class="bg-green-medium bg-opacity-10 p-6 rounded-lg mb-6">
+                            <h5 class="text-lg font-medium text-primary-dark mb-3">Retention Periods</h5>
+                            <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                <li><strong>Active Account Data:</strong> Retained while your account remains active and for up to 2 years after account closure</li>
+                                <li><strong>Academic Records:</strong> Maintained for up to 7 years to support transcript requests and academic verification</li>
+                                <li><strong>Communication Records:</strong> Kept for up to 3 years for quality assurance and dispute resolution</li>
+                                <li><strong>Technical Logs:</strong> Automatically deleted after 12 months unless required for security investigations</li>
+                            </ul>
+                        </div>
+                        
+                        <p class="text-base text-primary-dark leading-relaxed">
+                            When data is no longer needed, we securely delete or anonymize it using industry-standard data destruction methods to ensure it cannot be recovered or reconstructed.
+                        </p>
+                    </section>
+
+                    <section id="policy-user-rights" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Comprehensive User Rights Under Philippine Law</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            In accordance with the Data Privacy Act of 2012, you possess extensive rights regarding your personal information. We are committed to facilitating the exercise of these rights through clear processes and timely responses:
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white border-l-4 border-green-light p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Right to Information</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Be informed about the collection and processing of your personal data, including the purposes, legal basis, and retention periods.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white border-l-4 border-green-light p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Right of Access</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Request and receive copies of your personal information, including details about how it has been processed and shared.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white border-l-4 border-green-light p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Right to Object</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Object to the processing of your personal data under certain circumstances, including direct marketing and automated decision-making.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white border-l-4 border-green-light p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Right to Rectification</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Request correction of inaccurate, incomplete, or outdated personal information in our records.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white border-l-4 border-green-light p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Right to Erasure</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Request deletion or blocking of your personal data, subject to legal and contractual restrictions and retention requirements.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white border-l-4 border-green-light p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Right to Data Portability</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Receive your personal data in a structured, commonly used, and machine-readable format for transfer to another service provider.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-white border-l-4 border-green-light p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Right to Withdraw Consent</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    Withdraw your consent for data processing at any time, without affecting the lawfulness of processing based on consent before withdrawal.
+                                </p>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-accent-yellow bg-opacity-20 p-6 rounded-lg mt-6">
+                            <p class="text-base text-primary-dark leading-relaxed">
+                                <strong>Exercising Your Rights:</strong> To exercise any of these rights, please contact us using the information provided in this policy. We will respond to your request within the timeframes required by Philippine law, typically within 30 days of receiving a complete request.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section id="policy-updates" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Policy Updates and Amendments</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            We may periodically update this Privacy Policy to reflect changes in our services, legal requirements, industry standards, or operational practices. Our commitment to protecting your privacy remains constant, even as our policies evolve.
+                        </p>
+                        
+                        <div class="bg-green-light bg-opacity-10 p-6 rounded-lg mb-6">
+                            <h5 class="text-lg font-medium text-primary-dark mb-3">Update Process</h5>
+                            <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                <li>All revisions will be posted on this page with a new "Effective Date"</li>
+                                <li>Significant changes will be communicated via email or platform notification</li>
+                                <li>You will have the opportunity to review changes before they take effect</li>
+                                <li>Continued use of our services after updates constitutes acceptance of the revised policy</li>
+                            </ul>
+                        </div>
+                        
+                        <p class="text-base text-primary-dark leading-relaxed">
+                            We encourage you to review this Privacy Policy periodically to stay informed about how we protect your personal information and respect your privacy rights.
+                        </p>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Terms of Service Tab -->
+            <div id="content-terms" class="tab-content">
+                <div class="flex justify-center mb-8 lg:mb-12">
+                    <img 
+                        src="/src/ToS.jpg" 
+                        alt="Student's Helpdesk Terms of Service illustration" 
+                        class="w-full max-w-md lg:w-96 h-48 lg:h-72 object-contain"
+                    />
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <section id="terms-introduction" class="mb-12">
+                        <h2 class="text-sm font-medium text-green-muted mb-6 tracking-wide uppercase">Student's Helpdesk Terms and Conditions</h2>
+                        
+                        <div class="mb-8 text-sm text-primary-dark bg-gray-50 p-4 rounded-lg">
+                            <span><strong>Campus:</strong> Cebu Technological University - Main Campus</span><br>
+                            <span><strong>Last Updated:</strong> August 16, 2025</span>
+                        </div>
+
+                        <h3 class="text-2xl lg:text-3xl font-normal text-primary-dark mb-6">Comprehensive Terms and Conditions</h3>
+                        
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            Please read these Terms and Conditions ("Terms") carefully and thoroughly before accessing or using any part of the Student's Helpdesk platform.
+                        </p>
+                        
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            These Terms constitute a legally binding agreement between you (the "User" or "Student") and Student's Helpdesk ("we," "our," "us," or the "Company") regarding your access to and use of our comprehensive educational platform, website, mobile applications, and all associated content, features, tools, and services (collectively referred to as the "Services").
+                        </p>
+                    </section>
+
+                    <section id="terms-acceptance" class="mb-12">
+                        <div class="bg-green-light bg-opacity-10 p-6 rounded-lg mb-6">
+                            <h4 class="text-xl font-medium text-primary-dark mb-4">Agreement and Acceptance</h4>
+                            <p class="text-base text-primary-dark leading-relaxed mb-4">
+                                By accessing, browsing, registering for, or using any part of our Services, you acknowledge that you have read, understood, and agree to be legally bound by these Terms, as well as our Privacy Notice, Privacy Policy, and any other guidelines, policies, or notices published by Student's Helpdesk.
+                            </p>
+                            <p class="text-base text-primary-dark leading-relaxed font-medium">
+                                <strong>Important:</strong> If you do not accept and agree to these Terms in their entirety, you must immediately discontinue access to and use of our Services.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-accent-yellow bg-opacity-20 p-6 rounded-lg">
+                            <h5 class="text-lg font-medium text-primary-dark mb-3">Terms Updates and Modifications</h5>
+                            <p class="text-base text-primary-dark leading-relaxed">
+                                We reserve the right to update, amend, or revise these Terms at any time to reflect changes in our Services, operational requirements, legal obligations, or industry standards. Updated Terms will be posted on this page with a new effective date. Your continued use of our Services after any modifications constitutes acceptance of the revised Terms.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section id="terms-services" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Comprehensive Use of Services</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            Student's Helpdesk provides a comprehensive suite of educational support services designed to enhance your academic journey. Your use of these Services is subject to the following terms and conditions:
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Permitted Uses</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-3">
+                                    <li>Access and utilize our academic support services, including tutoring, study resources, and educational tools, solely for your personal educational advancement and academic success</li>
+                                    <li>Engage with our platform's features, including interactive forms, educational widgets, progress tracking tools, and communication systems, in a manner consistent with their intended educational purposes</li>
+                                    <li>Participate in collaborative learning activities, discussion forums, and peer support networks while maintaining respect for other users and academic integrity</li>
+                                    <li>Download and use educational materials provided through our platform for your personal study and reference, subject to applicable copyright and intellectual property restrictions</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Usage Restrictions and Responsibilities</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-3">
+                                    <li>You agree to use our Services exclusively for lawful purposes related to academic support and educational advancement, ensuring that your activities do not infringe upon the rights of others or restrict their use and enjoyment of the platform</li>
+                                    <li>All resources, guidance, tools, and content provided through Student's Helpdesk are intended for your personal, educational, and non-commercial use only. Commercial use, including advertising, soliciting, or selling goods or services through our platform, is strictly prohibited</li>
+                                    <li>You may not copy, reproduce, adapt, alter, distribute, or create derivative works from any content, materials, or resources available on our platform without our prior written consent, except for personal academic use as explicitly permitted</li>
+                                    <li>You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="terms-academic" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Academic Integrity and Ethical Use</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            Student's Helpdesk is committed to promoting and maintaining the highest standards of academic integrity. All users are expected to uphold these principles in their use of our Services:
+                        </p>
+                        
+                        <div class="bg-green-medium bg-opacity-10 p-6 rounded-lg mb-6">
+                            <h5 class="text-lg font-medium text-primary-dark mb-4">Academic Integrity Standards</h5>
+                            <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-3">
+                                <li><strong>Original Work:</strong> All academic work submitted through our platform must be your own original effort. Plagiarism, cheating, or any form of academic dishonesty is strictly prohibited</li>
+                                <li><strong>Proper Attribution:</strong> When using resources, ideas, or assistance provided through our platform, you must properly cite and acknowledge these sources in accordance with your institution's academic standards</li>
+                                <li><strong>Collaborative Learning:</strong> While we encourage collaborative learning and peer support, you must ensure that any collaboration complies with your institution's policies on group work and individual assessment</li>
+                                <li><strong>Honest Representation:</strong> You must accurately represent your academic level, needs, and circumstances when requesting support or assistance</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-red-50 border-l-4 border-red-400 p-6 rounded-r-lg">
+                            <h5 class="text-lg font-medium text-red-800 mb-3">Prohibited Academic Practices</h5>
+                            <p class="text-base text-red-700 leading-relaxed mb-3">
+                                The following activities are strictly prohibited and may result in immediate suspension or termination of your access to our Services:
+                            </p>
+                            <ul class="list-disc list-inside text-base text-red-700 leading-relaxed space-y-2">
+                                <li>Submitting work completed by others as your own</li>
+                                <li>Sharing or distributing assignment answers or solutions</li>
+                                <li>Using our Services to facilitate cheating or academic misconduct</li>
+                                <li>Misrepresenting the nature or source of academic assistance received</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <section id="terms-prohibited" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Prohibited Uses and Conduct</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            To maintain a safe, respectful, and productive learning environment for all users, the following activities are strictly prohibited:
+                        </p>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Technical Violations</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Attempting to gain unauthorized access to our systems</li>
+                                    <li>Interfering with platform functionality or security</li>
+                                    <li>Introducing malicious code, viruses, or harmful software</li>
+                                    <li>Circumventing access controls or usage limitations</li>
+                                    <li>Automated data collection or scraping</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Content and Conduct Violations</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Posting inappropriate, offensive, or harmful content</li>
+                                    <li>Harassment, bullying, or intimidation of other users</li>
+                                    <li>Sharing false, misleading, or defamatory information</li>
+                                    <li>Violating intellectual property rights</li>
+                                    <li>Engaging in commercial activities without authorization</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="terms-intellectual" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Intellectual Property Rights</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            Student's Helpdesk respects intellectual property rights and expects all users to do the same. The following provisions govern intellectual property matters:
+                        </p>
+                        
+                        <div class="space-y-6">
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">Our Intellectual Property</h5>
+                                <p class="text-base text-primary-dark leading-relaxed mb-3">
+                                    All content, materials, features, functionality, and intellectual property available through our Services, including but not limited to text, graphics, logos, images, software, and educational resources, are owned by Student's Helpdesk or our licensors and are protected by copyright, trademark, and other intellectual property laws.
+                                </p>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    You are granted a limited, non-exclusive, non-transferable license to access and use our Services for personal educational purposes only.
+                                </p>
+                            </div>
+                            
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-3">User-Generated Content</h5>
+                                <p class="text-base text-primary-dark leading-relaxed mb-3">
+                                    You retain ownership of any original content you create and submit through our Services. However, by submitting content, you grant us a non-exclusive, royalty-free license to use, display, and distribute such content solely for the purpose of providing our Services.
+                                </p>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    You represent and warrant that you have all necessary rights to grant this license and that your content does not infringe upon the rights of any third party.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="terms-liability" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Limitation of Liability and Disclaimers</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            While we strive to provide high-quality educational support services, it is important to understand the limitations of our liability and the nature of our Services:
+                        </p>
+                        
+                        <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-lg mb-6">
+                            <h5 class="text-lg font-medium text-yellow-800 mb-3">Service Disclaimers</h5>
+                            <ul class="list-disc list-inside text-base text-yellow-700 leading-relaxed space-y-2">
+                                <li>Our Services are provided "as is" without warranties of any kind, express or implied</li>
+                                <li>We do not guarantee specific academic outcomes or results from using our Services</li>
+                                <li>Educational advice and support are provided for informational purposes and should not replace professional academic counseling</li>
+                                <li>We are not responsible for decisions made based on information or guidance provided through our Services</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-6 rounded-lg">
+                            <h5 class="text-lg font-medium text-primary-dark mb-3">Limitation of Liability</h5>
+                            <p class="text-base text-primary-dark leading-relaxed">
+                                To the maximum extent permitted by Philippine law, Student's Helpdesk shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, or academic opportunities, arising from your use of our Services.
+                            </p>
+                        </div>
+                    </section>
+
+                    <section id="terms-termination" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Account Termination and Suspension</h4>
+                        <p class="text-base lg:text-lg text-primary-dark leading-relaxed mb-6">
+                            We reserve the right to suspend or terminate your access to our Services under certain circumstances to protect the integrity of our platform and the safety of our community:
+                        </p>
+                        
+                        <div class="space-y-4">
+                            <div class="bg-white border-l-4 border-red-400 p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Grounds for Termination</h5>
+                                <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                    <li>Violation of these Terms or our policies</li>
+                                    <li>Academic dishonesty or integrity violations</li>
+                                    <li>Inappropriate conduct or harassment of other users</li>
+                                    <li>Unauthorized use or security violations</li>
+                                    <li>Failure to comply with applicable laws and regulations</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="bg-white border-l-4 border-green-medium p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-primary-dark mb-2">Termination Process</h5>
+                                <p class="text-base text-primary-dark leading-relaxed">
+                                    We will make reasonable efforts to provide notice of termination and, where appropriate, an opportunity to remedy violations. However, we reserve the right to immediately suspend or terminate access in cases of serious violations or security threats.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="terms-governing" class="mb-12">
+                        <h4 class="text-xl lg:text-2xl font-medium text-primary-dark mb-6">Governing Law and Dispute Resolution</h4>
+                        <div class="bg-green-medium bg-opacity-10 p-6 rounded-lg mb-6">
+                            <h5 class="text-lg font-medium text-primary-dark mb-3">Applicable Law</h5>
+                            <p class="text-base text-primary-dark leading-relaxed">
+                                These Terms and your use of our Services are governed by and construed in accordance with the laws of the Republic of the Philippines, without regard to conflict of law principles.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                            <h5 class="text-lg font-medium text-primary-dark mb-3">Dispute Resolution</h5>
+                            <p class="text-base text-primary-dark leading-relaxed mb-4">
+                                Any disputes arising from or relating to these Terms or your use of our Services shall be resolved through the following process:
+                            </p>
+                            <ol class="list-decimal list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                <li><strong>Direct Communication:</strong> Initial attempt to resolve disputes through direct communication with our support team</li>
+                                <li><strong>Mediation:</strong> If direct resolution fails, disputes may be submitted to mediation</li>
+                                <li><strong>Legal Proceedings:</strong> As a last resort, disputes shall be subject to the exclusive jurisdiction of the courts of the Philippines</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="bg-accent-yellow bg-opacity-20 p-6 rounded-lg mt-6">
+                            <p class="text-base text-primary-dark leading-relaxed">
+                                <strong>Contact Information:</strong> For questions about these Terms or to report violations, please contact us at ctudevcom@gmail.com. We are committed to addressing your concerns promptly and fairly.
+                            </p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Platform Guidelines Tab -->
+            <div id="content-guidelines" class="tab-content hidden">
+                <div class="flex justify-center mb-8 lg:mb-12">
+                    <img 
+                        src="/src/performance.png" 
+                        alt="Platform guidelines illustration" 
+                        class="w-full max-w-md lg:w-96 h-48 lg:h-72 object-contain"
+                    />
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <section id="guidelines-respect" class="mb-12">
+                        <h2 class="text-sm font-medium text-green-muted mb-6 tracking-wide uppercase">Platform Guidelines</h2>
+                        <h3 class="text-2xl lg:text-3xl font-normal text-primary-dark mb-6">Comprehensive Guidelines for Using Student's Helpdesk</h3>
+                        
+                        <div class="bg-green-light bg-opacity-10 p-6 rounded-lg mb-8">
+                            <p class="text-base lg:text-lg text-primary-dark leading-relaxed">
+                                These guidelines establish the standards for respectful, ethical, and productive use of our platform. By following these guidelines, you contribute to creating a positive learning environment that benefits all members of our academic community.
+                            </p>
+                        </div>
+                        
+                        <div class="space-y-8">
+                            <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                                <h4 class="text-xl font-medium text-primary-dark mb-4">1. Respect and Academic Integrity</h4>
+                                <p class="text-base text-primary-dark leading-relaxed mb-4">
+                                    All users must interact with others respectfully and maintain the highest standards of academic integrity. Our platform is built on trust, mutual respect, and shared commitment to educational excellence.
+                                </p>
+                                
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div>
+                                        <h5 class="text-lg font-medium text-primary-dark mb-3">Respectful Interaction</h5>
+                                        <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                            <li>Treat all users with courtesy and professionalism</li>
+                                            <li>Use appropriate language in all communications</li>
+                                            <li>Respect diverse perspectives and learning styles</li>
+                                            <li>Provide constructive feedback and support</li>
+                                            <li>Report inappropriate behavior promptly</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h5 class="text-lg font-medium text-primary-dark mb-3">Academic Integrity</h5>
+                                        <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                            <li>Submit only original work and properly cite sources</li>
+                                            <li>Use our platform for learning, not cheating</li>
+                                            <li>Respect intellectual property rights</li>
+                                            <li>Maintain honesty in all academic interactions</li>
+                                            <li>Report academic misconduct when observed</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-red-50 border-l-4 border-red-400 p-4 rounded-r-lg mt-6">
+                                    <p class="text-base text-red-700 leading-relaxed font-medium">
+                                        <strong>Zero Tolerance:</strong> We have a zero-tolerance policy for plagiarism, cheating, harassment, discrimination, or any form of academic dishonesty. Violations will result in immediate account suspension or termination.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="guidelines-accuracy" class="mb-12">
+                        <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                            <h4 class="text-xl font-medium text-primary-dark mb-4">2. Information Accuracy and Truthfulness</h4>
+                            <p class="text-base text-primary-dark leading-relaxed mb-6">
+                                Accurate information is essential for effective academic support. You are responsible for ensuring that all information you provide is truthful, current, and complete.
+                            </p>
+                            
+                            <div class="space-y-6">
+                                <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-3">Personal Information Requirements</h5>
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li><strong>Profile Accuracy:</strong> Maintain accurate and up-to-date profile information, including your academic level, institution, and areas of study</li>
+                                        <li><strong>Contact Information:</strong> Provide valid contact information to ensure you receive important communications and support</li>
+                                        <li><strong>Academic Status:</strong> Accurately represent your current academic standing and enrollment status</li>
+                                        <li><strong>Learning Needs:</strong> Honestly describe your academic challenges and learning objectives to receive appropriate support</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-3">Academic Information Standards</h5>
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li><strong>Assignment Details:</strong> Provide accurate information about assignments, including requirements, deadlines, and academic standards</li>
+                                        <li><strong>Course Information:</strong> Share correct course details, including level, subject area, and specific topics being studied</li>
+                                        <li><strong>Progress Reporting:</strong> Honestly report your academic progress and any challenges you're experiencing</li>
+                                        <li><strong>Feedback Accuracy:</strong> Provide truthful feedback about the effectiveness of support services received</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg mt-6">
+                                <p class="text-base text-yellow-700 leading-relaxed">
+                                    <strong>Update Responsibility:</strong> You must promptly update your information when changes occur, including changes in academic status, contact information, or learning needs. Outdated information may result in inappropriate or ineffective support.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="guidelines-resources" class="mb-12">
+                        <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                            <h4 class="text-xl font-medium text-primary-dark mb-4">3. Appropriate Use of Educational Resources</h4>
+                            <p class="text-base text-primary-dark leading-relaxed mb-6">
+                                Our platform provides extensive educational resources designed to support your learning journey. These resources must be used responsibly and in accordance with their intended educational purposes.
+                            </p>
+                            
+                            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-3">Permitted Resource Usage</h5>
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li>Personal study and academic research</li>
+                                        <li>Preparation for assignments and examinations</li>
+                                        <li>Skill development and knowledge enhancement</li>
+                                        <li>Collaborative learning with proper attribution</li>
+                                        <li>Reference and citation in academic work</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="bg-red-50 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-red-800 mb-3">Prohibited Resource Usage</h5>
+                                    <ul class="list-disc list-inside text-base text-red-700 leading-relaxed space-y-2">
+                                        <li>Commercial redistribution or sale</li>
+                                        <li>Unauthorized copying or reproduction</li>
+                                        <li>Sharing with non-registered users</li>
+                                        <li>Use for non-academic purposes</li>
+                                        <li>Circumventing access controls</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-green-medium pl-6">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-2">Study Materials and Guides</h5>
+                                    <p class="text-base text-primary-dark leading-relaxed">
+                                        Use study materials and guides as learning aids to enhance your understanding of course content. These resources should supplement, not replace, your primary course materials and classroom instruction.
+                                    </p>
+                                </div>
+                                
+                                <div class="border-l-4 border-green-medium pl-6">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-2">Interactive Tools and Widgets</h5>
+                                    <p class="text-base text-primary-dark leading-relaxed">
+                                        Engage with interactive tools and educational widgets to practice skills, test knowledge, and reinforce learning. Use these tools regularly to maximize their educational benefit.
+                                    </p>
+                                </div>
+                                
+                                <div class="border-l-4 border-green-medium pl-6">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-2">Tutoring and Support Services</h5>
+                                    <p class="text-base text-primary-dark leading-relaxed">
+                                        Utilize tutoring and support services to clarify concepts, develop study strategies, and overcome academic challenges. Be prepared for sessions and actively participate in the learning process.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="guidelines-compliance" class="mb-12">
+                        <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                            <h4 class="text-xl font-medium text-primary-dark mb-4">4. Policy Compliance and Legal Adherence</h4>
+                            <p class="text-base text-primary-dark leading-relaxed mb-6">
+                                By using our Services, you agree to comply with all applicable policies, guidelines, and legal requirements. This includes both our platform-specific policies and broader legal obligations.
+                            </p>
+                            
+                            <div class="space-y-6">
+                                <div class="bg-green-medium bg-opacity-10 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-3">Platform Policy Compliance</h5>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                            <li>Terms of Service adherence</li>
+                                            <li>Privacy Policy acknowledgment</li>
+                                            <li>Community guidelines observance</li>
+                                            <li>Academic integrity standards</li>
+                                        </ul>
+                                        <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                            <li>Usage restrictions compliance</li>
+                                            <li>Content guidelines adherence</li>
+                                            <li>Security policy observance</li>
+                                            <li>Reporting requirement compliance</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-blue-50 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-3">Legal and Regulatory Compliance</h5>
+                                    <p class="text-base text-primary-dark leading-relaxed mb-4">
+                                        Your use of our platform must comply with all applicable laws and regulations, including but not limited to:
+                                    </p>
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li><strong>Philippines Data Privacy Act of 2012:</strong> Respect data protection and privacy requirements</li>
+                                        <li><strong>Intellectual Property Laws:</strong> Respect copyright, trademark, and other intellectual property rights</li>
+                                        <li><strong>Educational Regulations:</strong> Comply with academic standards and institutional policies</li>
+                                        <li><strong>Anti-Cybercrime Laws:</strong> Avoid any activities that could be considered cybercrime or online harassment</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="guidelines-conduct" class="mb-12">
+                        <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                            <h4 class="text-xl font-medium text-primary-dark mb-4">5. Code of Conduct and Community Standards</h4>
+                            <p class="text-base text-primary-dark leading-relaxed mb-6">
+                                Our platform thrives on mutual respect, collaboration, and shared commitment to academic excellence. All users are expected to maintain the highest standards of conduct and contribute positively to our learning community.
+                            </p>
+                            
+                            <div class="bg-green-light bg-opacity-10 p-6 rounded-lg mb-6">
+                                <h5 class="text-lg font-medium text-primary-dark mb-4">Core Conduct Principles</h5>
+                                <div class="grid md:grid-cols-3 gap-6">
+                                    <div>
+                                        <h6 class="text-base font-medium text-primary-dark mb-2">Respect</h6>
+                                        <ul class="text-sm text-primary-dark leading-relaxed space-y-1">
+                                            <li>• Treat all users with dignity</li>
+                                            <li>• Value diverse perspectives</li>
+                                            <li>• Use inclusive language</li>
+                                            <li>• Respect cultural differences</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h6 class="text-base font-medium text-primary-dark mb-2">Integrity</h6>
+                                        <ul class="text-sm text-primary-dark leading-relaxed space-y-1">
+                                            <li>• Be honest and truthful</li>
+                                            <li>• Maintain academic standards</li>
+                                            <li>• Respect intellectual property</li>
+                                            <li>• Take responsibility for actions</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div>
+                                        <h6 class="text-base font-medium text-primary-dark mb-2">Collaboration</h6>
+                                        <ul class="text-sm text-primary-dark leading-relaxed space-y-1">
+                                            <li>• Support fellow learners</li>
+                                            <li>• Share knowledge appropriately</li>
+                                            <li>• Participate constructively</li>
+                                            <li>• Foster inclusive environment</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <div class="border-l-4 border-green-light pl-6">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-2">Professional Communication</h5>
+                                    <p class="text-base text-primary-dark leading-relaxed">
+                                        Maintain professional standards in all communications. Use clear, respectful language and avoid inflammatory, offensive, or inappropriate content. Remember that your interactions reflect on the entire academic community.
+                                    </p>
+                                </div>
+                                
+                                <div class="border-l-4 border-green-light pl-6">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-2">Constructive Participation</h5>
+                                    <p class="text-base text-primary-dark leading-relaxed">
+                                        Contribute meaningfully to discussions, forums, and collaborative activities. Provide helpful feedback, ask thoughtful questions, and share relevant insights that benefit the learning community.
+                                    </p>
+                                </div>
+                                
+                                <div class="border-l-4 border-green-light pl-6">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-2">Conflict Resolution</h5>
+                                    <p class="text-base text-primary-dark leading-relaxed">
+                                        Address conflicts and disagreements professionally and constructively. Seek to understand different perspectives and work toward mutually beneficial solutions. When necessary, involve platform moderators or support staff.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="guidelines-violations" class="mb-12">
+                        <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                            <h4 class="text-xl font-medium text-primary-dark mb-4">6. Violations and Enforcement</h4>
+                            <p class="text-base text-primary-dark leading-relaxed mb-6">
+                                We take violations of our guidelines seriously and have established clear procedures for addressing misconduct. Our enforcement approach is fair, consistent, and designed to maintain the integrity of our learning community.
+                            </p>
+                            
+                            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                <div class="bg-red-50 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-red-800 mb-3">Types of Violations</h5>
+                                    <ul class="list-disc list-inside text-base text-red-700 leading-relaxed space-y-2">
+                                        <li><strong>Minor Violations:</strong> Inappropriate language, minor policy infractions</li>
+                                        <li><strong>Moderate Violations:</strong> Repeated minor violations, disruptive behavior</li>
+                                        <li><strong>Serious Violations:</strong> Academic dishonesty, harassment, security breaches</li>
+                                        <li><strong>Severe Violations:</strong> Illegal activities, threats, systematic abuse</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="bg-yellow-50 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-yellow-800 mb-3">Enforcement Actions</h5>
+                                    <ul class="list-disc list-inside text-base text-yellow-700 leading-relaxed space-y-2">
+                                        <li><strong>Warning:</strong> Formal notice of violation with guidance for correction</li>
+                                        <li><strong>Temporary Suspension:</strong> Limited-time restriction of access</li>
+                                        <li><strong>Feature Restriction:</strong> Limitation of specific platform features</li>
+                                        <li><strong>Account Termination:</strong> Permanent removal from platform</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg">
+                                <h5 class="text-lg font-medium text-blue-800 mb-3">Due Process and Appeals</h5>
+                                <p class="text-base text-blue-700 leading-relaxed mb-3">
+                                    We are committed to fair and transparent enforcement of our guidelines. Our process includes:
+                                </p>
+                                <ul class="list-disc list-inside text-base text-blue-700 leading-relaxed space-y-2">
+                                    <li>Investigation of reported violations with evidence review</li>
+                                    <li>Opportunity for users to explain their actions and provide context</li>
+                                    <li>Proportionate enforcement actions based on violation severity</li>
+                                    <li>Clear communication of violations and consequences</li>
+                                    <li>Appeals process for users who believe enforcement was unfair</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="guidelines-reporting" class="mb-12">
+                        <div class="bg-white border border-gray-200 p-6 rounded-lg">
+                            <h4 class="text-xl font-medium text-primary-dark mb-4">7. Reporting Issues and Seeking Support</h4>
+                            <p class="text-base text-primary-dark leading-relaxed mb-6">
+                                We encourage all users to report violations, technical issues, or concerns promptly. Your reports help us maintain a safe, supportive, and effective learning environment for everyone.
+                            </p>
+                            
+                            <div class="space-y-6">
+                                <div class="bg-green-light bg-opacity-10 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-3">What to Report</h5>
+                                    <div class="grid md:grid-cols-2 gap-4">
+                                        <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                            <li>Academic dishonesty or integrity violations</li>
+                                            <li>Harassment, bullying, or inappropriate behavior</li>
+                                            <li>Technical issues or platform malfunctions</li>
+                                            <li>Privacy or security concerns</li>
+                                        </ul>
+                                        <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                            <li>Inappropriate content or communications</li>
+                                            <li>Suspected unauthorized access or misuse</li>
+                                            <li>Discrimination or bias incidents</li>
+                                            <li>Any other policy violations or concerns</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-blue-50 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-3">How to Report</h5>
+                                    <p class="text-base text-primary-dark leading-relaxed mb-4">
+                                        We provide multiple channels for reporting issues and seeking support:
+                                    </p>
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li><strong>Online Reporting Form:</strong> Use our secure online form for detailed incident reports</li>
+                                        <li><strong>Email Support:</strong> Contact our support team directly at [Email to be inserted]</li>
+                                        <li><strong>In-Platform Reporting:</strong> Use built-in reporting features for immediate concerns</li>
+                                        <li><strong>Emergency Contact:</strong> For urgent security or safety issues, use our emergency contact system</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="bg-green-medium bg-opacity-10 p-6 rounded-lg">
+                                    <h5 class="text-lg font-medium text-primary-dark mb-3">Our Commitment to You</h5>
+                                    <ul class="list-disc list-inside text-base text-primary-dark leading-relaxed space-y-2">
+                                        <li><strong>Prompt Response:</strong> We acknowledge all reports within 24 hours and provide regular updates</li>
+                                        <li><strong>Confidentiality:</strong> We protect the privacy of all parties involved in reported incidents</li>
+                                        <li><strong>No Retaliation:</strong> We prohibit retaliation against users who report violations in good faith</li>
+                                        <li><strong>Continuous Improvement:</strong> We use reports to identify and address systemic issues</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript for functionality -->
+    <script>
+        // Tab switching functionality
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.add('hidden'));
+            
+            // Hide all sidebar contents
+            const sidebarContents = document.querySelectorAll('.sidebar-content');
+            sidebarContents.forEach(content => content.classList.add('hidden'));
+            
+            // Remove active styles from all tabs (both desktop and mobile)
+            const tabs = document.querySelectorAll('[id^="tab-"]');
+            tabs.forEach(tab => {
+                tab.classList.remove('text-green-medium', 'border-green-medium', 'font-medium', 'bg-green-light', 'bg-opacity-10');
+                tab.classList.add('text-primary-dark', 'border-transparent');
+            });
+            
+            // Show selected tab content
+            document.getElementById(`content-${tabName}`).classList.remove('hidden');
+            
+            // Show corresponding sidebar content
+            const sidebarContent = document.getElementById(`sidebar-${tabName}`);
+            if (sidebarContent) {
+                sidebarContent.classList.remove('hidden');
+            }
+            
+            // Add active styles to selected tab (both desktop and mobile)
+            const activeTab = document.getElementById(`tab-${tabName}`);
+            const activeMobileTab = document.getElementById(`tab-${tabName}-mobile`);
+            
+            if (activeTab) {
+                activeTab.classList.remove('text-primary-dark', 'border-transparent');
+                activeTab.classList.add('text-green-medium', 'border-green-medium', 'font-medium');
+            }
+            
+            if (activeMobileTab) {
+                activeMobileTab.classList.remove('text-primary-dark');
+                activeMobileTab.classList.add('text-green-medium', 'bg-green-light', 'bg-opacity-10', 'font-medium');
+            }
+            
+            if (window.innerWidth < 1024) {
+                const mobileNavMenu = document.getElementById('mobile-nav-menu');
+                const mobileNavIcon = document.getElementById('mobile-nav-icon');
+                mobileNavMenu.classList.add('hidden');
+                mobileNavIcon.classList.remove('rotate-180');
+            }
+        }
+
+        // Smooth scrolling to sections
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ 
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                
+                // Update sidebar active state
+                const sidebarLinks = document.querySelectorAll('.sidebar-content:not(.hidden) a');
+                sidebarLinks.forEach(link => {
+                    link.classList.remove('text-green-medium', 'bg-green-light', 'bg-opacity-10');
+                    link.classList.add('text-primary-dark');
+                });
+                
+                const activeLink = document.querySelector(`a[href="#${sectionId}"]`);
+                if (activeLink) {
+                    activeLink.classList.remove('text-primary-dark');
+                    activeLink.classList.add('text-green-medium', 'bg-green-light', 'bg-opacity-10');
+                }
+            }
+        }
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const mobileOverlay = document.getElementById('mobile-overlay');
+        const closeSidebar = document.getElementById('close-sidebar');
+
+        function openMobileSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            mobileOverlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            mobileOverlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileSidebar);
+        closeSidebar.addEventListener('click', closeMobileSidebar);
+        mobileOverlay.addEventListener('click', closeMobileSidebar);
+
+        // Close mobile sidebar when clicking on sidebar links
+        const sidebarLinks = document.querySelectorAll('aside a');
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth < 1024) {
+                    closeMobileSidebar();
+                }
+            });
+        });
+
+        const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+        const mobileNavMenu = document.getElementById('mobile-nav-menu');
+        const mobileNavIcon = document.getElementById('mobile-nav-icon');
+
+        mobileNavToggle.addEventListener('click', () => {
+            mobileNavMenu.classList.toggle('hidden');
+            mobileNavIcon.classList.toggle('rotate-180');
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 1024) {
+                closeMobileSidebar();
+                mobileNavMenu.classList.add('hidden');
+                mobileNavIcon.classList.remove('rotate-180');
+            }
+        });
+
+        // Initialize with terms tab active
+        document.addEventListener('DOMContentLoaded', () => {
+            showTab('overview');
+        });
+    </script>
+</body>
+</html>
