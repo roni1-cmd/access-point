@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - Access Point</title>
+    <link rel="icon" type="image/x-icon" href="/src/godc.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #353539;
+            --green-dark: #0e3521;
+            --green-medium: #006936;
+            --green-light: #5fb14c;
+            --accent-yellow: #f1ec33;
+            --green-muted: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: white;
+            color: var(--primary-dark);
+            line-height: 1.5;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            fill: var(--primary-dark);
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--green-dark);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .apps-icon {
+            display: none;
+        }
+
+        .profile-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--green-light);
+            cursor: pointer;
+        }
+
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            text-align: center;
+        }
+
+        .google-logo {
+            display: none;
+        }
+
+        .main-heading {
+            font-size: 48px;
+            font-weight: 400;
+            color: var(--green-medium);
+            margin-bottom: 40px;
+        }
+
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto 80px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 16px 20px 16px 50px;
+            border: 2px solid #e8eaed;
+            border-radius: 24px;
+            font-size: 16px;
+            font-family: 'Google Sans', sans-serif;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .search-box:focus {
+            border-color: var(--green-light);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            fill: var(--green-muted);
+        }
+
+        /* Search results styling */
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e8eaed;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .search-result-item {
+            padding: 12px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-result-item:hover {
+            background-color: rgba(95, 177, 76, 0.1);
+        }
+
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+
+        .no-results {
+            padding: 20px;
+            text-align: center;
+            color: var(--green-muted);
+            font-style: italic;
+        }
+
+        /* Replaced basic rectangles with proper people illustrations positioned around search area */
+        .illustrations-container {
+            position: relative;
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            height: 300px;
+        }
+
+        .people-illustration {
+            position: absolute;
+            border-radius: 8px;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        /* Making people illustrations much bigger and more prominent like in original */
+        .people-illustration.left-side {
+            top: 50%;
+            transform: translateY(-50%);
+            left: -50px;
+            width: 600px;
+            height: 300px;
+            object-position: left center;
+        }
+
+        .people-illustration.right-side {
+            top: 50%;
+            transform: translateY(-50%);
+            right: -50px;
+            width: 600px;
+            height: 300px;
+            object-position: right center;
+        }
+
+        @media (max-width: 1200px) {
+            .people-illustration.left-side {
+                left: -30px;
+                width: 500px;
+                height: 250px;
+            }
+            
+            .people-illustration.right-side {
+                right: -30px;
+                width: 500px;
+                height: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .people-illustration {
+                display: none;
+            }
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .product-card {
+            background: white;
+            border: 1px solid #e8eaed;
+            border-radius: 12px;
+            padding: 32px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .product-card:hover {
+            border-color: var(--green-light);
+            box-shadow: 0 4px 12px rgba(95, 177, 76, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .product-card.hidden {
+            display: none;
+        }
+
+        /* Using placeholder images with no background instead of emoji icons */
+        .product-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .product-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .product-name {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--green-dark);
+        }
+
+        /* Added promotional section with gradient background using our color scheme */
+        .promo-section {
+            background: linear-gradient(135deg, var(--green-light), var(--green-medium), var(--green-dark));
+            padding: 80px 24px;
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .promo-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .promo-heading {
+            font-size: 48px;
+            font-weight: 400;
+            color: white;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .promo-subheading {
+            font-size: 32px;
+            font-weight: 400;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .promo-logo {
+            font-size: 48px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: -1px;
+        }
+
+        /* Added footer with links and company info */
+        .footer {
+            background-color: var(--primary-dark);
+            color: white;
+            padding: 60px 24px 40px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--accent-yellow);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--green-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #555;
+            padding-top: 20px;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+
+        /* Added sidebar styles and functionality */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 300px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease;
+            z-index: 1000;
+            padding: 20px 0;
+        }
+
+        .sidebar.active {
+            left: 0;
+        }
+
+        .sidebar-header {
+            padding: 0 24px 20px;
+            border-bottom: 1px solid #e8eaed;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--green-dark);
+        }
+
+        .close-btn {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            fill: var(--primary-dark);
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .sidebar-item {
+            display: block;
+            padding: 16px 24px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(95, 177, 76, 0.1);
+            color: var(--green-medium);
+        }
+
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            z-index: 999;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        @media (max-width: 768px) {
+            .main-heading {
+                font-size: 32px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            /* Adjusted mobile logo size to still be bigger but fit mobile screens */
+            .product-icon {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .header {
+                padding: 12px 16px;
+            }
+            
+            .main-content {
+                padding: 40px 16px;
+            }
+
+            /* Added responsive styles for promo section */
+            .promo-heading {
+                font-size: 32px;
+            }
+
+            .promo-subheading {
+                font-size: 24px;
+            }
+
+            .promo-logo {
+                font-size: 36px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Added sidebar overlay and sidebar menu -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-title">Menu</span>
+            <svg class="close-btn" id="closeSidebar" viewBox="0 0 24 24">
+                <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+            </svg>
+        </div>
+        <nav class="sidebar-menu">
+            <a href="ToS.html" class="sidebar-item">Privacy Policy</a>
+            <a href="faq.html" class="sidebar-item">FAQ</a>
+            <a href="ToS.html" class="sidebar-item">Terms of Services</a>
+            <a href="cookie.html" class="sidebar-item">Cookie Policy</a>
+        </nav>
+    </div>
+
+    <header class="header">
+        <div class="header-left">
+            <!-- Added click handler to menu icon -->
+            <svg class="menu-icon" id="menuIcon" viewBox="0 0 24 24">
+                <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+            </svg>
+            <img src="/src/helpdesk.png" alt="CTU Logo" style="width:40px;height:40px;vertical-align:middle;margin-right:12px;">
+            <span class="logo-text">Access Point | Help Center</span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <h1 class="main-heading">How can we help you?</h1>
+        
+        <!-- Wrapped search in illustrations container with proper people images -->
+        <div class="illustrations-container">
+            <img src="/src/mental.png" 
+                 alt="People illustrations" class="people-illustration left-side">
+            
+            <div class="search-container">
+                <svg class="search-icon" viewBox="0 0 24 24">
+                    <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+                <input type="text" class="search-box" id="searchInput" placeholder="Search your category...">
+                <div class="search-results" id="searchResults"></div>
+            </div>
+            
+            <img src="/src/health.png" 
+                 alt="People illustrations" class="people-illustration right-side">
+        </div>
+
+        <div class="products-grid" id="productsGrid">
+            <div class="product-card" data-keywords="therapy counseling mental health talk professional therapist psychologist" onclick="window.open('/help-center/therapy.html')">
+                <div class="product-icon">
+                    <img src="/src/therapy.png" alt="Therapy">
+                </div>
+                <div class="product-name">Therapy and Counseling</div>
+            </div>
+            <div class="product-card" data-keywords="medication management pills prescription drugs medicine doctor" onclick="window.open('/help-center/medication.html')">
+                <div class="product-icon">
+                    <img src="/src/medication.png" alt="Medication">
+                </div>
+                <div class="product-name">Medication Management</div>
+            </div>
+            <div class="product-card" data-keywords="exercise fitness workout gym physical activity sports running" onclick="window.open('/help-center/exercise.html')">
+                <div class="product-icon">
+                    <img src="/src/exercise.png" alt="Exercise">
+                </div>
+                <div class="product-name">Regular Exercise</div>
+            </div>
+            <div class="product-card" data-keywords="mindfulness meditation relaxation breathing calm peace zen" onclick="window.open('/help-center/meditation.html')">
+                <div class="product-icon">
+                    <img src="/src/meditation.png" alt="Meditation">
+                </div>
+                <div class="product-name">Mindfulness and Meditation</div>
+            </div>
+            <div class="product-card" data-keywords="sleep routine rest bedtime insomnia tired fatigue" onclick="window.open('/help-center/sleep.html')">
+                <div class="product-icon">
+                    <img src="/src/sleep.png" alt="Sleep">
+                </div>
+                <div class="product-name">Healthy Sleep Routine</div>
+            </div>
+            <div class="product-card" data-keywords="nutrition diet food healthy eating balanced meals vitamins" onclick="window.open('/help-center/nutrition.html')">
+                <div class="product-icon">
+                    <img src="/src/nutrition.png" alt="Nutrition">
+                </div>
+                <div class="product-name">Balanced Nutrition</div>
+            </div>
+            <div class="product-card" data-keywords="social support friends family community connection relationships" onclick="window.open('/help-center/social.html')">
+                <div class="product-icon">
+                    <img src="/src/social.png" alt="Social Support">
+                </div>
+                <div class="product-name">Social Support</div>
+            </div>
+            <div class="product-card" data-keywords="stress management anxiety worry pressure coping techniques" onclick="window.open('/help-center/stress.html')">
+                <div class="product-icon">
+                    <img src="/src/stress.png" alt="Stress Management">
+                </div>
+                <div class="product-name">Stress Management Techniques</div>
+            </div>
+            <div class="product-card" data-keywords="alcohol substance use addiction recovery sobriety limit drinking" onclick="window.open('/help-center/alcohol.html')">
+                <div class="product-icon">
+                    <img src="/src/alcohol.png" alt="Substance Awareness">
+                </div>
+                <div class="product-name">Limiting Alcohol and Substance Use</div>
+            </div>
+            <div class="product-card" data-keywords="boundaries setting limits personal space self care protection" onclick="window.open('/help-center/boundaries.html')">
+                <div class="product-icon">
+                    <img src="/src/setting.png" alt="Boundaries">
+                </div>
+                <div class="product-name">Setting Boundaries</div>
+            </div>
+            <div class="product-card" data-keywords="crisis support emergency help hotline professional urgent immediate" onclick="window.open('/help-center/support.html')">
+                <div class="product-icon">
+                    <img src="/src/support.png" alt="Crisis Support">
+                </div>
+                <div class="product-name">Professional Crisis Support</div>
+            </div>
+            <div class="product-card" data-keywords="routine schedule structure daily habits consistency organization" onclick="window.open('/help-center/routine.html')">
+                <div class="product-icon">
+                    <img src="/src/routine.png" alt="Routine">
+                </div>
+                <div class="product-name">Building a Routine</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Added promotional section with gradient background -->
+    <section class="promo-section">
+        <div class="promo-content">
+            <h2 class="promo-heading">Mental health is not a destination, but a process.</h2>
+            <h3 class="promo-subheading">It’s about how you drive, not where you’re going</h3>
+            <div class="promo-logo">- Noam Shpancer</div>
+        </div>
+    </section>
+
+    <!-- Added comprehensive footer with links and company info -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h3>Products</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Search</a></li>
+                        <li><a href="#">Gmail</a></li>
+                        <li><a href="#">Drive</a></li>
+                        <li><a href="#">Maps</a></li>
+                        <li><a href="#">YouTube</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Community</a></li>
+                        <li><a href="#">Report Issue</a></li>
+                        <li><a href="#">Feedback</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Developers</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Accessibility</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy;  2025 CTU-MC | BS-DEVCOM | ALL RIGHTS RESERVED. </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const menuIcon = document.getElementById('menuIcon');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const closeSidebar = document.getElementById('closeSidebar');
+        const searchInput = document.getElementById('searchInput');
+        const searchResults = document.getElementById('searchResults');
+        const productsGrid = document.getElementById('productsGrid');
+        const productCards = document.querySelectorAll('.product-card');
+
+        // Sidebar functionality
+        function openSidebar() {
+            sidebar.classList.add('active');
+            sidebarOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebarMenu() {
+            sidebar.classList.remove('active');
+            sidebarOverlay.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        menuIcon.addEventListener('click', openSidebar);
+        closeSidebar.addEventListener('click', closeSidebarMenu);
+        sidebarOverlay.addEventListener('click', closeSidebarMenu);
+
+        // Close sidebar when pressing Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+                closeSidebarMenu();
+            }
+        });
+
+        // Search functionality
+        function performSearch(query) {
+            const searchTerm = query.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                // Show all cards when search is empty
+                productCards.forEach(card => {
+                    card.classList.remove('hidden');
+                });
+                searchResults.style.display = 'none';
+                return;
+            }
+
+            const matches = [];
+            
+            // Search through product cards
+            productCards.forEach(card => {
+                const productName = card.querySelector('.product-name').textContent.toLowerCase();
+                const keywords = card.getAttribute('data-keywords').toLowerCase();
+                
+                if (productName.includes(searchTerm) || keywords.includes(searchTerm)) {
+                    matches.push({
+                        name: card.querySelector('.product-name').textContent,
+                        element: card
+                    });
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            // Show search results dropdown
+            displaySearchResults(matches, searchTerm);
+        }
+
+        function displaySearchResults(matches, searchTerm) {
+            searchResults.innerHTML = '';
+            
+            if (matches.length === 0) {
+                searchResults.innerHTML = '<div class="no-results">No results found for "' + searchTerm + '"</div>';
+            } else {
+                matches.forEach(match => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'search-result-item';
+                    resultItem.textContent = match.name;
+                    resultItem.addEventListener('click', () => {
+                        // Scroll to the product card
+                        match.element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        // Highlight the card briefly
+                        match.element.style.transform = 'scale(1.05)';
+                        setTimeout(() => {
+                            match.element.style.transform = '';
+                        }, 300);
+                        // Clear search and hide results
+                        searchInput.value = '';
+                        searchResults.style.display = 'none';
+                        // Show all cards again
+                        productCards.forEach(card => card.classList.remove('hidden'));
+                    });
+                    searchResults.appendChild(resultItem);
+                });
+            }
+            
+            searchResults.style.display = 'block';
+        }
+
+        // Search input event listeners
+        searchInput.addEventListener('input', function(e) {
+            performSearch(e.target.value);
+        });
+
+        searchInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch(e.target.value);
+            }
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchResults.style.display = 'none';
+                productCards.forEach(card => card.classList.remove('hidden'));
+            }
+        });
+
+        // Hide search results when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                searchResults.style.display = 'none';
+            }
+        });
+
+        // Show search results when focusing on input (if there's content)
+        searchInput.addEventListener('focus', function() {
+            if (searchInput.value.trim() !== '') {
+                performSearch(searchInput.value);
+            }
+        });
+    </script>
+</body>
+</html>
