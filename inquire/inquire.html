@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Point - Message Center</title>
+    <link rel="icon" type="image/png" href="/src/godc.png">
+    <!-- Google Fonts - Google Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
+    <!-- Email.js for sending emails -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
+    <style>
+        :root {
+            --primary-dark: #353539;
+            --green-dark: #0e3521;
+            --green-medium: #006936;
+            --green-light: #5fb14c;
+            --accent-yellow: #f1ec33;
+            --green-muted: #4a7c59;
+            --primary-gradient: linear-gradient(135deg, var(--green-medium), var(--green-light));
+            --accent-gradient: linear-gradient(135deg, var(--green-dark), var(--green-medium));
+            --text-dark: #333333;
+            --text-light: #ffffff;
+            --background-light: #ffffff;
+            --background-dark: #1e1e1e;
+            --gray-50: #fafafa;
+            --gray-100: #f5f5f5;
+            --gray-200: #eeeeee;
+            --gray-300: #e0e0e0;
+            --gray-400: #bdbdbd;
+            --gray-500: #9e9e9e;
+            --gray-600: #757575;
+            --gray-700: #616161;
+            --gray-800: #424242;
+            --gray-900: #212121;
+            --success: #4caf50;
+            --warning: #ff9800;
+            --error: #f44336;
+            --info: #2196f3;
+            --border-radius-sm: 12px;
+            --border-radius: 18px;
+            --border-radius-lg: 24px;
+            --border-radius-xl: 32px;
+            --border-radius-circle: 50%;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-md: 0 6px 16px rgba(0,0,0,0.12);
+            --shadow-lg: 0 12px 28px rgba(0,0,0,0.15);
+            --shadow-xl: 0 20px 30px rgba(0,0,0,0.18);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Google Sans', sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background-color: var(--background-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 600;
+        }
+        
+        p {
+            font-family: 'Google Sans', sans-serif;
+        }
+        
+        .accent-text {
+            font-family: 'Google Sans', sans-serif;
+        }
+        
+        .quote-text {
+            font-family: 'Google Sans', sans-serif;
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+        /* Main Layout */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+        }
+        
+        .brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .logo {
+            height: 45px;
+            margin-right: 15px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+        }
+        
+        .brand-name {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 800;
+            font-size: 26px;
+            color: var(--green-medium);
+            letter-spacing: -0.5px;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .nav-link {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--green-medium);
+        }
+        
+        .nav-link:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            position: relative;
+            overflow: hidden;
+            padding-top: 75px;
+        }
+        
+        .hero-left {
+            width: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        
+        .hero-right {
+            width: 50%;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+            position: relative;
+        }
+        
+        .hero-circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+        
+        .hero-circle {
+            position: absolute;
+            border-radius: var(--border-radius-circle);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .hero-circle-1 {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            right: -150px;
+        }
+        
+        .hero-circle-2 {
+            width: 200px;
+            height: 200px;
+            bottom: 50px;
+            left: -100px;
+        }
+        
+        .hero-circle-3 {
+            width: 150px;
+            height: 150px;
+            top: 50%;
+            left: 30%;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            padding-top: 0;
+        }
+        
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .hero-badge i {
+            margin-right: 8px;
+        }
+        
+        .hero-title {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 800;
+            font-size: 56px;
+            color: white;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero-subtitle {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 40px;
+            max-width: 500px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Form Section */
+        .form-container {
+            max-width: 500px;
+            width: 100%;
+        }
+        
+        .form-title {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 700;
+            font-size: 32px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        
+        .form-subtitle {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 16px;
+            color: var(--gray-600);
+            margin-bottom: 30px;
+        }
+        
+        .form-tabs {
+            display: flex;
+            background-color: var(--gray-100);
+            border-radius: var(--border-radius);
+            padding: 4px;
+            margin-bottom: 30px;
+        }
+        
+        .form-tab {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--gray-600);
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .form-tab.active {
+            background-color: white;
+            color: var(--green-medium);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .form-content {
+            display: none;
+        }
+        
+        .form-content.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+        
+        .input-wrapper {
+            position: relative;
+        }
+        
+        .input-wrapper input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--border-radius);
+            font-family: 'Google Sans', sans-serif;
+            font-size: 16px;
+            color: var(--text-dark);
+            background-color: white;
+            transition: var(--transition);
+        }
+        
+        .input-wrapper input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--green-medium);
+            box-shadow: 0 0 0 3px rgba(95, 177, 76, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .input-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-400);
+            font-size: 16px;
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .btn-dark {
+            background: var(--primary-dark);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-dark:hover {
+            background: var(--green-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .btn-icon {
+            margin-right: 8px;
+        }
+        
+        /* Alerts */
+        .alert {
+            display: flex;
+            align-items: flex-start;
+            padding: 15px 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+        
+        .alert-error {
+            background-color: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.2);
+            color: var(--error);
+        }
+        
+        .alert-success {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            color: var(--success);
+        }
+        
+        .alert-icon {
+            margin-right: 12px;
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+        
+        .alert-title {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        
+        /* Spinner */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-xl);
+            transform: scale(0.9);
+            transition: var(--transition);
+        }
+        
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+        
+        .modal-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: var(--border-radius-circle);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            color: white;
+            font-size: 32px;
+        }
+        
+        .modal-title {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+        
+        .modal-text {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 16px;
+            color: var(--gray-600);
+            margin-bottom: 20px;
+        }
+        
+        .tracking-code-display {
+            background: var(--gray-100);
+            border: 2px dashed var(--green-medium);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin: 20px 0;
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--green-medium);
+            letter-spacing: 1px;
+        }
+        
+        /* Tracking Results */
+        .tracking-card {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .tracking-info h3 {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            color: var(--primary-dark);
+            margin-bottom: 5px;
+        }
+        
+        .tracking-meta {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            color: var(--gray-600);
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 500;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-received {
+            background: rgba(33, 150, 243, 0.1);
+            color: var(--info);
+        }
+        
+        .status-in-progress {
+            background: rgba(255, 152, 0, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-resolved {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+        }
+        
+        .tracking-details {
+            margin-bottom: 25px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .detail-label {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--primary-dark);
+            width: 100px;
+            flex-shrink: 0;
+        }
+        
+        .detail-value {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            color: var(--gray-700);
+            flex: 1;
+        }
+        
+        .comments-section {
+            border-top: 1px solid var(--gray-200);
+            padding-top: 20px;
+        }
+        
+        .comments-title {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--primary-dark);
+            margin-bottom: 15px;
+        }
+        
+        .comment {
+            background: var(--gray-50);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .comment-text {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 14px;
+            color: var(--gray-700);
+            margin-bottom: 5px;
+        }
+        
+        .comment-meta {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 15px 0;
+            text-align: center;
+            font-size: 12px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+        
+        .footer-logo img {
+            height: 20px;
+            margin-right: 8px;
+        }
+        
+        .footer-logo-text {
+            font-family: 'Google Sans', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--accent-yellow);
+        }
+        
+        .footer-text {
+            font-family: 'Google Sans', sans-serif;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-section {
+                flex-direction: column;
+            }
+            
+            .hero-left,
+            .hero-right {
+                width: 100%;
+            }
+            
+            .hero-left {
+                min-height: 60vh;
+                padding: 40px 30px;
+            }
+            
+            .hero-right {
+                padding: 40px 30px;
+            }
+            
+            .hero-title {
+                font-size: 42px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .brand-name {
+                font-size: 20px;
+            }
+            
+            .logo {
+                height: 35px;
+            }
+        }
+
+        /* Added styles for admin replies */
+        .admin-replies-section {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid var(--green-light);
+        }
+        
+        .section-title {
+            color: var(--green-dark);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .section-title i {
+            color: var(--green-medium);
+        }
+        
+        .admin-reply {
+            background: linear-gradient(135deg, var(--green-light), var(--green-medium));
+            border: 1px solid var(--green-medium);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .admin-reply-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .admin-reply-header i {
+            color: white;
+            background: var(--green-dark);
+            padding: 4px;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+        }
+        
+        .admin-label {
+            font-weight: 600;
+            color: white;
+            flex: 1;
+        }
+        
+        .reply-date {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .admin-reply-content {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--primary-dark);
+            line-height: 1.5;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <a href="#" class="brand">
+                <img src="/src/helpdesk.png" alt="Access Point Logo" class="logo">
+                <h1 class="brand-name">Access Point</h1>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="About Us.html" class="nav-link">About</a>
+            </nav>
+        </header>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-left">
+                    <div class="hero-circles">
+                        <div class="hero-circle hero-circle-1"></div>
+                        <div class="hero-circle hero-circle-2"></div>
+                        <div class="hero-circle hero-circle-3"></div>
+                    </div>
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <i class="fa-solid fa-comment-dots"></i> Message Center
+                        </div>
+                        <h1 class="hero-title">Connect with us</h1>
+                        <p class="hero-subtitle">Have a question, feedback, or just want to reach out? We're here to listen and respond to all your messages with care and attention.</p>
+                        <div class="hero-buttons">
+                            <button class="btn btn-primary" onclick="switchTab('send')">
+                                <i class="fa-solid fa-envelope btn-icon"></i> Send Message
+                            </button>
+                            <button class="btn btn-secondary" onclick="switchTab('track')">
+                                <i class="fa-solid fa-search btn-icon"></i> Track Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-right">
+                    <div class="form-container">
+                        <h2 class="form-title">Message Center</h2>
+                        <p class="form-subtitle">We value your feedback and are committed to providing timely responses.</p>
+                        
+                        <div class="form-tabs">
+                            <button class="form-tab active" data-tab="send">Send Message</button>
+                            <button class="form-tab" data-tab="track">Track Message</button>
+                        </div>
+                        
+                        <div class="form-content active" id="send-form">
+                            <div class="form-group">
+                                <label for="name">Student ID Number</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="name" placeholder="Enter your student ID number" required>
+                                    <i class="fa-solid fa-id-card input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <div class="input-wrapper">
+                                    <input type="email" id="email" placeholder="Enter your email address" required>
+                                    <i class="fa-solid fa-envelope input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="subject" placeholder="Enter message subject" required>
+                                    <i class="fa-solid fa-tag input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" placeholder="Type your message here..." required></textarea>
+                            </div>
+                            
+                            <div id="status-message" style="display: none;"></div>
+                            
+                            <button id="send-button" class="btn btn-dark" style="width: 100%; margin-top: 20px;" onclick="sendMessage()">
+                                <i class="fa-solid fa-paper-plane btn-icon"></i> Send Message
+                            </button>
+                        </div>
+                        
+                        <div class="form-content" id="track-form">
+                            <div class="form-group">
+                                <label for="tracking-code">Tracking Code</label>
+                                <div class="input-wrapper">
+                                    <input type="text" id="tracking-code" placeholder="Enter your tracking code (e.g., SILAKBO123456)">
+                                    <i class="fa-solid fa-barcode input-icon"></i>
+                                </div>
+                            </div>
+                            
+                            <button id="track-button" class="btn btn-dark" style="width: 100%; margin-top: 20px;" onclick="trackMessage()">
+                                <i class="fa-solid fa-search btn-icon"></i> Track Message
+                            </button>
+                            
+                            <div id="tracking-result" style="display: none; margin-top: 30px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        
+        <!-- Success Modal -->
+        <div id="success-modal" class="modal-overlay">
+            <div class="modal">
+                <div class="modal-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h3 class="modal-title">Message Sent Successfully!</h3>
+                <p class="modal-text">Your message has been received and logged in our system. Please save your tracking code for future reference.</p>
+                <div class="tracking-code-display">
+                    <span id="success-tracking-code">CTUBSDC123456</span>
+                </div>
+                <p class="modal-text">A confirmation email with your tracking code has been sent to your email address.</p>
+                <button class="btn btn-primary" onclick="closeSuccessModal()">
+                    <i class="fa-solid fa-check btn-icon"></i> Got it!
+                </button>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="/src/godc.png" alt="Access Point Logo">
+                    <span class="footer-logo-text">ACCESS POINT</span>
+                </div>
+                <p class="footer-text">© 2025 CTU-MC | BS-DEVCOM. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize EmailJS
+        (function() {
+            emailjs.init('x9F5-hZBRrxYyCW4E');
+        })();
+        
+        // Initialize Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsynsRyRVwNYzOtqG4yDdcy5HWw74aOzY",
+            authDomain: "student-s-helpdesk.firebaseapp.com",
+            databaseURL: "https://student-s-helpdesk-default-rtdb.firebaseio.com/",
+            projectId: "student-s-helpdesk",
+            storageBucket: "student-s-helpdesk.firebasestorage.app",
+            messagingSenderId: "270861175145",
+            appId: "1:270861175145:web:b66a5f9fef8ac3104855f8",
+            measurementId: "G-VRKD5P955F"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // Reference to the database
+        const database = firebase.database();
+        
+        // Tab switching
+        function switchTab(tabId) {
+            // Update tab buttons
+            const tabs = document.querySelectorAll('.form-tab');
+            tabs.forEach(tab => {
+                if (tab.dataset.tab === tabId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            // Update content
+            const contents = document.querySelectorAll('.form-content');
+            contents.forEach(content => {
+                if (content.id === tabId + '-form') {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+        
+        // Modal functions
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.remove('active');
+        }
+        
+        function openSuccessModal() {
+            document.getElementById('success-modal').classList.add('active');
+        }
+        
+        // Generate tracking code
+        function generateTrackingCode() {
+            const timestamp = Date.now();
+            const randomNum = Math.floor(Math.random() * 10000);
+            return `CTUBSDC${timestamp.toString().slice(-6)}${randomNum.toString().padStart(4, '0')}`;
+        }
+        
+        // Send message function
+        function sendMessage() {
+            const sendButton = document.getElementById('send-button');
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const subject = document.getElementById('subject').value.trim();
+            const messageText = document.getElementById('message').value.trim();
+            const statusMessage = document.getElementById('status-message');
+            
+            // Validate form
+            if (!name || !email || !subject || !messageText) {
+                statusMessage.innerHTML = `
+                    <div class="alert alert-error">
+                        <i class="fa-solid fa-exclamation-circle alert-icon"></i>
+                        <div class="alert-content">     
+                            <div class="alert-title">Error</div>
+                            <p>Please fill in all required fields.</p>
+                        </div>
+                    </div>
+                `;
+                statusMessage.style.display = 'block';
+                return;
+            }
+            
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                statusMessage.innerHTML = `
+                    <div class="alert alert-error">
+                        <i class="fa-solid fa-exclamation-circle alert-icon"></i>
+                        <div class="alert-content">
+                            <div class="alert-title">Invalid Email</div>
+                            <p>Please enter a valid email address.</p>
+                        </div>
+                    </div>
+                `;
+                statusMessage.style.display = 'block';
+                return;
+            }
+            
+            // Show loading state
+            sendButton.disabled = true;
+            sendButton.innerHTML = '<span class="spinner"></span> Sending...';
+            statusMessage.style.display = 'none';
+            
+            // Generate tracking code
+            const trackingCode = generateTrackingCode();
+            
+            // Generate a unique key for the message
+            const messageKey = database.ref().child('messages').push().key;
+            
+            // Message data
+            const messageData = {
+                studentId: name,
+                email: email,
+                subject: subject,
+                message: messageText,
+                timestamp: Date.now(),
+                trackingCode: trackingCode,
+                status: "Received",
+                read: false,
+                comments: [{
+                    text: "Message received and logged in our system.",
+                    timestamp: Date.now(),
+                    author: "system"
+                }]
+            };
+            
+            // Write to database
+            database.ref('messages/' + messageKey).set(messageData)
+                .then(() => {
+                    // Send email with tracking code
+                    sendConfirmationEmail(name, email, trackingCode, subject);
+                    
+                    // Show success modal with tracking code
+                    document.getElementById('success-tracking-code').textContent = trackingCode;
+                    openSuccessModal();
+                    
+                    // Reset button
+                    sendButton.disabled = false;
+                    sendButton.innerHTML = '<i class="fa-solid fa-paper-plane btn-icon"></i> Send Message';
+                    
+                    // Clear form
+                    document.getElementById('name').value = '';
+                    document.getElementById('email').value = '';
+                    document.getElementById('subject').value = '';
+                    document.getElementById('message').value = '';
+                })
+                .catch((error) => {
+                    statusMessage.innerHTML = `
+                        <div class="alert alert-error">
+                            <i class="fa-solid fa-exclamation-circle alert-icon"></i>
+                            <div class="alert-content">
+                                <div class="alert-title">Error</div>
+                                <p>There was a problem sending your message: ${error.message}</p>
+                            </div>
+                        </div>
+                    `;
+                    statusMessage.style.display = 'block';
+                    
+                    // Reset button
+                    sendButton.disabled = false;
+                    sendButton.innerHTML = '<i class="fa-solid fa-paper-plane btn-icon"></i> Send Message';
+                });
+        }
+        
+        // Send confirmation email with tracking code
+        function sendConfirmationEmail(studentId, email, trackingCode, subject) {
+            // Create the parameter object
+            const templateParams = {
+                to_email: email,
+                to_name: studentId,
+                tracking_code: trackingCode,
+                message_subject: subject,
+                from_name: "CTU BS-DevCom",
+                reply_to: email
+            };
+            
+            // Send email using emailjs
+            return emailjs.send(
+                'service_d8zmr4b',
+                'template_88n0bhm',
+                templateParams,
+                'x9F5-hZBRrxYyCW4E'
+            ).then(function(response) {
+                console.log('Email sent successfully!', response.status, response.text);
+            }).catch(function(error) {
+                console.log('Failed to send email...', error);
+                // Add error handling to show the error to the user
+                const statusMessage = document.getElementById('status-message');
+                statusMessage.innerHTML = `
+                    <div class="alert alert-error">
+                        <i class="fa-solid fa-exclamation-circle alert-icon"></i>
+                        <div class="alert-content">
+                            <div class="alert-title">Error</div>
+                            <p>Failed to send confirmation email: ${error.text}. Your message was saved but the email confirmation failed.</p>
+                        </div>
+                    </div>
+                `;
+                statusMessage.style.display = 'block';
+            });
+        }
+        
+        // Track message function
+        function trackMessage() {
+            const trackingCode = document.getElementById('tracking-code').value.trim();
+            const trackingResult = document.getElementById('tracking-result');
+            const trackButton = document.getElementById('track-button');
+            
+            if (!trackingCode) {
+                trackingResult.innerHTML = `
+                    <div class="alert alert-error">
+                        <i class="fa-solid fa-exclamation-circle alert-icon"></i>
+                        <div class="alert-content">
+                            <div class="alert-title">Error</div>
+                            <p>Please enter a tracking code.</p>
+                        </div>
+                    </div>
+                `;
+                trackingResult.style.display = 'block';
+                return;
+            }
+            
+            // Show loading state
+            trackButton.disabled = true;
+            trackButton.innerHTML = '<span class="spinner"></span> Tracking...';
+            trackingResult.innerHTML = `
+                <div style="text-align: center; padding: 20px;">
+                    <div class="spinner" style="width: 24px; height: 24px; border-top-color: var(--green-medium); border-color: var(--gray-300); margin: 0 auto 15px;"></div>
+                    <p>Retrieving message information...</p>
+                </div>
+            `;
+            trackingResult.style.display = 'block';
+            
+            // Query the database for the tracking code
+            database.ref('messages').orderByChild('trackingCode').equalTo(trackingCode).once('value')
+                .then((snapshot) => {
+                    // Reset button
+                    trackButton.disabled = false;
+                    trackButton.innerHTML = '<i class="fa-solid fa-search btn-icon"></i> Track Message';
+                    
+                    if (snapshot.exists()) {
+                        // Get the message data
+                        let messageData;
+                        let messageKey;
+                        
+                        snapshot.forEach((childSnapshot) => {
+                            messageData = childSnapshot.val();
+                            messageKey = childSnapshot.key;
+                        });
+                        
+                        // Format date
+                        const messageDate = new Date(messageData.timestamp).toLocaleString();
+                        
+                        // Determine status class
+                        let statusClass = '';
+                        switch(messageData.status) {
+                            case 'Received':
+                                statusClass = 'status-received';
+                                break;
+                            case 'In Progress':
+                                statusClass = 'status-in-progress';
+                                break;
+                            case 'Resolved':
+                                statusClass = 'status-resolved';
+                                break;
+                            default:
+                                statusClass = 'status-received';
+                        }
+                        
+                        // Build comments HTML - reverse the order to show newest first
+                        let commentsHtml = '';
+                        let adminRepliesHtml = '';
+                        
+                        if (messageData.comments && Array.isArray(messageData.comments)) {
+                            // Create a copy of the array and reverse it
+                            const reversedComments = [...messageData.comments].reverse();
+                            
+                            reversedComments.forEach(comment => {
+                                const commentDate = new Date(comment.timestamp).toLocaleString();
+                                commentsHtml += `
+                                    <div class="comment">
+                                        <div class="comment-text">${comment.text}</div>
+                                        <div class="comment-meta">${commentDate}</div>
+                                    </div>
+                                `;
+                            });
+                        }
+                        
+                        if (messageData.replies && typeof messageData.replies === 'object') {
+                            // Convert replies object to array and sort by timestamp (newest first)
+                            const repliesArray = Object.values(messageData.replies).sort((a, b) => b.timestamp - a.timestamp);
+                            
+                            repliesArray.forEach(reply => {
+                                const replyDate = new Date(reply.timestamp).toLocaleString();
+                                adminRepliesHtml += `
+                                    <div class="admin-reply">
+                                        <div class="admin-reply-header">
+                                            <i class="fa-solid fa-user-tie"></i>
+                                            <span class="admin-label">Admin Response</span>
+                                            <span class="reply-date">${replyDate}</span>
+                                        </div>
+                                        <div class="admin-reply-content">${reply.message}</div>
+                                    </div>
+                                `;
+                            });
+                        }
+                        
+                        // Display tracking result
+                        trackingResult.innerHTML = `
+                            <div class="tracking-card">
+                                <div class="tracking-header">
+                                    <div class="tracking-info">
+                                        <h3>Message Details</h3>
+                                        <div class="tracking-meta">Tracking Code: ${trackingCode}</div>
+                                    </div>
+                                    <span class="status-badge ${statusClass}">${messageData.status}</span>
+                                </div>
+                                
+                                <div class="tracking-details">
+                                    <div class="detail-row">
+                                        <span class="detail-label">Student ID:</span>
+                                        <span class="detail-value">${messageData.studentId || messageData.name}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Email:</span>
+                                        <span class="detail-value">${messageData.email}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Subject:</span>
+                                        <span class="detail-value">${messageData.subject}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Submitted:</span>
+                                        <span class="detail-value">${messageDate}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Message:</span>
+                                        <span class="detail-value">${messageData.message}</span>
+                                    </div>
+                                </div>
+                                
+                                ${adminRepliesHtml ? `
+                                <div class="admin-replies-section">
+                                    <h4 class="section-title">
+                                        <i class="fa-solid fa-reply"></i>
+                                        Admin Replies
+                                    </h4>
+                                    ${adminRepliesHtml}
+                                </div>
+                                ` : ''}
+                                
+                                <div class="comments-section">
+                                    <h4 class="comments-title">Updates & Comments</h4>
+                                    ${commentsHtml}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        trackingResult.innerHTML = `
+                            <div class="alert alert-error">
+                                <i class="fa-solid fa-exclamation-circle alert-icon"></i>
+                                <div class="alert-content">
+                                    <div class="alert-title">Message Not Found</div>
+                                    <p>No message found with tracking code: <strong>${trackingCode}</strong></p>
+                                    <p>Please check your tracking code and try again.</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                })
+                .catch((error) => {
+                    // Reset button
+                    trackButton.disabled = false;
+                    trackButton.innerHTML = '<i class="fa-solid fa-search btn-icon"></i> Track Message';
+                    
+                    trackingResult.innerHTML = `
+                        <div class="alert alert-error">
+                            <i class="fa-solid fa-exclamation-circle alert-icon"></i>
+                            <div class="alert-content">
+                                <div class="alert-title">Error</div>
+                                <p>There was a problem retrieving your message: ${error.message}</p>
+                            </div>
+                        </div>
+                    `;
+                });
+        }
+        
+        // Add event listeners for tab switching
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.form-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    switchTab(this.dataset.tab);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
