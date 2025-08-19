@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Point - Student Help Desk</title>
+    <link rel="icon" href="/src/helpdesk.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #353539;
+            --green-dark: #0e3521;
+            --green-medium: #006936;
+            --green-light: #5fb14c;
+            --accent-yellow: #f1ec33;
+            --green-muted: #4a7c59;
+            --border-color: #dadce0;
+        }
+
+        body {
+            font-family: 'Google Sans', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--primary-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            background-color: #fff;
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 48px;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            background-color: #fff;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .google-account-logo {
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--green-muted);
+            display: flex;
+            align-items: center;
+        }
+
+        .google-account-logo span:first-child {
+            color: var(--green-medium);
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--green-muted);
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .nav-link.active {
+            color: var(--green-medium);
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--green-medium);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 10px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-outline {
+            border: 1px solid var(--border-color);
+            color: var(--green-medium);
+            background-color: #fff;
+        }
+
+        .btn-outline:hover {
+            background-color: #f8f9fa;
+        }
+
+        .btn-primary {
+            background-color: var(--green-medium);
+            color: #fff;
+            border: 1px solid var(--green-medium);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--green-dark);
+        }
+
+        /* Main Content - Hero Section */
+        .hero-section {
+            padding: 80px 48px 120px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 40px;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .hero-content h1 {
+            font-size: 56px;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: var(--primary-dark);
+        }
+
+        .hero-content p {
+            font-size: 18px;
+            color: var(--green-muted);
+            margin-bottom: 0;
+        }
+
+        .hero-images {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-width: 400px;
+            min-height: 200px;
+        }
+
+        .hero-images .profile-pic {
+            width: 600px;
+            height: 400px;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        /* Features Section */
+        .features-section {
+            background-color: #f8f9fa;
+            padding: 80px 48px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .feature-card {
+            padding: 24px;
+            background-color: #f8f9fa;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .feature-card:hover {
+            background-color: #f1f3f4;
+            transform: translateY(-2px);
+        }
+
+        .feature-card.active {
+            background-color: #e8f5e8;
+        }
+
+        .feature-card:not(:last-child) {
+            border-right: 1px solid var(--border-color);
+        }
+
+        .feature-card h2 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 16px;
+            position: relative;
+            padding-bottom: 8px;
+            color: var(--primary-dark);
+        }
+
+        .feature-card h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .feature-card.information h2::after {
+            background-color: var(--green-medium);
+        }
+
+        .feature-card.dropbox h2::after {
+            background-color: var(--accent-yellow);
+        }
+
+        .feature-card.community h2::after {
+            background-color: var(--green-light);
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            color: var(--green-muted);
+            margin-bottom: 0;
+        }
+
+        /* Dynamic Content Section */
+        .content-section {
+            padding: 80px 48px;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 400px;
+        }
+
+        .content-item {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .content-item.active {
+            display: block;
+        }
+
+        .content-item h2 {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 24px;
+            color: var(--primary-dark);
+        }
+
+        .content-item h3 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 32px 0 16px 0;
+            color: var(--green-medium);
+        }
+
+        .content-item p {
+            font-size: 18px;
+            color: var(--green-muted);
+            margin-bottom: 20px;
+        }
+
+        .content-item ul {
+            font-size: 16px;
+            color: var(--green-muted);
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .content-item li {
+            margin-bottom: 8px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Floating Scroll Button */
+        .scroll-button-container {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 100;
+        }
+
+        .scroll-button {
+            width: 56px;
+            height: 56px;
+            background-color: var(--green-medium);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(14, 53, 33, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            border: none;
+        }
+
+        .scroll-button:hover {
+            background-color: var(--green-dark);
+        }
+
+        .scroll-button svg {
+            fill: #fff;
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .hero-section {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 40px;
+                padding-bottom: 80px;
+            }
+
+            .hero-content {
+                max-width: 100%;
+            }
+
+            .hero-content h1 {
+                font-size: 48px;
+            }
+
+            .hero-images {
+                margin-top: 40px;
+                min-width: unset;
+                min-height: unset;
+            }
+
+            .features-section {
+                gap: 40px;
+            }
+
+            .feature-card:not(:last-child) {
+                border-right: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 12px 24px;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 16px;
+            }
+
+            .header-left {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 16px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: center;
+                margin-top: 16px;
+            }
+
+            .hero-section, .features-section, .content-section {
+                padding: 40px 24px;
+            }
+
+            .hero-content h1 {
+                font-size: 36px;
+            }
+
+            .hero-content p {
+                font-size: 16px;
+            }
+
+            .feature-card {
+                padding: 20px;
+            }
+
+            .feature-card h2 {
+                font-size: 20px;
+            }
+
+            .content-item h2 {
+                font-size: 28px;
+            }
+
+            .scroll-button-container {
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .hero-images .profile-pic {
+                width: 450px;
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-images .profile-pic {
+                width: 350px;
+                height: 230px;
+            }
+        }
+
+        /* Footer */
+        footer {
+            background-color: #fff;
+            border-top: 1px solid var(--border-color);
+            padding: 48px 0;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 48px;
+        }
+
+        .footer-social {
+            margin-bottom: 32px;
+        }
+
+        .footer-social h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            padding: 8px 16px;
+            background-color: #f8f9fa;
+            border-radius: 24px;
+            text-decoration: none;
+            color: var(--green-muted);
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .social-link:hover {
+            background-color: #e8f5e8;
+            color: var(--green-medium);
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+            fill: currentColor;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid var(--border-color);
+            padding-top: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+        }
+
+        .footer-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-nav a {
+            font-size: 14px;
+            color: var(--green-muted);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            color: var(--green-medium);
+        }
+
+        .footer-nav .help-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 4px;
+            fill: currentColor;
+        }
+
+        @media (min-width: 768px) {
+            .footer-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .footer-brand {
+                margin-bottom: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .footer-container {
+                padding: 0 24px;
+            }
+
+            .social-links {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-nav {
+                flex-direction: column;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <div class="google-account-logo" aria-label="Access Point">
+                <img src="/src/helpdesk.png" alt="Access Point Logo" style="height:32px;width:32px;margin-right:10px;">
+                <span>Access Point</span>
+            </div>
+            <nav class="nav-links" aria-label="Main navigation">
+                <a href="#" class="nav-link active" onclick="showSection('about')">About</a>
+                <a href="/pages/help" class="nav-link" onclick="showSection('help')">Help Center</a>
+                <a href="/pages/ToS.html" class="nav-link" onclick="showSection('contact')">Privacy and Terms</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <a href="index" class="btn btn-primary">Get Started</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>Welcome to Access Point</h1>
+                <p>"Your safe space to ask, speak and raise your concern — where every student's voices and stories matters and are always welcome"</p>
+            </div>
+            <div class="hero-images">
+                <img src="/src/about.png" alt="Students collaborating" class="profile-pic">
+            </div>
+        </section>
+
+        <section class="features-section">
+            <div class="feature-card information active" onclick="showContent('information')">
+                <h2>Information Compass</h2>
+                <p>Your guide for enrollment processes, exam tips, interview preparation, and all school-related information you need to succeed.</p>
+            </div>
+            <div class="feature-card dropbox" onclick="showContent('dropbox')">
+                <h2>Anonymous Drop Box</h2>
+                <p>A safe space to share your emotions, concerns, and feelings anonymously. Both online and physical drop boxes available.</p>
+            </div>
+            <div class="feature-card community" onclick="showContent('community')">
+                <h2>Student Community</h2>
+                <p>A compassionate and informed community where every CTU student's voice is heard, validated, and welcomed.</p>
+            </div>
+        </section>
+
+        <section class="content-section">
+            <div id="information-content" class="content-item active">
+                <h2>Information Compass</h2>
+                <p>Access Point serves as your comprehensive guide through your academic journey at CTU. We provide essential information and resources to help you navigate various processes and challenges.</p>
+                
+                <h3>What We Offer:</h3>
+                <ul>
+                    <li><strong>Enrollment Guidance:</strong> Step-by-step assistance with enrollment processes, requirements, and deadlines</li>
+                    <li><strong>Exam Preparation:</strong> Tips, strategies, and resources to help you excel in your examinations</li>
+                    <li><strong>Interview Support:</strong> Preparation guides for academic interviews, scholarship applications, and career opportunities</li>
+                    <li><strong>Academic Resources:</strong> Information about courses, faculty, facilities, and academic policies</li>
+                    <li><strong>Campus Navigation:</strong> Help finding your way around campus and understanding university procedures</li>
+                </ul>
+
+                <p>Our platform was created by First Year Development Communication students to ensure that information dissemination reaches every student who needs it. We understand the challenges of being a student, and we're here to make your academic journey smoother.</p>
+            </div>
+
+            <div id="dropbox-content" class="content-item">
+                <h2>Anonymous Drop Box</h2>
+                <p>Sometimes you need a safe space to express your feelings without judgment. Our Anonymous Drop Box provides both online and physical options for you to share what's on your mind.</p>
+
+                <h3>How It Works:</h3>
+                <ul>
+                    <li><strong>Online Drop Box:</strong> Submit your thoughts, concerns, or emotions through our secure online platform</li>
+                    <li><strong>Physical Drop Box:</strong> Use our physical drop boxes located around campus for handwritten submissions</li>
+                    <li><strong>Complete Anonymity:</strong> Your identity is never revealed or tracked</li>
+                    <li><strong>Safe Environment:</strong> All submissions are handled with care and confidentiality</li>
+                </ul>
+
+                <h3>Why Use the Drop Box:</h3>
+                <p>We understand that students face various challenges - academic pressure, personal issues, social anxiety, or simply need someone to listen. The drop box allows you to:</p>
+                <ul>
+                    <li>Express emotions without fear of judgment</li>
+                    <li>Share concerns that you might not feel comfortable discussing face-to-face</li>
+                    <li>Release stress and emotional burden in a healthy way</li>
+                    <li>Know that someone cares about your wellbeing</li>
+                </ul>
+            </div>
+
+            <div id="community-content" class="content-item">
+                <h2>Student Community</h2>
+                <p>Access Point is more than just a platform - it's a community built by students, for students. We believe that every voice matters and every story deserves to be heard.</p>
+
+                <h3>Our Mission:</h3>
+                <p>To create a safe space for students where a compassionate and informed community with positive connections is present. This is your space for all concerns, questions, and issues.</p>
+
+                <h3>Community Values:</h3>
+                <ul>
+                    <li><strong>Inclusivity:</strong> Every student is welcome regardless of background, year level, or program</li>
+                    <li><strong>Compassion:</strong> We approach every interaction with understanding and empathy</li>
+                    <li><strong>Support:</strong> We're here to help each other succeed and overcome challenges</li>
+                    <li><strong>Respect:</strong> All voices are valued and treated with dignity</li>
+                    <li><strong>Confidentiality:</strong> Your privacy and trust are our top priorities</li>
+                </ul>
+
+                <h3>Get Involved:</h3>
+                <p>This platform was created to hear the voices of every student in CTU, so we can help you in any way we can. Whether you need academic support, emotional guidance, or just someone to listen, our community is here for you.</p>
+
+                <p><strong>Remember:</strong> You are not alone in your journey. Access Point is your safe space where silent voices that need to be heard are validated and always welcome.</p>
+            </div>
+
+            <div id="about-content" class="content-item">
+                <h2>About Access Point</h2>
+                <p>Good day! Welcome to Access Point, where the silent voices that need to be heard are validated and are always welcome.</p>
+
+                <p>Access Point is an online platform created by First Year Development Communication students to help first year and other students with Information Dissemination.</p>
+
+                <h3>Our Story:</h3>
+                <p>Access Point: Help Desk is an online platform that caters to different features designed specifically for the CTU student community. We recognized the need for a centralized, accessible resource where students could find support, information, and a sense of belonging.</p>
+
+                <h3>What Makes Us Different:</h3>
+                <p>We are students helping students. Our team understands the unique challenges, pressures, and experiences that come with university life because we live them too. This peer-to-peer approach ensures that our platform remains relevant, accessible, and truly helpful.</p>
+
+                <p>Thank you and once again, welcome to ACCESS POINT!</p>
+            </div>
+
+            <div id="help-content" class="content-item">
+                <h2>Help Center</h2>
+                <p>Need assistance? Our Help Center provides comprehensive support for all your questions and concerns.</p>
+
+                <h3>How to Get Help:</h3>
+                <ul>
+                    <li><strong>Browse Information:</strong> Use our Information Compass to find guides and resources</li>
+                    <li><strong>Submit Questions:</strong> Use our contact form for specific inquiries</li>
+                    <li><strong>Anonymous Support:</strong> Use the Drop Box for sensitive concerns</li>
+                    <li><strong>Community Support:</strong> Connect with fellow students and peer mentors</li>
+                </ul>
+
+                <h3>Common Topics:</h3>
+                <ul>
+                    <li>Enrollment and registration procedures</li>
+                    <li>Academic requirements and policies</li>
+                    <li>Campus facilities and services</li>
+                    <li>Student organizations and activities</li>
+                    <li>Mental health and wellness resources</li>
+                    <li>Career guidance and opportunities</li>
+                </ul>
+
+                <h3>Response Time:</h3>
+                <p>We strive to respond to all inquiries within 24-48 hours. For urgent matters, please indicate the urgency in your message.</p>
+            </div>
+
+            <div id="contact-content" class="content-item">
+                <h2>Contact Us</h2>
+                <p>We're here to help! Reach out to us through any of the following methods:</p>
+
+                <h3>Get in Touch:</h3>
+                <ul>
+                    <li><strong>Online Form:</strong> Submit your questions through our secure contact form</li>
+                    <li><strong>Anonymous Drop Box:</strong> For sensitive or personal matters</li>
+                    <li><strong>Campus Locations:</strong> Visit our physical drop box locations around CTU</li>
+                    <li><strong>Student Representatives:</strong> Connect with our peer support team</li>
+                </ul>
+
+                <h3>Office Hours:</h3>
+                <p>Our online platform is available 24/7. Student representatives are typically available during regular school hours and can be reached for urgent matters.</p>
+
+                <h3>Emergency Support:</h3>
+                <p>For immediate mental health support or crisis situations, please contact the CTU Guidance Office or emergency services directly.</p>
+
+                <p><strong>Remember:</strong> No question is too small, and no concern is insignificant. We're here to support you throughout your academic journey.</p>
+            </div>
+        </section>
+    </main>
+
+    <div class="scroll-button-container">
+        <button class="scroll-button" aria-label="Scroll to features" onclick="scrollToFeatures()">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/ctudevcomofficial" class="social-link">
+                        <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Guild of Development Communicators
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-brand">CTU-MC | BS-DEVCOM | ACCESS POINT</div>
+                <div class="footer-nav">
+                    <a href="/pages/ToS.html">Privacy and Terms</a>
+                    <a href="/error.html">About Access Point</a>
+                    <a href="/pages/help.html">
+                        <svg class="help-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                        </svg>
+                        Help
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function scrollToFeatures() {
+            document.querySelector('.features-section').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        function showContent(contentType) {
+            // Remove active class from all feature cards
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Add active class to clicked card
+            document.querySelector(`.feature-card.${contentType}`).classList.add('active');
+            
+            // Hide all content items
+            document.querySelectorAll('.content-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected content
+            document.getElementById(`${contentType}-content`).classList.add('active');
+            
+            // Scroll to content section
+            document.querySelector('.content-section').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        function showSection(section) {
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+            
+            // Hide all content items
+            document.querySelectorAll('.content-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section content
+            document.getElementById(`${section}-content`).classList.add('active');
+            
+            // Reset feature cards
+            document.querySelectorAll('.feature-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // If showing about, activate information card by default
+            if (section === 'about') {
+                document.querySelector('.feature-card.information').classList.add('active');
+            }
+            
+            // Scroll to content section
+            document.querySelector('.content-section').scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
+
+        // Initialize with information content active
+        document.addEventListener('DOMContentLoaded', function() {
+            showContent('information');
+        });
+    </script>
+</body>
+</html>
