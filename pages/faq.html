@@ -246,89 +246,112 @@
             margin: 0 4px;
         }
 
+        /* Updated footer styles to match the new design */
         .footer {
-            background-color: #353539;
+            background-color: #ffffff;
+            border-top: 1px solid #e5e7eb;
             margin-top: 80px;
-            padding: 40px 0;
+            padding: 48px 0;
         }
 
         .footer-content {
-            max-width: 1200px;
+            max-width: 1280px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 16px;
         }
 
-        .footer-sections {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
+        .footer-follow {
+            margin-bottom: 32px;
         }
 
-        .footer-section h3 {
-            color: #f1ec33;
-            font-size: 16px;
-            font-weight: 500;
+        .footer-follow h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
             margin-bottom: 16px;
         }
 
-        .footer-links {
-            list-style: none;
+        .footer-social {
+            display: flex;
+            gap: 16px;
         }
 
-        .footer-links li {
-            margin-bottom: 8px;
+        .footer-social-link {
+            width: auto;
+            height: 40px;
+            background-color: #f3f4f6;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+
+        .footer-social-link:hover {
+            background-color: #e5e7eb;
+        }
+
+        .footer-social-link .material-icons {
+            color: #6b7280;
+            margin-right: 8px;
+        }
+
+        .footer-social-link span {
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 32px;
+        }
+
+        .footer-bottom-content {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .footer-branding {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .footer-branding-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-right: 32px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            font-size: 14px;
+            color: #6b7280;
         }
 
         .footer-links a {
-            color: #ffffff;
+            color: #6b7280;
             text-decoration: none;
-            font-size: 14px;
             transition: color 0.2s;
         }
 
         .footer-links a:hover {
-            color: #5fb14c;
+            color: #1f2937;
         }
 
-        .footer-bottom {
-            border-top: 1px solid #4a7c59;
-            padding-top: 24px;
+        .footer-help-link {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
         }
 
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            color: #ffffff;
+        .footer-help-link .material-icons {
             font-size: 16px;
-            font-weight: 500;
-        }
-
-        .footer-logo .logo-text {
-            color: #f1ec33;
             margin-right: 4px;
-        }
-
-        .footer-legal {
-            display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
-        }
-
-        .footer-legal a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 12px;
-            transition: color 0.2s;
-        }
-
-        .footer-legal a:hover {
-            color: #5fb14c;
         }
 
         @media (max-width: 768px) {
@@ -404,6 +427,35 @@
 
             .faq-answer.show {
                 padding: 16px 0 20px; /* Adjusted for mobile consistency */
+            }
+
+            /* Mobile responsive footer styles */
+            .footer-bottom-content {
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .footer-content {
+                padding: 0 24px;
+            }
+            
+            .footer-bottom-content {
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            
+            .footer-branding {
+                margin-bottom: 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .footer-content {
+                padding: 0 32px;
             }
         }
     </style>
@@ -593,59 +645,32 @@
         </section>
     </main>
 
+    <!-- Completely redesigned footer to match the provided image -->
     <footer class="footer">
         <div class="footer-content">
-            <div class="footer-sections">
-                <div class="footer-section">
-                    <h3>Enrollment</h3>
-                    <ul class="footer-links">
-                        <li><a href="error">Requirements</a></li>
-                        <li><a href="error">Process Guide</a></li>
-                        <li><a href="error">Medical Forms</a></li>
-                        <li><a href="error">Schedule</a></li>
-                        <li><a href="error">Registration</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Student Services</h3>
-                    <ul class="footer-links">
-                        <li><a href="error">Dean's Office</a></li>
-                        <li><a href="error">Registrar</a></li>
-                        <li><a href="error">Scholarship Office</a></li>
-                        <li><a href="error">Medical Clinic</a></li>
-                        <li><a href="error">CAS Office</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Programs</h3>
-                    <ul class="footer-links">
-                        <li><a href="error">BS DevCom</a></li>
-                        <li><a href="error">Course Curriculum</a></li>
-                        <li><a href="error">Faculty</a></li>
-                        <li><a href="error">Facilities</a></li>
-                        <li><a href="error">Student Organizations</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <ul class="footer-links">
-                        <li><a href="error">Contact Us</a></li>
-                        <li><a href="error">Campus Map</a></li>
-                        <li><a href="error">Academic Calendar</a></li>
-                        <li><a href="error">Student Handbook</a></li>
-                        <li><a href="error">Help Center</a></li>
-                    </ul>
+            <div class="footer-follow">
+                <h3 class="footer-follow h3">Follow Us</h3>
+                <div class="footer-social">
+                    <a href="https://www.facebook.com/ctudevcomofficial" class="footer-social-link">
+                        <span class="material-icons">facebook</span>
+                        <span>Guild of Development Communicators</span>
+                    </a>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
-                <div class="footer-logo">
-                    <span>CTU-MC | BS-DEVCOM - Access Point</span>
-                </div>
-                <div class="footer-legal">
-                    <a href="/pages/ToS">Privacy Policy</a>
-                    <a href="/pages/ToS.html">Terms of Service</a>
-                    <a href="/pages/about">About</a>
+                <div class="footer-bottom-content">
+                    <div class="footer-branding">
+                        <span class="footer-branding-text">CTU-MC | BS-DEVCOM | ACCESS POINT</span>
+                    </div>
+                    <div class="footer-links">
+                        <a href="/pages/ToS.html">Privacy and Terms</a>
+                        <a href="/error.html">About Access Point</a>
+                        <a href="/pages/help.html" class="footer-help-link">
+                            <span class="material-icons">help</span>
+                            Help
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
