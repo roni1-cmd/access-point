@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Point</title>
+    <link rel="icon" href="/src/helpdesk.png" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background: linear-gradient(135deg, #353539 0%, #0e3521 100%);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .main-content {
+            background: white;
+            overflow: hidden;
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #4a7c59;
+            padding: 30px 0;
+            border-right: 1px solid #006936;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 30px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .nav-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-right: 3px solid #00ff88;
+        }
+
+        .nav-item .material-icons {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            padding: 0 30px 40px;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            border-radius: 8px;
+            margin-right: 12px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .content-area {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .welcome-section h2 {
+            color: #2d3748;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .welcome-section p {
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #4a7c59, #00ff88);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-avatar-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slider-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .slider-section h3 {
+            color: #2d3748;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .slider-section > p {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            cursor: pointer;
+        }
+
+        .slide.active {
+            opacity: 1;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .slide-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+            color: white;
+            padding: 40px 30px 30px;
+        }
+
+        .slide-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .slide-description {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .slider-nav:hover {
+            background: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider-nav.prev {
+            left: 20px;
+        }
+
+        .slider-nav.next {
+            right: 20px;
+        }
+
+        .slider-nav .material-icons {
+            font-size: 24px;
+            color: #2d3748;
+        }
+
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e2e8f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: #4a7c59;
+        }
+
+        .additional-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .content-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .content-card h4 {
+            color: #2d3748;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .content-card p {
+            color: #718096;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: #4a7c59;
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .logout-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logout-modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content h3 {
+            color: #2d3748;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 25px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.cancel {
+            background: #e2e8f0;
+            color: #2d3748;
+        }
+
+        .modal-btn.cancel:hover {
+            background: #cbd5e0;
+        }
+
+        .modal-btn.confirm {
+            background: #e53e3e;
+            color: white;
+        }
+
+        .modal-btn.confirm:hover {
+            background: #c53030;
+        }
+
+        .logout-loader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2001;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .logout-loader.show {
+            display: flex;
+        }
+
+        .loader {
+            position: relative;
+            width: 96px;
+            height: 96px;
+            transform: rotate(45deg);
+        }
+
+        .loader-square {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 28px;
+            height: 28px;
+            margin: 2px;
+            border-radius: 0px;
+            background: #4a7c59;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            animation: square-animation 10s ease-in-out infinite both;
+        }
+
+        .loader-square:nth-of-type(1) {
+            animation-delay: 0s;
+        }
+
+        .loader-square:nth-of-type(2) {
+            animation-delay: -1.4285714286s;
+        }
+
+        .loader-square:nth-of-type(3) {
+            animation-delay: -2.8571428571s;
+        }
+
+        .loader-square:nth-of-type(4) {
+            animation-delay: -4.2857142857s;
+        }
+
+        .loader-square:nth-of-type(5) {
+            animation-delay: -5.7142857143s;
+        }
+
+        .loader-square:nth-of-type(6) {
+            animation-delay: -7.1428571429s;
+        }
+
+        .loader-square:nth-of-type(7) {
+            animation-delay: -8.5714285714s;
+        }
+
+        .loader-square:nth-of-type(8) {
+            animation-delay: -10s;
+        }
+
+        @keyframes square-animation {
+            0% {
+                left: 0;
+                top: 0;
+            }
+            10.5% {
+                left: 0;
+                top: 0;
+            }
+            12.5% {
+                left: 32px;
+                top: 0;
+            }
+            23% {
+                left: 32px;
+                top: 0;
+            }
+            25% {
+                left: 64px;
+                top: 0;
+            }
+            35.5% {
+                left: 64px;
+                top: 0;
+            }
+            37.5% {
+                left: 64px;
+                top: 32px;
+            }
+            48% {
+                left: 64px;
+                top: 32px;
+            }
+            50% {
+                left: 32px;
+                top: 32px;
+            }
+            60.5% {
+                left: 32px;
+                top: 32px;
+            }
+            62.5% {
+                left: 32px;
+                top: 64px;
+            }
+            73% {
+                left: 32px;
+                top: 64px;
+            }
+            75% {
+                left: 0;
+                top: 64px;
+            }
+            85.5% {
+                left: 0;
+                top: 64px;
+            }
+            87.5% {
+                left: 0;
+                top: 32px;
+            }
+            98% {
+                left: 0;
+                top: 32px;
+            }
+            100% {
+                left: 0;
+                top: 0;
+            }
+        }
+
+        .loader-text {
+            color: white;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        #steve {
+            display: none;
+        }
+
+        /* Loading spinner for authentication check */
+        .auth-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #353539 0%, #0e3521 100%);
+            color: white;
+            font-size: 18px;
+        }
+
+        .auth-loading.hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .mobile-overlay.show {
+                display: block;
+            }
+
+            .sidebar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                transform: translateX(-100%);
+                z-index: 1000;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .content-area {
+                padding: 20px;
+                margin-left: 0;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .slider-container {
+                height: 300px;
+            }
+
+            .additional-content {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading screen while checking authentication -->
+    <div class="auth-loading" id="auth-loading">
+        <div>Checking account validity...</div>
+    </div>
+
+    <button class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+        <span class="material-icons">menu</span>
+    </button>
+    
+    <div class="mobile-overlay" onclick="closeMobileMenu()"></div>
+
+    <div class="main-content" id="main-content" style="display: none;">
+        <nav class="sidebar" id="sidebar">
+            <div class="logo">
+                <img src="/src/helpdesk.png" alt="Logo" class="logo-icon" style="background: none; border-radius: 8px; width: 32px; height: 32px; object-fit: cover; margin-right: 12px;">
+                <span class="logo-text">Access Point</span>
+            </div>
+            
+            <nav>
+                <a href="#" class="nav-item active">
+                    <span class="material-icons">dashboard</span>
+                    Dashboard
+                </a>
+                <a href="/error.html" class="nav-item">
+                    <span class="material-icons">folder</span>
+                    Project
+                </a>
+                <a href="/error.html" class="nav-item">
+                    <span class="material-icons">people</span>
+                    Team
+                </a>
+                <a href="/error.html" class="nav-item">
+                    <span class="material-icons">star</span>
+                    Review
+                </a>
+                <a href="/error.html" class="nav-item">
+                    <span class="material-icons">message</span>
+                    Message
+                </a>
+                <a href="/error.html" class="nav-item">
+                    <span class="material-icons">settings</span>
+                    Settings
+                </a>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 40px;">
+                <a href="/error.html" class="nav-item">
+                    <span class="material-icons">help</span>
+                    Help
+                </a>
+                <a href="#" class="nav-item" id="logout-btn">
+                    <span class="material-icons">logout</span>
+                    Log Out
+                </a>
+            </div>
+        </nav>
+
+        <main class="content-area">
+            <div class="top-bar">
+                <div class="welcome-section">
+                    <h2 id="welcome-message">Welcome, User</h2>
+                    <p id="current-date-time"></p>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">
+                        <div class="user-avatar-text" id="user-avatar-text">U</div>
+                    </div>
+                    <div class="user-details">
+                        <h4 id="user-name">User Name</h4>
+                        <p id="user-email">user@example.com</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slider-section">
+                <h3>What's In</h3>
+                
+                <div class="slider-container">
+                    <div class="slider-wrapper">
+                        <div class="slide active" data-redirect="https://example.com/nature">
+                            <img src="/src/hero.png" alt="Nature Landscape">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Consult With Us</div>
+                                <div class="slide-description">Here to help you with your needs</div>
+                            </div>
+                        </div>
+                        
+                        <div class="slide" data-redirect="https://example.com/technology">
+                            <img src="/src/hero2.png" alt="Technology Workspace">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Consider Yourself</div>
+                                <div class="slide-description">Your Success Starts Here</div>
+                            </div>
+                        </div>
+                        
+                        <div class="slide" data-redirect="https://example.com/business">
+                            <img src="/src/hero3.png" alt="Business Meeting">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Growth</div>
+                                <div class="slide-description">Empowering Your Journey Towards Success</div>
+                            </div>
+                        </div>
+                        
+                        <div class="slide" data-redirect="https://example.com/creative">
+                            <img src="/src/hero4.png" alt="Creative Studio">
+                            <div class="slide-overlay">
+                                <div class="slide-title">Terms and Privacy</div>
+                                <div class="slide-description">Learn About Our Terms of Service and Privacy Policy</div>
+                            </div>
+                        </div>
+                        
+                        <div class="slide" data-redirect="https://example.com/lifestyle">
+                            <img src="/src/hero5.png" alt="Healthy Lifestyle">
+                            <div class="slide-overlay">
+                                <div class="slide-title">The Commons</div>
+                                <div class="slide-description">A Space for Collaboration and Community</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="slider-nav prev" onclick="changeSlide(-1)">
+                        <span class="material-icons">chevron_left</span>
+                    </button>
+                    <button class="slider-nav next" onclick="changeSlide(1)">
+                        <span class="material-icons">chevron_right</span>
+                    </button>
+                </div>
+                
+                <div class="slider-dots">
+                    <span class="dot active" onclick="currentSlide(1)"></span>
+                    <span class="dot" onclick="currentSlide(2)"></span>
+                    <span class="dot" onclick="currentSlide(3)"></span>
+                    <span class="dot" onclick="currentSlide(4)"></span>
+                    <span class="dot" onclick="currentSlide(5)"></span>
+                </div>
+            </div>
+
+            <div class="additional-content">
+                <div class="content-card">
+                    <h4>Quick Access</h4>
+                    <p>Access your most frequently used tools and resources with just one click. Streamline your workflow and boost productivity.</p>
+                </div>
+                <div class="content-card">
+                    <h4>Recent Updates</h4>
+                    <p>Stay informed about the latest features, improvements, and announcements. Never miss important updates to your dashboard.</p>
+                </div>
+                <div class="content-card">
+                    <h4>Support Center</h4>
+                    <p>Get help when you need it most. Access documentation, tutorials, and contact our support team for assistance.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="logout-modal" id="logout-modal">
+        <div class="modal-content">
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to log out of your account?</p>
+            <div class="modal-buttons">
+                <button class="modal-btn cancel" id="cancel-logout">Cancel</button>
+                <button class="modal-btn confirm" id="confirm-logout">Log Out</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="logout-loader" id="logout-loader">
+        <div class="loader">
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+            <div class="loader-square"></div>
+        </div>
+        <div class="loader-text">Logging out...</div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsynsRyRVwNYzOtqG4yDdcy5HWw74aOzY",
+            authDomain: "student-s-helpdesk.firebaseapp.com",
+            projectId: "student-s-helpdesk",
+            storageBucket: "student-s-helpdesk.firebasestorage.app",
+            messagingSenderId: "270861175145",
+            appId: "1:270861175145:web:b66a5f9fef8ac3104855f8",
+            measurementId: "G-VRKD5P955F"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Global user variable
+        let currentUser = null;
+
+        // Check authentication state
+        auth.onAuthStateChanged((user) => {
+            const authLoading = document.getElementById('auth-loading');
+            const mainContent = document.getElementById('main-content');
+            
+            if (user) {
+                // User is signed in
+                currentUser = user;
+                console.log('[v0] User authenticated:', user.email);
+                
+                // Update UI with user information
+                updateUserInterface(user);
+                
+                // Show main content and hide loading
+                authLoading.classList.add('hidden');
+                mainContent.style.display = 'flex';
+            } else {
+                // User is signed out, redirect to login
+                console.log('[v0] User not authenticated, redirecting to login');
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Update user interface with Firebase user data
+        function updateUserInterface(user) {
+            const welcomeMessage = document.getElementById('welcome-message');
+            const userName = document.getElementById('user-name');
+            const userEmail = document.getElementById('user-email');
+            const userAvatar = document.getElementById('user-avatar');
+            const userAvatarText = document.getElementById('user-avatar-text');
+
+            // Extract display name or use email
+            const displayName = user.displayName || user.email.split('@')[0];
+            const email = user.email;
+
+            // Update welcome message
+            welcomeMessage.textContent = `Welcome, ${displayName}`;
+            
+            // Update user details
+            userName.textContent = displayName;
+            userEmail.textContent = email;
+            
+            if (user.photoURL) {
+                // User has a profile picture
+                userAvatar.innerHTML = `<img src="${user.photoURL}" alt="Profile Picture" onerror="this.style.display='none'; document.getElementById('user-avatar-text').style.display='flex';">`;
+                userAvatarText.style.display = 'none';
+            } else {
+                // No profile picture, show initials
+                userAvatarText.textContent = displayName.charAt(0).toUpperCase();
+                userAvatarText.style.display = 'flex';
+            }
+
+            console.log('[v0] UI updated with user data:', { displayName, email, photoURL: user.photoURL });
+        }
+
+        // Logout functionality with Firebase
+        function handleLogout() {
+            const logoutLoader = document.getElementById('logout-loader');
+            logoutLoader.classList.add('show');
+            
+            auth.signOut().then(() => {
+                console.log('[v0] User signed out successfully');
+                // Firebase auth state change will handle redirect
+            }).catch((error) => {
+                console.error('[v0] Error signing out:', error);
+                logoutLoader.classList.remove('show');
+                alert('Error signing out. Please try again.');
+            });
+        }
+
+        // Slider functionality
+        let currentSlideIndex = 0;
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+            });
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        function changeSlide(direction) {
+            currentSlideIndex += direction;
+            if (currentSlideIndex >= slides.length) {
+                currentSlideIndex = 0;
+            } else if (currentSlideIndex < 0) {
+                currentSlideIndex = slides.length - 1;
+            }
+            showSlide(currentSlideIndex);
+        }
+
+        function currentSlide(index) {
+            currentSlideIndex = index - 1;
+            showSlide(currentSlideIndex);
+        }
+
+        // Auto-advance slides
+        setInterval(() => {
+            changeSlide(1);
+        }, 5000);
+
+        // Slide click functionality
+        slides.forEach(slide => {
+            slide.addEventListener('click', () => {
+                const redirectUrl = slide.getAttribute('data-redirect');
+                if (redirectUrl) {
+                    window.open(redirectUrl, '_blank');
+                }
+            });
+        });
+
+        // Mobile menu functionality
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('show');
+        }
+
+        function closeMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.mobile-overlay');
+            
+            sidebar.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+
+        // Date and time functionality
+        function updateDateTime() {
+            const now = new Date();
+            const options = { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            };
+            document.getElementById('current-date-time').textContent = now.toLocaleDateString('en-US', options);
+        }
+
+        // Update time every minute
+        updateDateTime();
+        setInterval(updateDateTime, 60000);
+
+        // Modal functionality
+        const logoutBtn = document.getElementById('logout-btn');
+        const logoutModal = document.getElementById('logout-modal');
+        const cancelLogout = document.getElementById('cancel-logout');
+        const confirmLogout = document.getElementById('confirm-logout');
+
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            logoutModal.classList.add('show');
+        });
+
+        cancelLogout.addEventListener('click', () => {
+            logoutModal.classList.remove('show');
+        });
+
+        confirmLogout.addEventListener('click', () => {
+            logoutModal.classList.remove('show');
+            handleLogout();
+        });
+
+        // Close modal when clicking outside
+        logoutModal.addEventListener('click', (e) => {
+            if (e.target === logoutModal) {
+                logoutModal.classList.remove('show');
+            }
+        });
+
+        // Close mobile menu when clicking nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    closeMobileMenu();
+                }
+            });
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+        });
+    </script>
+</body>
+</html>
