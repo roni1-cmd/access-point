@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google - File Sharing Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .google-blue { color: #4285f4; }
+        .google-red { color: #ea4335; }
+        .google-yellow { color: #fbbc05; }
+        .google-green { color: #34a853; }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Navigation Header -->
+    <header class="px-6 py-4 border-b border-gray-200">
+        <nav class="flex items-center justify-between">
+            <div class="flex items-center space-x-8">
+                <!-- Google Logo -->
+                <div class="flex items-center">
+                    <span class="text-2xl font-normal">
+                        <span class="google-blue">G</span><span class="google-red">o</span><span class="google-yellow">o</span><span class="google-blue">g</span><span class="google-green">l</span><span class="google-red">e</span>
+                    </span>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="flex space-x-8">
+                    <a href="#" class="text-blue-600 border-b-2 border-blue-600 pb-2 font-medium">File Sharing</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Products</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">Company Info</a>
+                    <a href="#" class="text-gray-600 hover:text-gray-900">News</a>
+                </div>
+            </div>
+            
+            <!-- Added authentication buttons in header -->
+            <div id="auth" class="flex items-center space-x-4">
+                <button id="googleLogin" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    Sign in with Google
+                </button>
+                <button id="logoutBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-medium transition-colors" style="display:none;">
+                    Logout
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <!-- Hero Section -->
+        <section class="text-center mb-16">
+            <h1 class="text-5xl font-normal text-gray-900 mb-4 leading-tight">
+                Share files securely with<br>
+                Google-powered technology
+            </h1>
+            <p class="text-xl text-gray-600 mb-12">Upload, store, and share your files with ease</p>
+            
+            <!-- Replaced video player with file upload interface -->
+            <div id="upload" class="bg-gray-50 rounded-lg p-12 shadow-lg" style="display:none;">
+                <div class="max-w-md mx-auto">
+                    <div class="mb-6">
+                        <input type="hidden" role="uploadcare-uploader" id="fileUploader" />
+                    </div>
+                    <button id="saveFileBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-medium transition-colors">
+                        Save File to Cloud
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Sign in prompt for non-authenticated users -->
+            <div id="signInPrompt" class="bg-gray-50 rounded-lg p-12 shadow-lg">
+                <div class="max-w-md mx-auto">
+                    <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                    </svg>
+                    <h3 class="text-xl font-medium text-gray-900 mb-2">Ready to share files?</h3>
+                    <p class="text-gray-600 mb-6">Sign in with your Google account to start uploading and sharing files securely.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Modified cards section to display uploaded files as cards -->
+        <section id="filesGrid" class="grid md:grid-cols-3 gap-8 mt-20" style="display:none;">
+            <!-- Files will be dynamically inserted here -->
+        </section>
+
+        <!-- Static feature cards shown when no files are uploaded -->
+        <section id="featureCards" class="grid md:grid-cols-3 gap-8 mt-20">
+            <!-- Upload Card -->
+            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                <div class="aspect-video bg-blue-50 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"/>
+                    </svg>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3">UPLOAD</h3>
+                    <p class="text-gray-900 text-lg leading-relaxed mb-4">
+                        Securely upload your files with advanced cloud storage technology
+                    </p>
+                    <div class="flex justify-end">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Card -->
+            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                <div class="aspect-video bg-green-50 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3">SECURITY</h3>
+                    <p class="text-gray-900 text-lg leading-relaxed mb-4">
+                        Your files are protected with enterprise-grade security and authentication
+                    </p>
+                    <div class="flex justify-end">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Share Card -->
+            <div class="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                <div class="aspect-video bg-purple-50 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>
+                    </svg>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3">SHARE</h3>
+                    <p class="text-gray-900 text-lg leading-relaxed mb-4">
+                        Easily share your files with others through secure, accessible links
+                    </p>
+                    <div class="flex justify-end">
+                        <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Added Firebase and Uploadcare scripts -->
+    <!-- Firebase Compat SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+    <!-- Uploadcare Widget -->
+    <script>
+        UPLOADCARE_PUBLIC_KEY = "fedffcfab625a665a88f"; // Replace this
+    </script>
+    <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+
+    <!-- Added Firebase configuration and functionality -->
+    <script>
+        // Firebase config
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsynsRyRVwNYzOtqG4yDdcy5HWw74aOzY",
+            authDomain: "student-s-helpdesk.firebaseapp.com",
+            databaseURL: "https://student-s-helpdesk-default-rtdb.firebaseio.com",
+            projectId: "student-s-helpdesk",
+            storageBucket: "student-s-helpdesk.appspot.com",
+            messagingSenderId: "270861175145",
+            appId: "1:270861175145:web:b66a5f9fef8ac3104855f8"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const provider = new firebase.auth.GoogleAuthProvider();
+        const db = firebase.database();
+
+        const googleLogin = document.getElementById("googleLogin");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const uploadSection = document.getElementById("upload");
+        const signInPrompt = document.getElementById("signInPrompt");
+        const uploader = document.getElementById("fileUploader");
+        const saveFileBtn = document.getElementById("saveFileBtn");
+        const filesGrid = document.getElementById("filesGrid");
+        const featureCards = document.getElementById("featureCards");
+
+        function getFileIcon(fileName) {
+            const extension = fileName.split('.').pop().toLowerCase();
+            const iconClass = "w-16 h-16";
+            
+            switch (extension) {
+                case 'pdf':
+                    return `<svg class="${iconClass} text-red-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8.267 14.68c-.184 0-.308.018-.372.036v1.178c.076.018.171.023.302.023.479 0 .774-.242.774-.651 0-.366-.254-.586-.704-.586zm3.487.012c-.2 0-.33.018-.407.036v2.61c.077.018.201.018.313.018.817.006 1.349-.444 1.349-1.396.006-.83-.479-1.268-1.255-1.268z"/>
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6zM9.498 16.19c-.309.29-.765.42-1.296.42a2.23 2.23 0 0 1-.308-.018v1.426H7v-3.936A7.558 7.558 0 0 1 8.219 14c.557 0 .953.106 1.22.319.254.202.426.533.426.923-.001.392-.131.723-.367.948zm3.807 1.355c-.42.349-1.059.515-1.84.515-.468 0-.799-.03-1.024-.06v-3.917A7.947 7.947 0 0 1 11.66 14c.757 0 1.249.136 1.633.426.415.308.675.799.675 1.504 0 .763-.279 1.29-.663 1.615zM17 14.77h-1.532v.911H16.9v.734h-1.432v1.604h-.906V14.03H17v.74zM14 9h-1V4l5 5h-4z"/>
+                    </svg>`;
+                case 'doc':
+                case 'docx':
+                    return `<svg class="${iconClass} text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM16 18H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>`;
+                case 'xls':
+                case 'xlsx':
+                    return `<svg class="${iconClass} text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM8.5 18l1.5-2-1.5-2h1.5L11 16l1-2h1.5L12 16l1.5 2H12l-1-2-1 2H8.5zM13 9V3.5L18.5 9H13z"/>
+                    </svg>`;
+                case 'ppt':
+                case 'pptx':
+                    return `<svg class="${iconClass} text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zM11 15H9.5v3H8v-7h3c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2zm0-4H9.5v2H11v-2zM13 9V3.5L18.5 9H13z"/>
+                    </svg>`;
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif':
+                case 'svg':
+                    return `<svg class="${iconClass} text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.5-2-1.5-2h1.5L11 16l1-2h1.5L12 16l1.5 2H12l-1-2-1 2H8.5zM13 9V3.5L18.5 9H13z"/>
+                    </svg>`;
+                default:
+                    return `<svg class="${iconClass} text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>`;
+            }
+        }
+
+        function getFileTypeLabel(fileName) {
+            const extension = fileName.split('.').pop().toLowerCase();
+            switch (extension) {
+                case 'pdf': return 'PDF DOCUMENT';
+                case 'doc':
+                case 'docx': return 'WORD DOCUMENT';
+                case 'xls':
+                case 'xlsx': return 'SPREADSHEET';
+                case 'ppt':
+                case 'pptx': return 'PRESENTATION';
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif':
+                case 'svg': return 'IMAGE';
+                default: return 'FILE';
+            }
+        }
+
+        // Auth
+        googleLogin.onclick = () => auth.signInWithPopup(provider).catch(err => alert(err.message));
+        logoutBtn.onclick = () => auth.signOut();
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                uploadSection.style.display = "block";
+                signInPrompt.style.display = "none";
+                logoutBtn.style.display = "inline-block";
+                googleLogin.style.display = "none";
+            } else {
+                uploadSection.style.display = "none";
+                signInPrompt.style.display = "block";
+                logoutBtn.style.display = "none";
+                googleLogin.style.display = "inline-block";
+            }
+            loadPublicFiles();
+        });
+
+        // Save file to Firebase after Uploadcare finishes
+        saveFileBtn.onclick = () => {
+            console.log("[v0] Save button clicked");
+            const widget = uploadcare.Widget(uploader);
+            const file = widget.value();
+            
+            if (!file) {
+                alert("Please upload a file first");
+                return;
+            }
+            
+            console.log("[v0] File found, processing...");
+            saveFileBtn.disabled = true;
+            saveFileBtn.textContent = "Saving...";
+            
+            file.done(fileInfo => {
+                console.log("[v0] File info received:", fileInfo);
+                const user = auth.currentUser;
+                if (user) {
+                    console.log("[v0] User authenticated, saving to public Firebase location");
+                    const fileData = {
+                        name: fileInfo.name,
+                        url: fileInfo.cdnUrl,
+                        uploadedAt: new Date().toISOString(),
+                        size: fileInfo.size,
+                        mimeType: fileInfo.mimeType,
+                        uploadedBy: user.displayName || user.email
+                    };
+                    
+                    db.ref(`publicFiles`).push(fileData)
+                        .then(() => {
+                            console.log("[v0] File saved successfully to public Firebase");
+                            alert("File shared publicly!");
+                            // Reset the uploader
+                            widget.value(null);
+                            saveFileBtn.disabled = false;
+                            saveFileBtn.textContent = "Save File to Cloud";
+                        })
+                        .catch(error => {
+                            console.error("[v0] Error saving file:", error);
+                            alert("Error saving file: " + error.message);
+                            saveFileBtn.disabled = false;
+                            saveFileBtn.textContent = "Save File to Cloud";
+                        });
+                } else {
+                    console.log("[v0] No user authenticated");
+                    alert("Please sign in first");
+                    saveFileBtn.disabled = false;
+                    saveFileBtn.textContent = "Save File to Cloud";
+                }
+            }).fail(error => {
+                console.error("[v0] Uploadcare error:", error);
+                alert("Error processing file: " + error.message);
+                saveFileBtn.disabled = false;
+                saveFileBtn.textContent = "Save File to Cloud";
+            });
+        };
+
+        function loadPublicFiles() {
+            console.log("[v0] Loading public files");
+            filesGrid.innerHTML = "";
+            
+            db.ref(`publicFiles`).off(); // Remove previous listeners
+            
+            db.ref(`publicFiles`).on("child_added", snap => {
+                console.log("[v0] Public file loaded from Firebase:", snap.val());
+                const file = snap.val();
+                
+                // Hide feature cards and show files grid
+                featureCards.style.display = "none";
+                filesGrid.style.display = "grid";
+                
+                const fileCard = document.createElement("div");
+                fileCard.className = "bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer";
+                fileCard.onclick = () => {
+                    console.log("[v0] Opening file:", file.url);
+                    window.open(file.url, '_blank');
+                };
+                
+                fileCard.innerHTML = `
+                    <div class="aspect-video bg-gray-50 flex items-center justify-center">
+                        ${getFileIcon(file.name)}
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-3">${getFileTypeLabel(file.name)}</h3>
+                        <p class="text-gray-900 text-lg leading-relaxed mb-2 truncate" title="${file.name}">
+                            ${file.name}
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="text-sm text-gray-500">
+                                <div>${new Date(file.uploadedAt).toLocaleDateString()}</div>
+                                ${file.uploadedBy ? `<div class="text-xs">by ${file.uploadedBy}</div>` : ''}
+                            </div>
+                            <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+                            </svg>
+                        </div>
+                    </div>
+                `;
+                
+                filesGrid.appendChild(fileCard);
+            });
+            
+            db.ref(`publicFiles`).once("value", snapshot => {
+                if (!snapshot.exists()) {
+                    console.log("[v0] No public files found");
+                    featureCards.style.display = "grid";
+                    filesGrid.style.display = "none";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
