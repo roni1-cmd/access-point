@@ -7,42 +7,36 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .card-container { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 15px; }
+    .card { padding: 20px; background: #f3f3f3; border-radius: 8px; cursor: pointer; text-align: center; transition: 0.2s; }
+    .card:hover { background: #ddd; }
+    #subjectPage { display: none; }
+    #backBtn { margin-bottom: 15px; }
+    .file-item { margin: 8px 0; }
+  </style>
 </head>
 <body>
   <h2>Student File Sharing</h2>
 
-  <!-- Login button -->
+  <!-- Auth -->
   <button id="loginBtn">Login with Google</button>
   <button id="logoutBtn" style="display:none;">Logout</button>
 
-  <!-- Upload section -->
-  <div id="uploadSection" style="display:none;">
-    <h3>Upload File</h3>
-
-    <!-- Subject dropdown -->
-    <label for="subjectSelect">Select Subject:</label>
-    <select id="subjectSelect">
-      <option value="">-- Choose Subject --</option>
-      <option value="COMMUNICATION">COMMUNICATION</option>
-      <option value="CULTURE & SOCIETY">CULTURE & SOCIETY</option>
-      <option value="INTERPERSONAL COMMUNICATION IN DEVELOPMENT">INTERPERSONAL COMMUNICATION IN DEVELOPMENT</option>
-      <option value="THE CONTEMPORARY WORLD">THE CONTEMPORARY WORLD</option>
-      <option value="PURPOSIVE COMMUNICATION">PURPOSIVE COMMUNICATION</option>
-      <option value="ETHICS">ETHICS</option>
-      <option value="INTRODUCTION TO COMMUNICATION MEDIA">INTRODUCTION TO COMMUNICATION MEDIA</option>
-    </select>
-    <br><br>
-
-    <!-- File uploader -->
-    <input type="hidden"
-      role="uploadcare-uploader"
-      id="fileUploader"
-      data-file-types="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" 
-    />
+  <!-- Main subject card view -->
+  <div id="mainPage" style="display:none;">
+    <h3>Select a Subject</h3>
+    <div class="card-container" id="subjectCards"></div>
   </div>
 
-  <h3>Uploaded Files</h3>
-  <div id="fileList"></div>
+  <!-- Subject view -->
+  <div id="subjectPage">
+    <button id="backBtn">← Back</button>
+    <h3 id="subjectTitle"></h3>
+    <input type="hidden" role="uploadcare-uploader" id="fileUploader" />
+    <div id="fileList"></div>
+  </div>
 
   <script>
     // ===== Firebase Setup =====
@@ -60,10 +54,21 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
-    // ===== Auth =====
+    // Subjects
+    const subjects = [
+      "COMMUNICATION",
+      "CULTURE & SOCIETY",
+      "INTERPERSONAL COMMUNICATION IN DEVELOPMENT",
+      "THE CONTEMPORARY WORLD",
+      "PURPOSIVE COMMUNICATION",
+      "ETHICS",
+      "INTRODUCTION TO COMMUNICATION MEDIA"
+    ];
+
+    // Auth
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
-    const uploadSection = document.getElementById("uploadSection");
+    const mainPage = document.getElementById("mainPage");
 
     loginBtn.onclick = () => {
       const provider = new firebase.auth.GoogleAuthProvider();
@@ -75,38 +80,69 @@
       if (user) {
         loginBtn.style.display = "none";
         logoutBtn.style.display = "inline";
-        uploadSection.style.display = "block";
+        mainPage.style.display = "block";
       } else {
         loginBtn.style.display = "inline";
         logoutBtn.style.display = "none";
-        uploadSection.style.display = "none";
+        mainPage.style.display = "none";
+        document.getElementById("subjectPage").style.display = "none";
       }
     });
 
-    // ===== File Upload =====
-    const uploader = uploadcare.Widget('#fileUploader');
+    // Render subject cards
+    const subjectCards = document.getElementById("subjectCards");
+    subjects.forEach(sub => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.textContent = sub;
+      card.onclick = () => openSubject(sub);
+      subjectCards.appendChild(card);
+    });
+
+    // Subject page logic
+    const subjectPage = document.getElementById("subjectPage");
+    const subjectTitle = document.getElementById("subjectTitle");
+    const fileList = document.getElementById("fileList");
+    const backBtn = document.getElementById("backBtn");
+
+    let currentSubject = null;
+    let uploader = uploadcare.Widget("#fileUploader");
+
+    function openSubject(subject) {
+      currentSubject = subject;
+      subjectTitle.textContent = subject;
+      mainPage.style.display = "none";
+      subjectPage.style.display = "block";
+      fileList.innerHTML = "";
+
+      // Listen for files in this subject only
+      db.ref("files").orderByChild("subject").equalTo(subject).on("child_added", snap => {
+        const data = snap.val();
+        const div = document.createElement("div");
+        div.className = "file-item";
+        div.innerHTML = `<a href="${data.url}" target="_blank">${data.name}</a>`;
+        fileList.appendChild(div);
+      });
+    }
+
+    backBtn.onclick = () => {
+      subjectPage.style.display = "none";
+      mainPage.style.display = "block";
+      db.ref("files").off(); // detach old listener
+    };
+
+    // Upload handling
     uploader.onUploadComplete(fileInfo => {
-      const subject = document.getElementById("subjectSelect").value;
-      if (!subject) {
-        alert("Please choose a subject before uploading.");
+      if (!currentSubject) {
+        alert("Please open a subject before uploading.");
         return;
       }
-      // Save URL + subject to Firebase
       db.ref("files").push({
-        subject: subject,
+        subject: currentSubject,
         url: fileInfo.cdnUrl,
         name: fileInfo.name,
         uploadedAt: Date.now()
       });
-    });
-
-    // ===== Display Files =====
-    const fileList = document.getElementById("fileList");
-    db.ref("files").on("child_added", snapshot => {
-      const data = snapshot.val();
-      const div = document.createElement("div");
-      div.innerHTML = `<b>[${data.subject}]</b> <a href="${data.url}" target="_blank">${data.name}</a>`;
-      fileList.appendChild(div);
     });
   </script>
 </body>
