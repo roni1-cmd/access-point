@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Therapy & Counseling Guide</title>
+    <link rel="icon" type="image/x-icon" href="/src/godc.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #353539;
+            --green-dark: #0e3521;
+            --green-medium: #006936;
+            --green-light: #5fb14c;
+            --accent-yellow: #f1ec33;
+            --green-muted: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: white;
+            color: var(--primary-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            color: var(--primary-dark);
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-btn, .profile-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .menu-btn:hover, .profile-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .profile-btn {
+            background: var(--green-medium);
+            color: white;
+            border-radius: 50%;
+            font-weight: 500;
+        }
+
+        /* Layout */
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 73px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            border-right: 1px solid #e5e7eb;
+            background: white;
+            position: sticky;
+            top: 73px;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
+        }
+
+        .nav-menu {
+            padding: 24px;
+        }
+
+        .nav-menu ul {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 4px;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-menu a:hover {
+            background-color: #f3f4f6;
+        }
+
+        .nav-menu a.active {
+            background-color: var(--green-light);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 48px;
+            background: white;
+        }
+
+        .hero-image {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .content-wrapper {
+            max-width: 800px;
+        }
+
+        .subtitle {
+            color: var(--green-medium);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .main-title {
+            font-size: 36px;
+            font-weight: 400;
+            color: var(--primary-dark);
+            margin-bottom: 32px;
+            line-height: 1.2;
+        }
+
+        .intro-text {
+            font-size: 18px;
+            color: var(--primary-dark);
+            margin-bottom: 48px;
+            line-height: 1.7;
+        }
+
+        /* Enhanced Content Styles */
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--green-muted);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--green-medium);
+            border-radius: 2px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-highlight {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 2px solid var(--green-light);
+            border-left: 6px solid var(--green-medium);
+            padding: 32px;
+            border-radius: 12px;
+            margin: 24px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--green-light), var(--green-medium));
+            opacity: 0.1;
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-description {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            width: 28px;
+            height: 28px;
+            fill: var(--green-medium);
+            flex-shrink: 0;
+        }
+
+        .icon-large {
+            width: 48px;
+            height: 48px;
+            fill: var(--green-medium);
+            margin-bottom: 20px;
+        }
+
+        /* Enhanced grid layouts for better visual hierarchy */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .myth-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            margin-top: 32px;
+        }
+
+        /* Enhanced statistics section */
+        .stats-section {
+            background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-medium) 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            margin: 48px 0;
+            text-align: center;
+        }
+
+        .stats-title {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .stats-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--accent-yellow);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .stat-text {
+            font-size: 16px;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+        /* Enhanced list styling */
+        .enhanced-list {
+            list-style: none;
+            margin: 24px 0;
+        }
+
+        .enhanced-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid var(--green-light);
+        }
+
+        .list-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--green-medium);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .list-content {
+            flex: 1;
+        }
+
+        .list-title {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .list-description {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Therapy types cards with enhanced styling */
+        .therapy-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .therapy-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--green-light), var(--green-medium));
+        }
+
+        .therapy-card:hover {
+            border-color: var(--green-medium);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .therapy-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, var(--green-light), var(--green-medium));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .therapy-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .therapy-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+        }
+
+        .therapy-description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .therapy-features {
+            list-style: none;
+            text-align: left;
+        }
+
+        .therapy-features li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .therapy-features li::before {
+            content: '✓';
+            color: var(--green-medium);
+            font-weight: bold;
+        }
+
+        /* Crisis section with enhanced styling */
+        .crisis-section {
+            background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+            border: 2px solid #fecaca;
+            border-radius: 20px;
+            padding: 48px;
+            margin: 64px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .crisis-section::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(239, 68, 68, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .crisis-title {
+            color: #dc2626;
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .crisis-subtitle {
+            color: #dc2626;
+            font-size: 18px;
+            margin-bottom: 32px;
+            font-weight: 500;
+        }
+
+        .crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .crisis-card {
+            background: white;
+            padding: 32px;
+            border-radius: 16px;
+            border: 2px solid #fecaca;
+            box-shadow: 0 4px 20px rgba(239, 68, 68, 0.1);
+        }
+
+        .crisis-card-title {
+            color: #dc2626;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hotline-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #fef2f2;
+            border-radius: 8px;
+        }
+
+        .hotline-number {
+            font-weight: 600;
+            color: #dc2626;
+            font-size: 18px;
+        }
+
+        .hotline-description {
+            color: #7f1d1d;
+            font-size: 14px;
+        }
+
+        /* Sections */
+        /*.section {
+            margin-bottom: 64px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            font-weight: 500;
+            color: var(--primary-dark);
+            margin-bottom: 24px;
+        }*/
+
+        /*.card {
+            background: #f9fafb;
+            padding: 32px;
+            border-radius: 12px;
+            margin-bottom: 32px;
+        }*/
+
+        /*.card-highlight {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-left: 4px solid var(--green-medium);
+            padding: 24px;
+            border-radius: 8px;
+            margin: 24px 0;
+        }*/
+
+        /*.card-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }*/
+
+        /*.icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--green-medium);
+        }*/
+
+        .grid {
+            display: grid;
+            gap: 32px;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+
+        /*.stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            margin-top: 24px;
+        }*/
+
+        /*.stat-item {
+            text-align: center;
+        }*/
+
+        /*.stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--green-light);
+            margin-bottom: 8px;
+        }*/
+
+        /*.stat-text {
+            font-size: 14px;
+            color: var(--primary-dark);
+        }*/
+
+        /*.list {
+            list-style: none;
+            margin: 16px 0;
+        }*/
+
+        /*.list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }*/
+
+        /*.list-bullet {
+            width: 8px;
+            height: 8px;
+            background: var(--green-medium);
+            border-radius: 50%;
+            margin-top: 8px;
+            flex-shrink: 0;
+        }*/
+
+        /* Meta-style Connection Section */
+        .connection-section {
+            background: linear-gradient(135deg, var(--green-light) 0%, var(--green-medium) 50%, var(--green-dark) 100%);
+            padding: 80px 0;
+            text-align: center;
+            color: white;
+        }
+
+        /* Crisis Section */
+        /*.crisis-section {
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            border-radius: 12px;
+            padding: 32px;
+            margin: 48px 0;
+        }*/
+
+        /*.crisis-title {
+            color: #dc2626;
+            font-size: 28px;
+            font-weight: 500;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }*/
+
+        /*.crisis-text {
+            color: #dc2626;
+            font-size: 18px;
+            margin-bottom: 24px;
+        }*/
+
+        /*.crisis-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }*/
+
+        /*.crisis-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            border: 1px solid #fecaca;
+        }*/
+
+        /*.crisis-card-title {
+            color: #dc2626;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }*/
+
+        /*.hotline-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }*/
+
+        /*.hotline-icon {
+            width: 20px;
+            height: 20px;
+            fill: #dc2626;
+        }*/
+
+        /* Footer */
+        .footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--accent-yellow);
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-yellow);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #4b5563;
+            padding-top: 30px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+
+            .main-title {
+                font-size: 28px;
+            }
+
+            .connection-title {
+                font-size: 32px;
+            }
+
+            .connection-subtitle {
+                font-size: 24px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                padding: 12px 16px;
+            }
+
+            .logo-text {
+                font-size: 16px;
+            }
+
+            .nav-menu {
+                padding: 16px;
+            }
+
+            .hero-image img {
+                height: 250px;
+            }
+
+            .intro-text {
+                font-size: 16px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .connection-section {
+                padding: 60px 0;
+            }
+
+            .connection-content {
+                padding: 0 16px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer {
+                padding: 40px 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 16px;
+            }
+
+            .main-title {
+                font-size: 24px;
+            }
+
+            .connection-title {
+                font-size: 28px;
+            }
+
+            .connection-subtitle {
+                font-size: 20px;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .crisis-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img class="logo-icon" src="/src/godc.png" alt="Site Logo" />
+                <span class="logo-text">Student Therapy & Counseling Guide</span>
+            </div>
+            <div class="header-actions">
+                <button class="menu-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="/" class="active">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/services">Our Services</a></li>
+                    <li><a href="/therapists">Find Therapists</a></li>
+                    <li><a href="/resources">Resources</a></li>
+                    <li><a href="/blog">Blog & Articles</a></li>
+                    <li><a href="/support-groups">Support Groups</a></li>
+                    <li><a href="/crisis-help">Crisis Help</a></li>
+                    <li><a href="/insurance">Insurance Info</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Image -->
+            <div class="hero-image">
+                <img src="/src/therapy1.png" 
+                     alt="Students in therapy session">
+            </div>
+
+            <!-- Content -->
+            <div class="content-wrapper">
+                <p class="subtitle">Comprehensive Student Mental Health Guide</p>
+                
+                <h1 class="main-title">
+                    Your Complete Guide to Therapy and Counseling for Students
+                </h1>
+                
+                <p class="intro-text">
+                    Mental health support isn't a luxury—it's essential for academic success, personal growth, and building resilience for life's challenges. This comprehensive guide will help you understand, access, and make the most of therapy and counseling services.
+                </p>
+
+                <!-- Enhanced What It Is Section with detailed explanation -->
+                <section class="section">
+                    <h2 class="section-title">What Is Student Therapy & Counseling?</h2>
+                    <p class="section-subtitle">Understanding the fundamentals of mental health support designed specifically for students navigating academic and personal challenges.</p>
+                    
+                    <div class="card">
+                        <div class="card-title">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Professional Mental Health Support
+                        </div>
+                        <p class="card-description">Therapy and counseling for students involves working with trained mental health professionals—psychologists, counselors, therapists, or social workers—to address emotional, psychological, and behavioral challenges that impact academic performance and personal well-being.</p>
+                        
+                        <div class="enhanced-list">
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Safe, Confidential Environment</div>
+                                    <div class="list-description">A judgment-free space where you can openly discuss your thoughts, feelings, and experiences without fear of criticism or breach of privacy.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Evidence-Based Techniques</div>
+                                    <div class="list-description">Utilizes proven therapeutic approaches like Cognitive Behavioral Therapy (CBT), mindfulness, and solution-focused therapy tailored to student needs.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Personalized Support</div>
+                                    <div class="list-description">Treatment plans and coping strategies specifically designed around your unique circumstances, goals, and challenges as a student.</div>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+
+                    <div class="stats-section">
+                        <h3 class="stats-title">Mental Health in Student Populations</h3>
+                        <p class="stats-subtitle">Understanding the scope and impact of mental health challenges among students</p>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <span class="stat-number">73%</span>
+                                <div class="stat-text">of students experienced a mental health crisis on campus</div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">85%</span>
+                                <div class="stat-text">reported feeling overwhelmed by academic responsibilities</div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">45%</span>
+                                <div class="stat-text">experienced more than average stress levels</div>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-number">92%</span>
+                                <div class="stat-text">of students who received counseling reported improvement</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Enhanced Why It Matters Section with comprehensive benefits -->
+                <section class="section">
+                    <h2 class="section-title">Why Mental Health Support Matters for Students</h2>
+                    <p class="section-subtitle">The student years are a critical period for mental health development, identity formation, and building lifelong coping skills.</p>
+                    
+                    <div class="feature-grid">
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <div class="card-title">Academic Performance & Success</div>
+                            <p class="card-description">Mental health directly impacts concentration, memory, motivation, and academic achievement. Students with good mental health show 23% better academic performance.</p>
+                            <ul class="therapy-features">
+                                <li>Improved focus and concentration</li>
+                                <li>Better time management skills</li>
+                                <li>Reduced procrastination</li>
+                                <li>Enhanced problem-solving abilities</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            </svg>
+                            <div class="card-title">Social & Relationship Development</div>
+                            <p class="card-description">Learn healthy communication patterns, boundary setting, and relationship skills that will benefit you throughout life.</p>
+                            <ul class="therapy-features">
+                                <li>Improved communication skills</li>
+                                <li>Healthy boundary setting</li>
+                                <li>Conflict resolution abilities</li>
+                                <li>Stronger peer relationships</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div class="card-title">Identity & Personal Growth</div>
+                            <p class="card-description">The student years are crucial for identity formation. Counseling provides guidance during this transformative period.</p>
+                            <ul class="therapy-features">
+                                <li>Self-awareness and identity clarity</li>
+                                <li>Values and goal identification</li>
+                                <li>Confidence building</li>
+                                <li>Personal empowerment</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                            </svg>
+                            <div class="card-title">Stress Management & Resilience</div>
+                            <p class="card-description">Develop coping strategies for academic pressure, life transitions, and future challenges beyond school.</p>
+                            <ul class="therapy-features">
+                                <li>Stress reduction techniques</li>
+                                <li>Emotional regulation skills</li>
+                                <li>Resilience building</li>
+                                <li>Crisis management abilities</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Enhanced Types of Counseling Section with detailed descriptions -->
+                <section class="section">
+                    <h2 class="section-title">Types of Counseling & Therapy Available to Students</h2>
+                    <p class="section-subtitle">Explore the various mental health support options designed to meet different needs, preferences, and circumstances.</p>
+                    
+                    <div class="benefit-grid">
+                        <div class="therapy-card">
+                            <div class="therapy-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                            </div>
+                            <h3 class="therapy-title">School/Campus Counseling</h3>
+                            <p class="therapy-description">Free or low-cost counseling services provided directly by educational institutions, offering convenient access to mental health support.</p>
+                            <ul class="therapy-features">
+                                <li>Usually free of charge</li>
+                                <li>Convenient campus locations</li>
+                                <li>Understanding of academic pressures</li>
+                                <li>Crisis intervention available</li>
+                                <li>Group therapy options</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="therapy-card">
+                            <div class="therapy-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                            </div>
+                            <h3 class="therapy-title">Private Practice Therapy</h3>
+                            <p class="therapy-description">Individual therapy with licensed professionals in private practice, offering specialized treatment and longer-term therapeutic relationships.</p>
+                            <ul class="therapy-features">
+                                <li>Specialized treatment approaches</li>
+                                <li>Longer session times</li>
+                                <li>Consistent therapist relationship</li>
+                                <li>Flexible scheduling</li>
+                                <li>Insurance often accepted</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="therapy-card">
+                            <div class="therapy-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="therapy-title">Online & Teletherapy</h3>
+                            <p class="therapy-description">Digital therapy platforms and video counseling sessions that provide accessible mental health support from anywhere.</p>
+                            <ul class="therapy-features">
+                                <li>24/7 accessibility</li>
+                                <li>Lower cost options</li>
+                                <li>Comfortable home environment</li>
+                                <li>Chat, video, or phone options</li>
+                                <li>Reduced stigma and barriers</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="therapy-card">
+                            <div class="therapy-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <h3 class="therapy-title">Group Therapy & Support</h3>
+                            <p class="therapy-description">Therapeutic groups led by professionals where students with similar challenges support each other's healing and growth.</p>
+                            <ul class="therapy-features">
+                                <li>Peer support and connection</li>
+                                <li>Shared experiences and learning</li>
+                                <li>Cost-effective option</li>
+                                <li>Reduced isolation</li>
+                                <li>Skill-building focus</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="therapy-card">
+                            <div class="therapy-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="therapy-title">Peer Counseling Programs</h3>
+                            <p class="therapy-description">Trained student volunteers provide support, active listening, and resource connections to fellow students.</p>
+                            <ul class="therapy-features">
+                                <li>Peer-to-peer understanding</li>
+                                <li>Informal, approachable setting</li>
+                                <li>Bridge to professional help</li>
+                                <li>Crisis support available</li>
+                                <li>Community building focus</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="therapy-card">
+                            <div class="therapy-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                            </div>
+                            <h3 class="therapy-title">Specialized Student Services</h3>
+                            <p class="therapy-description">Targeted programs addressing specific student populations and challenges like LGBTQ+ support, international students, or academic coaching.</p>
+                            <ul class="therapy-features">
+                                <li>Identity-specific support</li>
+                                <li>Cultural competency</li>
+                                <li>Specialized expertise</li>
+                                <li>Community connections</li>
+                                <li>Advocacy and resources</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Enhanced Benefits Section with comprehensive outcomes -->
+                <section class="section">
+                    <h2 class="section-title">Comprehensive Benefits of Student Counseling</h2>
+                    <p class="section-subtitle">Research-backed outcomes and real-world benefits that students experience through mental health support and therapy.</p>
+                    
+                    <div class="card">
+                        <div class="enhanced-list">
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Enhanced Academic Performance</div>
+                                    <div class="list-description">Develop better study habits, time management, test anxiety reduction, and motivation strategies that directly improve grades and academic satisfaction.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Stress & Anxiety Management</div>
+                                    <div class="list-description">Learn evidence-based techniques like deep breathing, mindfulness, cognitive restructuring, and progressive muscle relaxation to manage overwhelming feelings.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Improved Relationships & Communication</div>
+                                    <div class="list-description">Develop healthy communication patterns, conflict resolution skills, boundary setting, and deeper emotional intelligence for all relationships.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Self-Awareness & Personal Growth</div>
+                                    <div class="list-description">Gain deeper understanding of your values, strengths, triggers, and goals while building confidence and self-compassion.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Crisis Prevention & Management</div>
+                                    <div class="list-description">Develop early warning systems, safety plans, and coping strategies to prevent mental health crises and manage difficult periods effectively.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Life Skills & Future Preparation</div>
+                                    <div class="list-description">Build resilience, emotional regulation, decision-making skills, and coping strategies that will serve you throughout your career and personal life.</div>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Enhanced Common Misconceptions Section -->
+                <section class="section">
+                    <h2 class="section-title">Debunking Common Myths About Student Therapy</h2>
+                    <p class="section-subtitle">Addressing misconceptions and stigma that prevent students from accessing the mental health support they need and deserve.</p>
+                    
+                    <div class="myth-grid">
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "Therapy is only for people with serious mental illness"</h3>
+                            <p class="card-description"><strong>Reality:</strong> Therapy is for anyone wanting to improve their mental health, develop coping skills, or work through life challenges. Most students use counseling for stress management, relationship issues, and personal growth—not crisis situations.</p>
+                        </div>
+                        
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "My problems aren't serious enough for therapy"</h3>
+                            <p class="card-description"><strong>Reality:</strong> If something is affecting your sleep, concentration, relationships, or happiness, it's worth addressing. Early intervention prevents small problems from becoming bigger ones.</p>
+                        </div>
+                        
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "Therapy is embarrassing or shows weakness"</h3>
+                            <p class="card-description"><strong>Reality:</strong> Seeking help demonstrates self-awareness, courage, and commitment to personal growth. It's a sign of strength, not weakness. Many successful people credit therapy for their achievements.</p>
+                        </div>
+                        
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "Therapy takes forever and costs too much"</h3>
+                            <p class="card-description"><strong>Reality:</strong> Many students see improvements in 6-12 sessions. Campus counseling is often free, and many insurance plans cover therapy. The cost of not addressing mental health is much higher.</p>
+                        </div>
+                        
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "I should be able to handle this on my own"</h3>
+                            <p class="card-description"><strong>Reality:</strong> Everyone needs support sometimes. Therapists provide tools and perspectives you can't get on your own. It's like having a personal trainer for your mental health.</p>
+                        </div>
+                        
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "Therapy will change who I am"</h3>
+                            <p class="card-description"><strong>Reality:</strong> Good therapy helps you become more authentically yourself by removing barriers to your growth and happiness. You remain in control of all decisions about your life and treatment.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Enhanced Quick Advice Section -->
+                <section class="section">
+                    <h2 class="section-title">Essential Guide: Getting Started with Student Therapy</h2>
+                    <p class="section-subtitle">Practical, actionable advice for students considering therapy, including what to expect and how to make the most of your mental health journey.</p>
+                    
+                    <div class="card">
+                        <div class="enhanced-list">
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Start with Available Resources</div>
+                                    <div class="list-description">Begin with your school's counseling center—it's usually free, convenient, and designed for student needs. If unavailable, explore online therapy platforms or community mental health centers.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Be Patient with the Process</div>
+                                    <div class="list-description">Therapy is a gradual process, not an instant fix. Most students notice improvements within 4-6 sessions, but lasting change takes time. Trust the process and stay committed.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Practice Radical Honesty</div>
+                                    <div class="list-description">The more honest you are about your thoughts, feelings, and experiences, the more effective therapy will be. Your therapist can't help with problems they don't know about.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Maintain Consistency</div>
+                                    <div class="list-description">Regular attendance is crucial for progress. Treat therapy appointments like important classes—prioritize them and avoid canceling unless absolutely necessary.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Do the Homework</div>
+                                    <div class="list-description">Many therapists assign between-session activities like journaling, practicing coping skills, or trying new behaviors. These assignments accelerate your progress significantly.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Communicate About Fit</div>
+                                    <div class="list-description">If you don't feel comfortable with your therapist after 2-3 sessions, it's okay to request someone else. The therapeutic relationship is crucial for success.</div>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Enhanced Crisis Resources Section -->
+                <div class="crisis-section">
+                    <h2 class="crisis-title">
+                        <svg class="icon" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        Crisis Resources & Emergency Support
+                    </h2>
+                    <p class="crisis-subtitle">If you're experiencing thoughts of self-harm, suicide, or are in immediate danger, please reach out for help immediately. You are not alone.</p>
+                    
+                    <div class="crisis-grid">
+                        <div class="crisis-card">
+                            <h3 class="crisis-card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                                </svg>
+                                24/7 Crisis Hotlines
+                            </h3>
+                            <div class="hotline-item">
+                                <div>
+                                    <div class="hotline-number">988</div>
+                                    <div class="hotline-description">Suicide & Crisis Lifeline (US)</div>
+                                </div>
+                            </div>
+                            <div class="hotline-item">
+                                <div>
+                                    <div class="hotline-number">1-800-366-8288</div>
+                                    <div class="hotline-description">Self-Injury Outreach & Support</div>
+                                </div>
+                            </div>
+                            <div class="hotline-item">
+                                <div>
+                                    <div class="hotline-number">1-866-488-7386</div>
+                                    <div class="hotline-description">Trevor Project (LGBTQ+ Youth)</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="crisis-card">
+                            <h3 class="crisis-card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                                </svg>
+                                Text & Chat Support
+                            </h3>
+                            <div class="hotline-item">
+                                <div>
+                                    <div class="hotline-number">Text HOME to 741741</div>
+                                    <div class="hotline-description">Crisis Text Line</div>
+                                </div>
+                            </div>
+                            <div class="hotline-item">
+                                <div>
+                                    <div class="hotline-number">suicidepreventionlifeline.org</div>
+                                    <div class="hotline-description">Online Chat Support</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="crisis-card">
+                            <h3 class="crisis-card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                Campus Emergency
+                            </h3>
+                            <div class="hotline-item">
+                                <div>
+                                    <div class="hotline-number">Campus Security</div>
+                                    <div class="hotline-description">Contact your campus security or counseling center immediately</div>
+                                </div>
+                            </div>
+                            <div class="hotline-item">
+                                <div>
+                                    <div class="hotline-number">911</div>
+                                    <div class="hotline-description">For immediate medical emergencies</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Meta-style Connection Section -->
+    <section class="connection-section">
+        <div class="connection-content">
+            <h2 class="connection-title">Every connection is an opportunity.</h2>
+            <h3 class="connection-subtitle">It's Your World.</h3>
+            <div class="connection-logo">Therapy</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="/crisis-help">Crisis Support</a></li>
+                        <li><a href="/therapists">Find a Therapist</a></li>
+                        <li><a href="/services">Types of Therapy</a></li>
+                        <li><a href="/resources">Self-Care Tips</a></li>
+                        <li><a href="/insurance">Insurance Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Student Counseling Centers</a></li>
+                        <li><a href="#">Online Therapy Platforms</a></li>
+                        <li><a href="#">Support Groups</a></li>
+                        <li><a href="#">Mental Health Apps</a></li>
+                        <li><a href="#">Campus Resources</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Information</h3>
+                    <ul>
+                        <li><a href="/resources">Benefits of Therapy</a></li>
+                        <li><a href="/faq">Common Myths</a></li>
+                        <li><a href="#">What to Expect</a></li>
+                        <li><a href="#">Warning Signs</a></li>
+                        <li><a href="/privacy">Privacy & Confidentiality</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <ul>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">Newsletter</a></li>
+                        <li><a href="#">Community Forum</a></li>
+                        <li><a href="#">Share Your Story</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Student Therapy & Counseling Guide. Mental health support for every student's journey.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active section in navigation
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Mobile menu toggle (if needed)
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>

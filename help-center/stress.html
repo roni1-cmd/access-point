@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mastering Stress Management for Student Success</title>
+    <link rel="icon" type="image/x-icon" href="/src/godc.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #353539;
+            --green-dark: #0e3521;
+            --green-medium: #006936;
+            --green-light: #5fb14c;
+            --accent-yellow: #f1ec33;
+            --green-muted: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: white;
+            color: var(--primary-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            color: var(--primary-dark);
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-btn, .profile-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .menu-btn:hover, .profile-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .profile-btn {
+            background: var(--green-medium);
+            color: white;
+            border-radius: 50%;
+            font-weight: 500;
+        }
+
+        /* Layout */
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 73px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            border-right: 1px solid #e5e7eb;
+            background: white;
+            position: sticky;
+            top: 73px;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
+        }
+
+        .nav-menu {
+            padding: 24px;
+        }
+
+        .nav-menu ul {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 4px;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-menu a:hover {
+            background-color: #f3f4f6;
+        }
+
+        .nav-menu a.active {
+            background-color: var(--green-light);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 48px;
+            background: white;
+        }
+
+        .hero-image {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .content-wrapper {
+            max-width: 800px;
+        }
+
+        .subtitle {
+            color: var(--green-medium);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .main-title {
+            font-size: 36px;
+            font-weight: 400;
+            color: var(--primary-dark);
+            margin-bottom: 32px;
+            line-height: 1.2;
+        }
+
+        .intro-text {
+            font-size: 18px;
+            color: var(--primary-dark);
+            margin-bottom: 48px;
+            line-height: 1.7;
+        }
+
+        /* Enhanced Content Styles */
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--green-muted);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--green-medium);
+            border-radius: 2px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-highlight {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 2px solid var(--green-light);
+            border-left: 6px solid var(--green-medium);
+            padding: 32px;
+            border-radius: 12px;
+            margin: 24px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--green-light), var(--green-medium));
+            opacity: 0.1;
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-description {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            width: 28px;
+            height: 28px;
+            fill: var(--green-medium);
+            flex-shrink: 0;
+        }
+
+        .icon-large {
+            width: 48px;
+            height: 48px;
+            fill: var(--green-medium);
+            margin-bottom: 20px;
+        }
+
+        /* Enhanced grid layouts for better visual hierarchy */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .myth-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            margin-top: 32px;
+        }
+
+        /* Enhanced list styling */
+        .enhanced-list {
+            list-style: none;
+            margin: 24px 0;
+        }
+
+        .enhanced-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid var(--green-light);
+        }
+
+        .list-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--green-medium);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .list-content {
+            flex: 1;
+        }
+
+        .list-title {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .list-description {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Stress management solution cards with enhanced styling */
+        .stress-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stress-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--green-light), var(--green-medium));
+        }
+
+        .stress-card:hover {
+            border-color: var(--green-medium);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .stress-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, var(--green-light), var(--green-medium));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stress-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .stress-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+        }
+
+        .stress-description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .stress-features {
+            list-style: none;
+            text-align: left;
+        }
+
+        .stress-features li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .stress-features li::before {
+            content: '✓';
+            color: var(--green-medium);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--accent-yellow);
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-yellow);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #4b5563;
+            padding-top: 30px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+
+            .main-title {
+                font-size: 28px;
+            }
+
+            .header-content {
+                padding: 12px 16px;
+            }
+
+            .logo-text {
+                font-size: 16px;
+            }
+
+            .nav-menu {
+                padding: 16px;
+            }
+
+            .hero-image img {
+                height: 250px;
+            }
+
+            .intro-text {
+                font-size: 16px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer {
+                padding: 40px 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 16px;
+            }
+
+            .main-title {
+                font-size: 24px;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img class="logo-icon" src="/src/godc.png" alt="Site Logo" />
+                <span class="logo-text">Mastering Stress Management for Student Success</span>
+            </div>
+            <div class="header-actions">
+                <button class="menu-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#what-it-is" class="active">What It Is</a></li>
+                    <li><a href="#why-it-matters">Why It Matters</a></li>
+                    <li><a href="#how-it-helps">How It Helps</a></li>
+                    <li><a href="#practical-tips">Practical Tips</a></li>
+                    <li><a href="#misconceptions">Misconceptions</a></li>
+                    <li><a href="#quick-advice">Quick Advice</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Image -->
+            <div class="hero-image">
+                <img src="/src/stress1.png" 
+                     alt="A student practicing deep breathing in a calm, green environment">
+            </div>
+
+            <!-- Content -->
+            <div class="content-wrapper">
+                <p class="subtitle">Comprehensive Guide to Stress Management for Students</p>
+                
+                <h1 class="main-title">
+                    Your Ultimate Guide to Mastering Stress Management for Student Success
+                </h1>
+                
+                <p class="intro-text">
+                    Stress management is about proactively using strategies to keep academic and personal pressures from spiraling into burnout, anxiety, or physical exhaustion. Stress can be a motivator in small doses, but chronic, unmanaged stress undermines your focus, health, and emotional well-being. This guide provides science-backed techniques to help students thrive under pressure, maintain mental clarity, and build resilience for academic and personal success.
+                </p>
+
+                <!-- What It Is Section -->
+                <section class="section" id="what-it-is">
+                    <h2 class="section-title">What Is Stress Management?</h2>
+                    <p class="section-subtitle">A proactive approach to controlling stress and maintaining mental and physical health.</p>
+                    
+                    <div class="card">
+                        <div class="card-title">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Harnessing Stress for Success
+                        </div>
+                        <p class="card-description">
+                            Stress management involves using evidence-based techniques to prevent stress from escalating into burnout, anxiety, or physical health issues. Rather than eliminating stress, it’s about channeling it productively to stay focused, resilient, and healthy. For students, this means balancing academic demands with self-care to optimize performance and well-being.
+                        </p>
+                        
+                        <div class="enhanced-list">
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Proactive Stress Control</div>
+                                    <div class="list-description">Stress management uses techniques like deep breathing, time management, and mindfulness to prevent stress from overwhelming your system.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Scientific Basis</div>
+                                    <div class="list-description">Stress triggers cortisol release, which can impair memory and immunity. Effective management reduces cortisol and boosts serotonin for better mood and focus.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Holistic Benefits</div>
+                                    <div class="list-description">Managing stress improves cognitive function, emotional regulation, and physical health, helping students perform better academically and personally.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Long-Term Resilience</div>
+                                    <div class="list-description">Consistent stress management builds habits that prevent burnout and equip students to handle future challenges with confidence.</div>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Why It Matters Section -->
+                <section class="section" id="why-it-matters">
+                    <h2 class="section-title">Why Stress Management Matters for Students</h2>
+                    <p class="section-subtitle">The critical role of stress management in academic success and mental health.</p>
+                    
+                    <div class="feature-grid">
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <div class="card-title">Navigating Academic Pressure</div>
+                            <p class="card-description">Students face relentless pressure from exams, deadlines, grades, and social expectations. Unmanaged stress impairs memory, focus, and academic performance.</p>
+                            <ul class="stress-features">
+                                <li>Reduces academic overwhelm</li>
+                                <li>Improves study efficiency</li>
+                                <li>Enhances exam performance</li>
+                                <li>Mitigates social stress</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            </svg>
+                            <div class="card-title">Protecting Physical Health</div>
+                            <p class="card-description">Chronic stress weakens the immune system, increases fatigue, and causes physical symptoms like headaches and insomnia, undermining overall health.</p>
+                            <ul class="stress-features">
+                                <li>Boosts immune function</li>
+                                <li>Reduces physical symptoms</li>
+                                <li>Improves sleep quality</li>
+                                <li>Enhances energy levels</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div class="card-title">Safeguarding Mental Health</div>
+                            <p class="card-description">Prolonged stress heightens anxiety, depression, and burnout risks. Stress management is essential to maintain emotional stability and mental clarity.</p>
+                            <ul class="stress-features">
+                                <li>Lowers anxiety symptoms</li>
+                                <li>Reduces depression risk</li>
+                                <li>Prevents burnout</li>
+                                <li>Promotes emotional balance</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- How It Helps Section -->
+                <section class="section" id="how-it-helps">
+                    <h2 class="section-title">How Stress Management Supports Mental Health</h2>
+                    <p class="section-subtitle">The science-backed benefits of stress management for emotional, cognitive, and physical well-being.</p>
+                    
+                    <div class="benefit-grid">
+                        <div class="card">
+                            <div class="card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Prevents Burnout
+                            </div>
+                            <p class="card-description">Effective stress management stops chronic stress from escalating into burnout, keeping you mentally strong during high-pressure periods like finals.</p>
+                            <ul class="stress-features">
+                                <li>Reduces burnout risk</li>
+                                <li>Maintains mental stamina</li>
+                                <li>Supports academic endurance</li>
+                                <li>Promotes long-term well-being</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                Improves Focus and Productivity
+                            </div>
+                            <p class="card-description">A calm mind enhances concentration, memory, and problem-solving, making study sessions more effective and reducing academic stress.</p>
+                            <ul class="stress-features">
+                                <li>Enhances concentration</li>
+                                <li>Improves memory retention</li>
+                                <li>Boosts study efficiency</li>
+                                <li>Reduces mental fatigue</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                                Boosts Resilience
+                            </div>
+                            <p class="card-description">Stress management techniques help you recover faster from setbacks, such as a bad grade or personal challenges, building long-term resilience.</p>
+                            <ul class="stress-features">
+                                <li>Enhances recovery speed</li>
+                                <li>Builds emotional strength</li>
+                                <li>Reduces setback impact</li>
+                                <li>Promotes adaptability</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                Protects Physical Health
+                            </div>
+                            <p class="card-description">Managing stress reduces physical symptoms like headaches, fatigue, and insomnia, supporting overall health and academic performance.</p>
+                            <ul class="stress-features">
+                                <li>Reduces physical symptoms</li>
+                                <li>Improves sleep quality</li>
+                                <li>Boosts immune function</li>
+                                <li>Enhances energy levels</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Improves Emotional Control
+                            </div>
+                            <p class="card-description">Stress management helps regulate emotions, reducing outbursts, anxiety, or paralysis under pressure, fostering a calmer, more balanced mindset.</p>
+                            <ul class="stress-features">
+                                <li>Reduces emotional outbursts</li>
+                                <li>Lowers anxiety responses</li>
+                                <li>Promotes emotional balance</li>
+                                <li>Enhances self-regulation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practical Tips Section -->
+                <section class="section" id="practical-tips">
+                    <h2 class="section-title">Practical Stress Management Techniques</h2>
+                    <p class="section-subtitle">Actionable strategies to manage stress effectively as a busy student.</p>
+                    
+                    <div class="benefit-grid">
+                        <div class="stress-card">
+                            <div class="stress-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                            </div>
+                            <h3 class="stress-title">Deep Breathing Exercises</h3>
+                            <p class="stress-description">Practice the 4-4-6 technique (inhale for 4 seconds, hold for 4, exhale for 6) before high-pressure situations like exams or presentations to calm your nervous system.</p>
+                            <ul class="stress-features">
+                                <li>Reduces heart rate</li>
+                                <li>Lowers cortisol levels</li>
+                                <li>Calms nervous system</li>
+                                <li>Enhances focus</li>
+                                <li>Improves emotional control</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="stress-card">
+                            <div class="stress-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                            </div>
+                            <h3 class="stress-title">Journaling</h3>
+                            <p class="stress-description">Write down your thoughts, worries, or to-do lists for 5–10 minutes daily to declutter your mind and gain perspective on stressors.</p>
+                            <ul class="stress-features">
+                                <li>Clears mental clutter</li>
+                                <li>Reduces anxiety</li>
+                                <li>Improves problem-solving</li>
+                                <li>Enhances emotional clarity</li>
+                                <li>Promotes self-reflection</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="stress-card">
+                            <div class="stress-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="stress-title">Break Tasks into Small Steps</h3>
+                            <p class="stress-description">Divide overwhelming tasks (e.g., “finish project”) into manageable steps (e.g., “write introduction”) to reduce anxiety and build momentum.</p>
+                            <ul class="stress-features">
+                                <li>Reduces overwhelm</li>
+                                <li>Builds task momentum</li>
+                                <li>Enhances productivity</li>
+                                <li>Improves task clarity</li>
+                                <li>Promotes progress</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="stress-card">
+                            <div class="stress-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <h3 class="stress-title">Time Blocking</h3>
+                            <p class="stress-description">Schedule specific times for studying, rest, and leisure to create structure, prevent procrastination, and reduce last-minute stress.</p>
+                            <ul class="stress-features">
+                                <li>Prevents procrastination</li>
+                                <li>Creates structured routine</li>
+                                <li>Reduces deadline stress</li>
+                                <li>Balances work and rest</li>
+                                <li>Enhances time management</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="stress-card">
+                            <div class="stress-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="stress-title">Exercise and Movement</h3>
+                            <p class="stress-description">Engage in light physical activity, like a 10-minute walk or yoga, to burn off stress hormones and boost endorphins for better mood and focus.</p>
+                            <ul class="stress-features">
+                                <li>Reduces stress hormones</li>
+                                <li>Boosts endorphins</li>
+                                <li>Improves mood</li>
+                                <li>Enhances physical health</li>
+                                <li>Promotes mental clarity</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="stress-card">
+                            <div class="stress-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="stress-title">Hobbies and Creative Outlets</h3>
+                            <p class="stress-description">Spend time on activities you enjoy, like music, art, gaming, or sports, to disconnect from stress and recharge mentally.</p>
+                            <ul class="stress-features">
+                                <li>Promotes mental relaxation</li>
+                                <li>Encourages creativity</li>
+                                <li>Reduces stress buildup</li>
+                                <li>Enhances enjoyment</li>
+                                <li>Supports emotional balance</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="stress-card">
+                            <div class="stress-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="stress-title">Mindfulness and Meditation</h3>
+                            <p class="stress-description">Practice mindfulness or short meditation (5–10 minutes) to anchor your focus in the present, reducing anxiety about the future.</p>
+                            <ul class="stress-features">
+                                <li>Reduces anxiety spirals</li>
+                                <li>Improves present focus</li>
+                                <li>Enhances emotional regulation</li>
+                                <li>Promotes mental clarity</li>
+                                <li>Supports relaxation</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="stress-card">
+                            <div class="stress-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                            </div>
+                            <h3 class="stress-title">Social Venting</h3>
+                            <p class="stress-description">Talk to a trusted friend or mentor about your stressors to gain perspective, reduce emotional weight, and feel supported.</p>
+                            <ul class="stress-features">
+                                <li>Reduces emotional burden</li>
+                                <li>Encourages perspective</li>
+                                <li>Fosters social connection</li>
+                                <li>Promotes emotional relief</li>
+                                <li>Enhances resilience</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Misconceptions Section -->
+                <section class="section" id="misconceptions">
+                    <h2 class="section-title">Debunking Misconceptions About Stress Management</h2>
+                    <p class="section-subtitle">Addressing common myths that prevent students from managing stress effectively.</p>
+                    
+                    <div class="myth-grid">
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "I’ll manage stress after exams."</h3>
+                            <p class="card-description"><strong>Reality:</strong> Waiting to address stress until after high-pressure periods is like ignoring a leaking pipe until it floods. Proactive management prevents burnout and improves performance.</p>
+                        </div>
+                        
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "Stress means I’m working hard."</h3>
+                            <p class="card-description"><strong>Reality:</strong> Chronic stress signals an overwhelmed system, not productivity. Managing stress enhances efficiency and protects mental and physical health.</p>
+                        </div>
+                        
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "Relaxing is wasting time."</h3>
+                            <p class="card-description"><strong>Reality:</strong> Strategic rest, like breaks or hobbies, boosts productivity by recharging your brain, making study time more effective.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Advice Section -->
+                <section class="section" id="quick-advice">
+                    <h2 class="section-title">Quick Advice for Managing Stress</h2>
+                    <p class="section-subtitle">Practical tips to integrate stress management into your daily student life.</p>
+                    
+                    <div class="card">
+                        <div class="enhanced-list">
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Build Mini-Breaks into Study Sessions</div>
+                                    <div class="list-description">Take 5–10 minute breaks every hour to stretch, breathe, or walk, resetting your mind and preventing mental fatigue.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Know Your Stress Triggers</div>
+                                    <div class="list-description">Identify specific stressors (e.g., exams, group work) and prepare tailored coping strategies, like deep breathing or journaling, in advance.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Pick 2–3 Go-To Techniques</div>
+                                    <div class="list-description">Choose a few stress management methods (e.g., breathing, exercise) that work best for you and practice them consistently for maximum impact.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Be Proactive, Not Reactive</div>
+                                    <div class="list-description">Incorporate stress management into your daily routine to prevent stress from building, rather than only addressing it during crises.</div>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#practical-tips">Stress Management Tips</a></li>
+                        <li><a href="#how-it-helps">Mental Health Benefits</a></li>
+                        <li><a href="/resources">Campus Resources</a></li>
+                        <li><a href="/wellness">Wellness Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Campus Counseling Services</a></li>
+                        <li><a href="#">Peer Support Groups</a></li>
+                        <li><a href="#">Stress Workshops</a></li>
+                        <li><a href="#">Mental Health Apps</a></li>
+                        <li><a href="#">Wellness Programs</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Information</h3>
+                    <ul>
+                        <li><a href="#how-it-helps">Benefits of Stress Management</a></li>
+                        <li><a href="#misconceptions">Common Myths</a></li>
+                        <li><a href="#quick-advice">Getting Started</a></li>
+                        <li><a href="#">Mental Health Tips</a></li>
+                        <li><a href="/privacy">Privacy & Confidentiality</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <ul>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">Newsletter</a></li>
+                        <li><a href="#">Community Forum</a></li>
+                        <li><a href="#">Share Your Story</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Mastering Stress Management for Student Success. Empowering students to thrive under pressure.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active section in navigation
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>

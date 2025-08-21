@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Balanced Nutrition for Student Success</title>
+    <link rel="icon" type="image/x-icon" href="/src/godc.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #353539;
+            --green-dark: #0e3521;
+            --green-medium: #006936;
+            --green-light: #5fb14c;
+            --accent-yellow: #f1ec33;
+            --green-muted: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: white;
+            color: var(--primary-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid #e5e7eb;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 24px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .logo-text {
+            color: var(--primary-dark);
+            font-size: 20px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-btn, .profile-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .menu-btn:hover, .profile-btn:hover {
+            background-color: #f3f4f6;
+        }
+
+        .profile-btn {
+            background: var(--green-medium);
+            color: white;
+            border-radius: 50%;
+            font-weight: 500;
+        }
+
+        /* Layout */
+        .main-layout {
+            display: flex;
+            min-height: calc(100vh - 73px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 320px;
+            border-right: 1px solid #e5e7eb;
+            background: white;
+            position: sticky;
+            top: 73px;
+            height: calc(100vh - 73px);
+            overflow-y: auto;
+        }
+
+        .nav-menu {
+            padding: 24px;
+        }
+
+        .nav-menu ul {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 4px;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--primary-dark);
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .nav-menu a:hover {
+            background-color: #f3f4f6;
+        }
+
+        .nav-menu a.active {
+            background-color: var(--green-light);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 48px;
+            background: white;
+        }
+
+        .hero-image {
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .hero-image img {
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .content-wrapper {
+            max-width: 800px;
+        }
+
+        .subtitle {
+            color: var(--green-medium);
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+        }
+
+        .main-title {
+            font-size: 36px;
+            font-weight: 400;
+            color: var(--primary-dark);
+            margin-bottom: 32px;
+            line-height: 1.2;
+        }
+
+        .intro-text {
+            font-size: 18px;
+            color: var(--primary-dark);
+            margin-bottom: 48px;
+            line-height: 1.7;
+        }
+
+        /* Enhanced Content Styles */
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            position: relative;
+        }
+
+        .section-subtitle {
+            font-size: 18px;
+            color: var(--green-muted);
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--green-medium);
+            border-radius: 2px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            margin-bottom: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #f1f5f9;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-highlight {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 2px solid var(--green-light);
+            border-left: 6px solid var(--green-medium);
+            padding: 32px;
+            border-radius: 12px;
+            margin: 24px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--green-light), var(--green-medium));
+            opacity: 0.1;
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+
+        .card-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-description {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #64748b;
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            width: 28px;
+            height: 28px;
+            fill: var(--green-medium);
+            flex-shrink: 0;
+        }
+
+        .icon-large {
+            width: 48px;
+            height: 48px;
+            fill: var(--green-medium);
+            margin-bottom: 20px;
+        }
+
+        /* Enhanced grid layouts for better visual hierarchy */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-top: 40px;
+        }
+
+        .benefit-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
+        }
+
+        .myth-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 28px;
+            margin-top: 32px;
+        }
+
+        /* Enhanced list styling */
+        .enhanced-list {
+            list-style: none;
+            margin: 24px 0;
+        }
+
+        .enhanced-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border-left: 4px solid var(--green-light);
+        }
+
+        .list-icon {
+            width: 24px;
+            height: 24px;
+            fill: var(--green-medium);
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .list-content {
+            flex: 1;
+        }
+
+        .list-title {
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .list-description {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        /* Nutrition solution cards with enhanced styling */
+        .nutrition-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nutrition-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, var(--green-light), var(--green-medium));
+        }
+
+        .nutrition-card:hover {
+            border-color: var(--green-medium);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .nutrition-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, var(--green-light), var(--green-medium));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nutrition-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: white;
+        }
+
+        .nutrition-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+        }
+
+        .nutrition-description {
+            color: #64748b;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .nutrition-features {
+            list-style: none;
+            text-align: left;
+        }
+
+        .nutrition-features li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #64748b;
+        }
+
+        .nutrition-features li::before {
+            content: '✓';
+            color: var(--green-medium);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 60px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h3 {
+            color: var(--accent-yellow);
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 12px;
+        }
+
+        .footer-section a {
+            color: #d1d5db;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-section a:hover {
+            color: var(--accent-yellow);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #4b5563;
+            padding-top: 30px;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-layout {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #e5e7eb;
+            }
+
+            .main-content {
+                padding: 24px;
+            }
+
+            .main-title {
+                font-size: 28px;
+            }
+
+            .header-content {
+                padding: 12px 16px;
+            }
+
+            .logo-text {
+                font-size: 16px;
+            }
+
+            .nav-menu {
+                padding: 16px;
+            }
+
+            .hero-image img {
+                height: 250px;
+            }
+
+            .intro-text {
+                font-size: 16px;
+            }
+
+            .section-title {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer {
+                padding: 40px 0 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 16px;
+            }
+
+            .main-title {
+                font-size: 24px;
+            }
+
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img class="logo-icon" src="/src/godc.png" alt="Site Logo" />
+                <span class="logo-text">Balanced Nutrition for Student Success</span>
+            </div>
+            <div class="header-actions">
+                <button class="menu-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M6,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM6,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM12,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM16,6c0,1.1 0.9,2 2,2s2,-0.9 2,-2 -0.9,-2 -2,-2 -2,0.9 -2,2zM12,8c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,14c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2zM18,20c1.1,0 2,-0.9 2,-2s-0.9,-2 -2,-2 -2,0.9 -2,2 0.9,2 2,2z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="nav-menu">
+                <ul>
+                    <li><a href="#what-it-is" class="active">What It Is</a></li>
+                    <li><a href="#why-it-matters">Why It Matters</a></li>
+                    <li><a href="#how-it-helps">How It Helps</a></li>
+                    <li><a href="#practical-tips">Practical Tips</a></li>
+                    <li><a href="#misconceptions">Misconceptions</a></li>
+                    <li><a href="#quick-advice">Quick Advice</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/faq">FAQ</a></li>
+                    <li><a href="/privacy">Privacy Policy</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Image -->
+            <div class="hero-image">
+                <img src="/src/nutrition1.png" 
+                     alt="A colorful plate of balanced food with vegetables, grains, and proteins">
+            </div>
+
+            <!-- Content -->
+            <div class="content-wrapper">
+                <p class="subtitle">Comprehensive Nutrition Guide for Students</p>
+                
+                <h1 class="main-title">
+                    Your Ultimate Guide to Balanced Nutrition for Student Success
+                </h1>
+                
+                <p class="intro-text">
+                    Balanced nutrition is the cornerstone of academic success and mental well-being for students. It’s not just about eating enough—it’s about fueling your brain and body with the right mix of proteins, complex carbs, healthy fats, vitamins, and minerals. By making smart food choices, students can boost focus, stabilize mood, and build resilience to handle the demands of academic life.
+                </p>
+
+                <!-- What It Is Section -->
+                <section class="section" id="what-it-is">
+                    <h2 class="section-title">What Is Balanced Nutrition?</h2>
+                    <p class="section-subtitle">A science-backed approach to fueling your brain and body for optimal performance.</p>
+                    
+                    <div class="card">
+                        <div class="card-title">
+                            <svg class="icon" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Fueling Your Brain and Body
+                        </div>
+                        <p class="card-description">
+                            Balanced nutrition means providing your body with the right nutrients—proteins, complex carbohydrates, healthy fats, vitamins, and minerals—to support cognitive function, emotional stability, and physical health. It’s about moving away from quick fixes like instant noodles, chips, and energy drinks and instead choosing foods that nourish your brain, which uses roughly 20% of your body’s energy daily.
+                        </p>
+                        
+                        <div class="enhanced-list">
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Brain Chemistry Fuel</div>
+                                    <div class="list-description">Food directly influences neurotransmitters like serotonin and dopamine, impacting mood, focus, and stress response.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Energy Stability</div>
+                                    <div class="list-description">Balanced meals prevent blood sugar spikes and crashes, maintaining steady energy levels for studying and daily tasks.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Nutrient Diversity</div>
+                                    <div class="list-description">A variety of nutrients (e.g., iron, B12, omega-3s) supports cognitive function, emotional health, and physical resilience.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Long-Term Benefits</div>
+                                    <div class="list-description">Proper nutrition now enhances academic performance and prevents long-term health issues like obesity or nutrient deficiencies.</div>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Why It Matters Section -->
+                <section class="section" id="why-it-matters">
+                    <h2 class="section-title">Why Nutrition Matters for Students</h2>
+                    <p class="section-subtitle">The critical role of balanced nutrition in academic success and mental health.</p>
+                    
+                    <div class="feature-grid">
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <div class="card-title">Brain Energy and Performance</div>
+                            <p class="card-description">Your brain consumes about 20% of your body’s energy daily. Poor nutrition, like a diet high in processed foods, leads to cognitive sluggishness, reduced focus, and weaker academic performance.</p>
+                            <ul class="nutrition-features">
+                                <li>Enhances cognitive function</li>
+                                <li>Improves memory retention</li>
+                                <li>Boosts academic performance</li>
+                                <li>Supports mental clarity</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            </svg>
+                            <div class="card-title">Mood and Energy Stability</div>
+                            <p class="card-description">Skipping meals or relying on sugary snacks causes blood sugar spikes and crashes, leading to irritability, fatigue, and emotional instability. Balanced nutrition stabilizes energy and mood.</p>
+                            <ul class="nutrition-features">
+                                <li>Prevents mood swings</li>
+                                <li>Reduces fatigue</li>
+                                <li>Stabilizes energy levels</li>
+                                <li>Promotes emotional balance</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <svg class="icon-large" viewBox="0 0 24 24">
+                                <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <div class="card-title">Mental Health Protection</div>
+                            <p class="card-description">Nutrient deficiencies (e.g., iron, B12, omega-3s) are linked to increased risks of depression, anxiety, and brain fog. A balanced diet supports emotional resilience and cognitive health.</p>
+                            <ul class="nutrition-features">
+                                <li>Reduces depression risk</li>
+                                <li>Lowers anxiety symptoms</li>
+                                <li>Prevents brain fog</li>
+                                <li>Builds emotional resilience</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- How It Helps Section -->
+                <section class="section" id="how-it-helps">
+                    <h2 class="section-title">How Nutrition Supports Mental Health</h2>
+                    <p class="section-subtitle">The science-backed benefits of balanced nutrition for emotional, cognitive, and physical well-being.</p>
+                    
+                    <div class="benefit-grid">
+                        <div class="card">
+                            <div class="card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Stabilizes Mood
+                            </div>
+                            <p class="card-description">Balanced blood sugar levels from consistent, nutrient-rich meals prevent sudden irritability and emotional dips, supporting a stable, positive mindset.</p>
+                            <ul class="nutrition-features">
+                                <li>Prevents mood swings</li>
+                                <li>Reduces emotional dips</li>
+                                <li>Promotes positive mindset</li>
+                                <li>Enhances emotional stability</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                Boosts Focus and Productivity
+                            </div>
+                            <p class="card-description">Nutrients like omega-3s, proteins, and complex carbs enhance cognitive function, improving concentration and making study sessions more effective.</p>
+                            <ul class="nutrition-features">
+                                <li>Improves concentration</li>
+                                <li>Enhances cognitive function</li>
+                                <li>Boosts study efficiency</li>
+                                <li>Reduces mental fatigue</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                                Improves Sleep
+                            </div>
+                            <p class="card-description">A balanced diet regulates hormones like melatonin and cortisol, promoting better sleep quality and reducing stress-related sleep disruptions.</p>
+                            <ul class="nutrition-features">
+                                <li>Enhances sleep quality</li>
+                                <li>Regulates sleep hormones</li>
+                                <li>Reduces sleep disruptions</li>
+                                <li>Promotes restful sleep</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-title">
+                                <svg class="icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                Supports Resilience
+                            </div>
+                            <p class="card-description">A nutrient-rich diet strengthens your physical health, improving your body’s ability to handle academic stress and reducing burnout risk.</p>
+                            <ul class="nutrition-features">
+                                <li>Enhances physical health</li>
+                                <li>Reduces burnout risk</li>
+                                <li>Improves stress resilience</li>
+                                <li>Supports long-term wellness</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Practical Tips Section -->
+                <section class="section" id="practical-tips">
+                    <h2 class="section-title">Practical Nutrition Tips for Students</h2>
+                    <p class="section-subtitle">Actionable strategies to build a balanced diet that fits your busy student life.</p>
+                    
+                    <div class="benefit-grid">
+                        <div class="nutrition-card">
+                            <div class="nutrition-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                </svg>
+                            </div>
+                            <h3 class="nutrition-title">Don’t Skip Breakfast</h3>
+                            <p class="nutrition-description">Start your day with a nutrient-packed breakfast like oats with fruit, eggs with whole-grain toast, or peanut butter on a banana to fuel your brain for studying.</p>
+                            <ul class="nutrition-features">
+                                <li>Boosts morning energy</li>
+                                <li>Improves focus</li>
+                                <li>Stabilizes blood sugar</li>
+                                <li>Enhances cognitive function</li>
+                                <li>Supports metabolism</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nutrition-card">
+                            <div class="nutrition-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                            </div>
+                            <h3 class="nutrition-title">Balance Your Plate</h3>
+                            <p class="nutrition-description">Aim for a mix of protein (chicken, fish, beans, tofu), complex carbs (rice, oats, potatoes), veggies, fruits, and healthy fats (nuts, olive oil, avocado) for optimal nutrition.</p>
+                            <ul class="nutrition-features">
+                                <li>Provides essential nutrients</li>
+                                <li>Supports brain function</li>
+                                <li>Promotes energy stability</li>
+                                <li>Enhances physical health</li>
+                                <li>Improves mood regulation</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nutrition-card">
+                            <div class="nutrition-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="nutrition-title">Snack Smart</h3>
+                            <p class="nutrition-description">Choose nutrient-dense snacks like nuts, yogurt, boiled eggs, or fruit instead of chips or soda to maintain energy and avoid crashes.</p>
+                            <ul class="nutrition-features">
+                                <li>Sustains energy levels</li>
+                                <li>Prevents sugar crashes</li>
+                                <li>Provides essential nutrients</li>
+                                <li>Supports focus</li>
+                                <li>Promotes healthy habits</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nutrition-card">
+                            <div class="nutrition-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                            </div>
+                            <h3 class="nutrition-title">Stay Hydrated</h3>
+                            <p class="nutrition-description">Drink water throughout the day to prevent fatigue and headaches. Limit coffee to avoid dehydration and prioritize water as your primary drink.</p>
+                            <ul class="nutrition-features">
+                                <li>Prevents fatigue</li>
+                                <li>Reduces headaches</li>
+                                <li>Supports cognitive function</li>
+                                <li>Promotes physical health</li>
+                                <li>Enhances focus</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nutrition-card">
+                            <div class="nutrition-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <h3 class="nutrition-title">Plan Around Study Sessions</h3>
+                            <p class="nutrition-description">Avoid heavy, greasy meals before studying, as they can cause sluggishness. Opt for light, balanced meals to maintain mental clarity.</p>
+                            <ul class="nutrition-features">
+                                <li>Prevents sluggishness</li>
+                                <li>Enhances mental clarity</li>
+                                <li>Supports study efficiency</li>
+                                <li>Promotes sustained focus</li>
+                                <li>Improves productivity</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="nutrition-card">
+                            <div class="nutrition-icon">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                            </div>
+                            <h3 class="nutrition-title">Limit Sugar and Energy Drinks</h3>
+                            <p class="nutrition-description">Avoid excessive sugar and energy drinks, which cause energy spikes and crashes, leading to exhaustion and anxiety. Choose nutrient-rich alternatives.</p>
+                            <ul class="nutrition-features">
+                                <li>Prevents energy crashes</li>
+                                <li>Reduces anxiety</li>
+                                <li>Promotes stable energy</li>
+                                <li>Supports mental clarity</li>
+                                <li>Enhances long-term health</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Misconceptions Section -->
+                <section class="section" id="misconceptions">
+                    <h2 class="section-title">Debunking Misconceptions About Nutrition</h2>
+                    <p class="section-subtitle">Addressing common myths that prevent students from adopting balanced eating habits.</p>
+                    
+                    <div class="myth-grid">
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "Eating healthy is expensive."</h3>
+                            <p class="card-description"><strong>Reality:</strong> Budget-friendly foods like eggs, rice, beans, bananas, and seasonal vegetables are affordable and nutrient-dense, often costing less than frequent fast food or soda purchases.</p>
+                        </div>
+                        
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "I’ll eat better when I’m older."</h3>
+                            <p class="card-description"><strong>Reality:</strong> Poor eating habits now impair academic performance and increase risks of long-term health issues like obesity or nutrient deficiencies. Good nutrition today sets you up for success.</p>
+                        </div>
+                        
+                        <div class="card-highlight">
+                            <h3 class="card-title">❌ "I just need caffeine to function."</h3>
+                            <p class="card-description"><strong>Reality:</strong> While caffeine offers a temporary boost, it cannot replace the sustained energy and cognitive benefits of a balanced diet rich in nutrients.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Advice Section -->
+                <section class="section" id="quick-advice">
+                    <h2 class="section-title">Quick Advice for Building a Balanced Diet</h2>
+                    <p class="section-subtitle">Practical tips to make healthy eating a seamless part of your student life.</p>
+                    
+                    <div class="card">
+                        <div class="enhanced-list">
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Start Small</div>
+                                    <div class="list-description">Make one simple swap, like replacing a junk snack with fruit or nuts, to build sustainable eating habits without overwhelming yourself.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Cook Simple</div>
+                                    <div class="list-description">Prepare easy meals like stir-fries, overnight oats, or scrambled eggs with veggies, which are healthier and cheaper than fast food.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Think Long-Term</div>
+                                    <div class="list-description">Invest in balanced nutrition now to boost your energy, focus, and performance during high-pressure times like exams or deadlines.</div>
+                                </div>
+                            </li>
+                            <li>
+                                <svg class="list-icon" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <div class="list-content">
+                                    <div class="list-title">Prioritize Nutrition</div>
+                                    <div class="list-description">A balanced diet is as crucial as sleep and exercise for stable energy, sharper focus, and fewer mood swings, making it a key pillar of student success.</div>
+                                </div>
+                            </li>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#practical-tips">Nutrition Tips</a></li>
+                        <li><a href="#how-it-helps">Mental Health Benefits</a></li>
+                        <li><a href="/recipes">Healthy Recipes</a></li>
+                        <li><a href="/wellness">Wellness Guide</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="#">Campus Nutrition Services</a></li>
+                        <li><a href="#">Cooking Workshops</a></li>
+                        <li><a href="#">Online Nutrition Resources</a></li>
+                        <li><a href="#">Wellness Groups</a></li>
+                        <li><a href="#">Health Apps</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Information</h3>
+                    <ul>
+                        <li><a href="#how-it-helps">Benefits of Nutrition</a></li>
+                        <li><a href="#misconceptions">Common Myths</a></li>
+                        <li><a href="#quick-advice">Getting Started</a></li>
+                        <li><a href="#">Health Tips</a></li>
+                        <li><a href="/privacy">Privacy & Confidentiality</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect</h3>
+                    <ul>
+                        <li><a href="/contact">Contact Us</a></li>
+                        <li><a href="#">Feedback</a></li>
+                        <li><a href="#">Newsletter</a></li>
+                        <li><a href="#">Community Forum</a></li>
+                        <li><a href="#">Share Your Story</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Balanced Nutrition for Student Success. Empowering students through healthy eating.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Highlight active section in navigation
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('nav a[href^="#"]');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Mobile menu toggle
+        document.querySelector('.menu-btn').addEventListener('click', function() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>
