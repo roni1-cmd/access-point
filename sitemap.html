@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Point - Site Map</title>
+    <link rel="icon" type="image/x-icon" href="/src/godc.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* Added CSS custom properties for the new color scheme */
+        :root {
+            --primary-dark: #353539;
+            --green-dark: #0e3521;
+            --green-medium: #006936;
+            --green-light: #5fb14c;
+            --accent-yellow: #f1ec33;
+            --green-muted: #4a7c59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            line-height: 1.5;
+            color: var(--primary-dark);
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e4e6ea;
+            padding: 0 24px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--green-medium);
+            text-decoration: none;
+        }
+
+        .logo-image {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .logo::before {
+            content: "";
+            font-size: 24px;
+            transform: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav a {
+            color: var(--primary-dark);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 8px 0;
+        }
+
+        .nav a:hover {
+            color: var(--green-light);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .search-icon {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .profile-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e4e6ea;
+            cursor: pointer;
+        }
+
+        .start-button {
+            background: var(--green-medium);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .start-button:hover {
+            background: var(--green-dark);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: 
+                linear-gradient(to right, rgba(14, 53, 33, 0.9), rgba(14, 53, 33, 0.3)),
+                url('/src/hero6.png?height=400&width=1200') center/cover;
+            color: white;
+            padding: 80px 24px;
+            text-align: left;
+        }
+
+        .hero-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 400;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 600px;
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            padding: 0;
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Added alternating section backgrounds */
+        .section {
+            padding: 80px 24px;
+        }
+
+        .section:nth-child(odd) {
+            background: white;
+        }
+
+        .section:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .section-title {
+            font-size: 32px;
+            font-weight: 400;
+            color: var(--primary-dark);
+            margin-bottom: 48px;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 48px;
+        }
+
+        .tools-column {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .tools-column a {
+            color: var(--green-muted);
+            text-decoration: none;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .tools-column a:hover {
+            color: var(--green-medium);
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 16px;
+            }
+
+            .nav {
+                display: none;
+            }
+
+            .hero {
+                padding: 48px 16px;
+            }
+
+            .section {
+                padding: 48px 16px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-nav {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer Styles */
+        .footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 40px 24px 20px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-social {
+            margin-bottom: 32px;
+        }
+
+        .footer-social h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .social-link:hover {
+            color: var(--green-light);
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #4a4a4a;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            font-weight: 600;
+            color: white;
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+
+        .footer-nav a {
+            color: #b3b3b3;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .footer-nav a:hover {
+            color: var(--green-light);
+        }
+
+        .help-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="#" class="logo">
+                <img src="/src/helpdesk.png" alt="Access Point Logo" class="logo-image">
+                Access Point
+            </a>
+        </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Access Point Lighthouse</h1>
+            <p>Looking for mental health resources and wellness information? Use this comprehensive list of pages to find the support and tools you need.</p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="section">
+            <div class="content-container">
+                <h2 class="section-title">Core Resources & Support</h2>
+                <div class="tools-grid">
+                    <div class="tools-column">
+                        <a href="/pages/about">About</a>
+                        <a href="/pages/help">Help Center</a>
+                        <a href="/pages/faq">FAQs</a>
+                    </div>
+                    <div class="tools-column">
+                        <a href="/help-center/support">Professional Crisis Support</a>
+                        <a href="/inquire/inquire">Message Center</a>
+                    </div>
+                    <div class="tools-column">
+                        <a href="/freedom-wall/login">Commons</a>
+                        <a href="/notes/hall-of-notes">Hall of Notes</a>
+                        <a href="/help-center/social">Social Support</a>
+                    </div>
+                    <div class="tools-column">
+                        <a href="/help-center/therapy">Therapy and Counseling</a>
+                        <a href="/help-center/medication">Medication Management</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="content-container">
+                <h2 class="section-title">Wellness & Self-Care Practices</h2>
+                <div class="tools-grid">
+                    <div class="tools-column">
+                        <a href="/help-center/exercise">Regular Exercise</a>
+                        <a href="/help-center/meditation.html">Mindfulness and Meditation</a>
+                    </div>
+                    <div class="tools-column">
+                        <a href="/help-center/sleep">Healthy Sleep Routine</a>
+                        <a href="/help-center/nutrition">Balanced Nutrition</a>
+                    </div>
+                    <div class="tools-column">
+                        <a href="/help-center/stress">Stress Management Techniques</a>
+                        <a href="/help-center/routine">Building a Routine</a>
+                    </div>
+                    <div class="tools-column">
+                        <a href="/help-center/boundaries">Setting Boundaries</a>
+                        <a href="/help-center/alcohol">Limiting Alcohol and Substance Use</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="content-container">
+                <h2 class="section-title">Resources & Information</h2>
+                <div class="tools-grid">
+                    <div class="tools-column">
+                        <a href="/contributors">Contributors' Blog</a>
+                    </div>
+                    <div class="tools-column">
+                        <a href="/error">Legal</a>
+                        <a href="/pages/ToS">Terms and Privacy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/ctudevcomofficial" class="social-link">
+                        <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Guild of Development Communicators
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-brand">CTU-MC | BS-DEVCOM | ACCESS POINT</div>
+                <div class="footer-nav">
+                    <a href="/pages/ToS">Privacy and Terms</a>
+                    <a href="/pages/about">About Access Point</a>
+                    <a href="/pages/help">
+                        <svg class="help-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                        </svg>
+                        Help
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
