@@ -444,46 +444,100 @@
         .footer {
             background: var(--primary-dark);
             color: white;
-            padding: 60px 0 30px;
+            padding: 40px 0;
         }
 
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .footer-section h3 {
+        .footer-social {
+            margin-bottom: 32px;
+        }
+
+        .footer-social h3 {
             color: var(--accent-yellow);
             font-size: 18px;
             font-weight: 500;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
-        .footer-section ul {
-            list-style: none;
+        .social-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
         }
 
-        .footer-section li {
-            margin-bottom: 12px;
-        }
-
-        .footer-section a {
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             color: #d1d5db;
             text-decoration: none;
+            font-size: 16px;
             transition: color 0.2s;
         }
 
-        .footer-section a:hover {
+        .social-link:hover {
             color: var(--accent-yellow);
         }
 
+        .social-icon {
+            width: 24px;
+            height: 24px;
+            fill: #d1d5db;
+        }
+
+        .social-link:hover .social-icon {
+            fill: var(--accent-yellow);
+        }
+
         .footer-bottom {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 24px;
             border-top: 1px solid #4b5563;
-            padding-top: 30px;
-            text-align: center;
-            color: #9ca3af;
+            gap: 16px;
+        }
+
+        .footer-brand {
+            font-size: 16px;
+            font-weight: 500;
+            color: #d1d5db;
+        }
+
+        .footer-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+
+        .footer-nav a {
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.2s;
+        }
+
+        .footer-nav a:hover {
+            color: var(--accent-yellow);
+        }
+
+        .help-icon {
+            width: 20px;
+            height: 20px;
+            fill: #d1d5db;
+        }
+
+        .footer-nav a:hover .help-icon {
+            fill: var(--accent-yellow);
         }
 
         /* Responsive */
@@ -536,13 +590,27 @@
                 padding: 20px;
             }
 
-            .footer-content {
-                grid-template-columns: 1fr;
-                gap: 30px;
+            .footer-container {
+                padding: 0 16px;
             }
 
-            .footer {
-                padding: 40px 0 20px;
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+
+            .footer-nav {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .footer-nav a {
+                font-size: 14px;
+            }
+
+            .footer-social {
+                margin-bottom: 24px;
             }
         }
 
@@ -561,6 +629,14 @@
 
             .hero-image img {
                 height: 200px;
+            }
+
+            .footer-social h3 {
+                font-size: 16px;
+            }
+
+            .social-link {
+                font-size: 14px;
             }
         }
     </style>
@@ -985,50 +1061,31 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Resources</h3>
-                    <ul>
-                        <li><a href="#practical-tips">Nutrition Tips</a></li>
-                        <li><a href="#how-it-helps">Mental Health Benefits</a></li>
-                        <li><a href="/recipes">Healthy Recipes</a></li>
-                        <li><a href="/wellness">Wellness Guide</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Support</h3>
-                    <ul>
-                        <li><a href="#">Campus Nutrition Services</a></li>
-                        <li><a href="#">Cooking Workshops</a></li>
-                        <li><a href="#">Online Nutrition Resources</a></li>
-                        <li><a href="#">Wellness Groups</a></li>
-                        <li><a href="#">Health Apps</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Information</h3>
-                    <ul>
-                        <li><a href="#how-it-helps">Benefits of Nutrition</a></li>
-                        <li><a href="#misconceptions">Common Myths</a></li>
-                        <li><a href="#quick-advice">Getting Started</a></li>
-                        <li><a href="#">Health Tips</a></li>
-                        <li><a href="/privacy">Privacy & Confidentiality</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Connect</h3>
-                    <ul>
-                        <li><a href="/contact">Contact Us</a></li>
-                        <li><a href="#">Feedback</a></li>
-                        <li><a href="#">Newsletter</a></li>
-                        <li><a href="#">Community Forum</a></li>
-                        <li><a href="#">Share Your Story</a></li>
-                    </ul>
+        <div class="footer-container">
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/studentsuccess" class="social-link">
+                        <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Guild of Development Communicators
+                    </a>
                 </div>
             </div>
+
             <div class="footer-bottom">
-                <p>&copy; 2025 Balanced Nutrition for Student Success. Empowering students through healthy eating.</p>
+                <div class="footer-brand">Access Point</div>
+                <div class="footer-nav">
+                    <a href="/privacy">Privacy and Terms</a>
+                    <a href="/about">About Us</a>
+                    <a href="/help">
+                        <svg class="help-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        Help
+                    </a>
+                </div>
             </div>
         </div>
     </footer>
