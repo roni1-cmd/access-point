@@ -2,43 +2,1097 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Student Uploads</title>
+  <title>Access Point - Hall of Notes</title>
+  <link rel="icon" type="image/x-icon" href="/src/godc.png">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    .card-container { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: 15px; }
-    .card { padding: 20px; background: #f3f3f3; border-radius: 8px; cursor: pointer; text-align: center; transition: 0.2s; }
-    .card:hover { background: #ddd; }
-    #subjectPage { display: none; }
-    #backBtn { margin-bottom: 15px; }
-    .file-item { margin: 8px 0; }
+    :root {
+      --primary-dark: #353539;
+      --green-dark: #0e3521;
+      --green-medium: #006936;
+      --green-light: #5fb14c;
+      --accent-yellow: #f1ec33;
+      --green-muted: #4a7c59;
+      --border-color: #dadce0;
+      --surface-white: #ffffff;
+      --text-primary: #202124;
+      --text-secondary: #5f6368;
+      --text-muted: #9aa0a6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: var(--surface-white);
+      min-height: 100vh;
+      margin: 0;
+      padding: 0;
+      color: var(--text-primary);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: var(--surface-white);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .menu-icon {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      fill: var(--text-secondary);
+      display: none;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      color: var(--primary-dark);
+      font-weight: 500;
+    }
+
+    .google-logo {
+      width: 24px;
+      height: 24px;
+      background: var(--green-medium);
+      border-radius: 50%;
+      position: relative;
+    }
+
+    .google-logo::before {
+      content: 'S';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .auth-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 2px solid var(--border-color);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .user-avatar:hover {
+      border-color: var(--green-medium);
+    }
+
+    .user-name {
+      font-size: 14px;
+      color: var(--text-primary);
+      font-weight: 500;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .profile-dropdown {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      background: var(--surface-white);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      min-width: 200px;
+      z-index: 1000;
+      display: none;
+      margin-top: 8px;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .dropdown-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .dropdown-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      margin: 0 auto 8px;
+      display: block;
+    }
+
+    .dropdown-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .dropdown-email {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .dropdown-item {
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-size: 14px;
+      color: var(--text-primary);
+      border: none;
+      background: none;
+      width: 100%;
+      text-align: left;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .dropdown-item:hover {
+      background: #f8f9fa;
+    }
+
+    .dropdown-item:last-child {
+      border-top: 1px solid var(--border-color);
+      color: #d93025;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 24px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .btn-primary {
+      background: var(--green-medium);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--green-dark);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--green-medium);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: #f8f9fa;
+    }
+
+    .main-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px;
+      text-align: center;
+      flex: 1;
+    }
+
+    .hero-section {
+      margin-bottom: 32px;
+    }
+
+    .hero-title {
+      font-size: 36px;
+      color: var(--primary-dark);
+      font-weight: 400;
+      margin-bottom: 24px;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .search-container {
+      max-width: 584px;
+      margin: 0 auto 32px;
+      position: relative;
+    }
+
+    .search-box {
+      width: 100%;
+      height: 48px;
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      padding: 12px 48px 12px 16px;
+      font-size: 16px;
+      outline: none;
+      box-shadow: 0 2px 5px 1px rgba(64,60,67,0.16);
+      transition: box-shadow 0.2s;
+      font-family: 'Google Sans', sans-serif;
+      background: var(--surface-white);
+    }
+
+    .search-box:focus {
+      box-shadow: 0 2px 8px 1px rgba(64,60,67,0.24);
+      border-color: var(--green-medium);
+    }
+
+    .search-icon {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: var(--text-muted);
+    }
+
+    .clear-icon {
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      fill: var(--text-muted);
+      cursor: pointer;
+      display: none;
+    }
+
+    .clear-icon:hover {
+      fill: var(--green-medium);
+    }
+
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .subject-card {
+      position: relative;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-start;
+      padding: 16px;
+    }
+
+    .subject-card:hover {
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      border-color: var(--green-medium);
+      transform: translateY(-2px);
+    }
+
+    .subject-title {
+      font-size: 16px;
+      font-weight: 500;
+      color: white;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      z-index: 1;
+    }
+
+    .subject-page {
+      display: none;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: none;
+      color: var(--green-medium);
+      font-size: 14px;
+      cursor: pointer;
+      margin-bottom: 24px;
+      padding: 8px 0;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .back-button:hover {
+      text-decoration: underline;
+    }
+
+    .subject-header {
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 24px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+      position: relative;
+      color: white;
+    }
+
+    .subject-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 0;
+    }
+
+    .subject-page-title {
+      font-size: 32px;
+      color: inherit;
+      margin-bottom: 16px;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .subject-description {
+      font-size: 14px;
+      color: white;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .upload-section {
+      background: var(--surface-white);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 2px dashed var(--border-color);
+      text-align: center;
+      transition: all 0.2s;
+    }
+
+    .upload-section:hover {
+      border-color: var(--green-medium);
+      background: #f8fff8;
+    }
+
+    .upload-section-guest {
+      background: #f8fff8;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 2px solid var(--border-color);
+      text-align: center;
+    }
+
+    .login-prompt {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .login-prompt-icon {
+      width: 48px;
+      height: 48px;
+      fill: var(--text-secondary);
+    }
+
+    .login-prompt-text {
+      color: var(--text-secondary);
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .login-prompt-subtext {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary-dark);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      max-width: 90vw;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .toast.show {
+      animation: slideUp 0.3s ease-out;
+    }
+
+    .toast.hide {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(100%);
+      }
+    }
+
+    .toast-icon {
+      width: 20px;
+      height: 20px;
+      fill: var(--green-light);
+      flex-shrink: 0;
+    }
+
+    .toast-message {
+      flex: 1;
+    }
+
+    .toast-action {
+      background: none;
+      border: none;
+      color: var(--green-light);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      transition: background 0.2s;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .toast-action:hover {
+      background: rgba(95, 177, 76, 0.1);
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: #ffffff;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      opacity: 0.7;
+    }
+
+    .toast-close:hover {
+      opacity: 1;
+    }
+
+    .upload-icon {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      fill: var(--green-medium);
+    }
+
+    .file-list {
+      background: var(--surface-white);
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+    }
+
+    .file-list-header {
+      background: #f8f9fa;
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--border-color);
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid #f1f3f4;
+      transition: background 0.2s;
+      justify-content: space-between;
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      flex: 1;
+    }
+
+    .file-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .delete-btn {
+      padding: 6px 8px;
+      background: none;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      color: #d93025;
+      cursor: pointer;
+      font-size: 12px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .delete-btn:hover {
+      background: #fce8e6;
+      border-color: #d93025;
+    }
+
+    .delete-icon {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .uploaded-by {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-left: auto;
+      margin-right: 12px;
+    }
+
+    .file-item:hover {
+      background: #f8f9fa;
+    }
+
+    .file-item:last-child {
+      border-bottom: none;
+    }
+
+    .file-icon {
+      width: 24px;
+      height: 24px;
+      margin-right: 16px;
+      fill: var(--text-secondary);
+    }
+
+    .file-link {
+      color: var(--green-medium);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .file-link:hover {
+      text-decoration: underline;
+    }
+
+    .auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .auth-card {
+      background: var(--surface-white);
+      padding: 48px;
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 400px;
+      border: 1px solid var(--border-color);
+    }
+
+    .auth-title {
+      font-size: 24px;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      font-weight: 400;
+    }
+
+    .auth-description {
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    footer {
+      background: var(--surface-white);
+      border-top: 1px solid var(--border-color);
+      padding: 32px 16px;
+      margin-top: auto;
+    }
+
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .footer-social {
+      text-align: center;
+    }
+
+    .footer-social h3 {
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 16px;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .social-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green-medium);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Google Sans', sans-serif;
+      transition: color 0.2s;
+    }
+
+    .social-link:hover {
+      color: var(--green-dark);
+      text-decoration: underline;
+    }
+
+    .social-icon {
+      width: 20px;
+      height: 20px;
+      fill: var(--green-medium);
+    }
+
+    .social-link:hover .social-icon {
+      fill: var(--green-dark);
+    }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-brand {
+      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .footer-nav a {
+      color: var(--green-medium);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Google Sans', sans-serif;
+      transition: color 0.2s;
+    }
+
+    .footer-nav a:hover {
+      color: var(--green-dark);
+      text-decoration: underline;
+    }
+
+    .help-icon {
+      width: 16px;
+      height: 16px;
+      fill: var(--green-medium);
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
+    .footer-nav a:hover .help-icon {
+      fill: var(--green-dark);
+    }
+
+    @media (max-width: 768px) {
+      .menu-icon {
+        display: block;
+      }
+
+      .header {
+        padding: 12px 16px;
+      }
+
+      .logo {
+        font-size: 18px;
+      }
+
+      .user-name {
+        display: none;
+      }
+
+      .subjects-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      
+      .hero-title {
+        font-size: 28px;
+        margin-bottom: 20px;
+      }
+      
+      .main-container {
+        padding: 20px 16px;
+      }
+
+      .search-box {
+        height: 44px;
+        font-size: 16px;
+      }
+
+      .subject-page {
+        padding: 16px;
+      }
+
+      .subject-header {
+        padding: 20px 16px;
+      }
+
+      .subject-page-title {
+        font-size: 24px;
+      }
+
+      .upload-section, .upload-section-guest {
+        padding: 20px 16px;
+      }
+
+      .file-item {
+        padding: 12px 16px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+
+      .file-info {
+        width: 100%;
+      }
+
+      .file-actions {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .uploaded-by {
+        margin: 0;
+        font-size: 11px;
+      }
+
+      .delete-btn {
+        font-size: 11px;
+        padding: 4px 6px;
+      }
+
+      .auth-card {
+        margin: 20px;
+        padding: 32px 24px;
+      }
+
+      .dropdown-menu {
+        right: 0;
+        left: auto;
+        min-width: 250px;
+      }
+
+      .toast {
+        bottom: 20px;
+        left: 16px;
+        right: 16px;
+        transform: none;
+        max-width: none;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .footer-nav {
+        flex-direction: column;
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 24px;
+      }
+
+      .main-container {
+        padding: 16px 12px;
+      }
+
+      .subject-card {
+        padding: 12px;
+        height: 150px;
+      }
+
+      .subject-title {
+        font-size: 14px;
+      }
+
+      .search-container {
+        margin-bottom: 24px;
+      }
+
+      .file-link {
+        font-size: 13px;
+        word-break: break-word;
+      }
+
+      .footer-social h3 {
+        font-size: 14px;
+      }
+
+      .social-link {
+        font-size: 13px;
+      }
+
+      .footer-brand {
+        font-size: 13px;
+      }
+
+      .footer-nav a {
+        font-size: 13px;
+      }
+    }
   </style>
 </head>
 <body>
-  <h2>Student File Sharing</h2>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <svg class="menu-icon" viewBox="0 0 24 24">
+        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+      </svg>
+      <div class="logo">
+        <img src="/src/helpdesk.png" alt="Student Help Logo" style="width: 24px; height: 24px;">
+        Access Point | Hall of Notes
+      </div>
+    </div>
+    <div class="auth-section">
+      <button id="loginBtn" class="btn btn-primary">Sign in with Google</button>
+      <div id="userProfile" class="user-profile" style="display:none;">
+        <span id="userName" class="user-name"></span>
+        <div class="profile-dropdown">
+          <img id="userAvatar" class="user-avatar" alt="User Avatar">
+          <div id="dropdownMenu" class="dropdown-menu">
+            <div class="dropdown-header">
+              <img id="dropdownAvatar" class="dropdown-avatar" alt="User Avatar">
+              <div id="dropdownName" class="dropdown-name"></div>
+              <div id="dropdownEmail" class="dropdown-email"></div>
+            </div>
+            <button class="dropdown-item">Account settings</button>
+            <button class="dropdown-item">Privacy</button>
+            <button id="logoutBtn" class="dropdown-item">Sign out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-  <!-- Auth -->
-  <button id="loginBtn">Login with Google</button>
-  <button id="logoutBtn" style="display:none;">Logout</button>
+  <!-- Auth Overlay -->
+  <div id="authOverlay" class="auth-overlay" style="display: none;">
+    <div class="auth-card">
+      <div class="google-logo" style="margin: 0 auto 24px;"></div>
+      <h2 class="auth-title">Access Point - Hall of Notes</h2>
+      <p class="auth-description">Sign in with your Google account to access course materials and share files with your classmates.</p>
+      <button id="overlayLoginBtn" class="btn btn-primary">Sign in with Google</button>
+    </div>
+  </div>
 
-  <!-- Main subject card view -->
+  <!-- Toast Notification -->
+  <div id="toast" class="toast" style="display: none;">
+    <svg class="toast-icon" viewBox="0 0 24 24">
+      <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"/>
+    </svg>
+    <div class="toast-message">Want to upload files? Sign in with Google to share course materials.</div>
+    <button id="toastAction" class="toast-action">Sign In</button>
+    <button id="toastClose" class="toast-close">×</button>
+  </div>
+
+  <!-- Main Page -->
   <div id="mainPage" style="display:none;">
-    <h3>Select a Subject</h3>
-    <div class="card-container" id="subjectCards"></div>
+    <div class="main-container">
+      <div class="hero-section">
+        <h1 class="hero-title">Search for Notes</h1>
+        <div class="search-container">
+          <input type="text" class="search-box" placeholder="Search for course materials or subjects">
+          <svg class="search-icon" viewBox="0 0 24 24">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          </svg>
+          <svg class="clear-icon" viewBox="0 0 24 24" style="display: none;">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </div>
+      </div>
+      <div class="subjects-grid" id="subjectCards"></div>
+    </div>
   </div>
 
-  <!-- Subject view -->
-  <div id="subjectPage">
-    <button id="backBtn">← Back</button>
-    <h3 id="subjectTitle"></h3>
-    <input type="hidden" role="uploadcare-uploader" id="fileUploader" />
-    <div id="fileList"></div>
+  <!-- Subject Page -->
+  <div id="subjectPage" class="subject-page">
+    <button id="backBtn" class="back-button">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      </svg>
+      Back to subjects
+    </button>
+    
+    <div class="subject-header" id="subjectHeader">
+      <h2 id="subjectTitle" class="subject-page-title"></h2>
+      <p class="subject-description">Share and access course materials</p>
+    </div>
+
+    <div class="upload-section" id="uploadSectionAuth" style="display: none;">
+      <svg class="upload-icon" viewBox="0 0 24 24">
+        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+      </svg>
+      <h3 style="margin-bottom: 8px; color: var(--text-primary);">Upload Files</h3>
+      <p style="color: var(--text-secondary); margin-bottom: 16px;">Drag and drop files or click to browse</p>
+      <input type="hidden" role="uploadcare-uploader" id="fileUploader" />
+    </div>
+
+    <div class="upload-section-guest" id="uploadSectionGuest" style="display: none;">
+      <div class="login-prompt">
+        <svg class="login-prompt-icon" viewBox="0 0 24 24">
+          <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/>
+        </svg>
+        <div class="login-prompt-text">Sign in to upload files</div>
+        <div class="login-prompt-subtext">You need to be logged in to share course materials</div>
+        <button class="btn btn-primary" onclick="signInWithGoogle()">Sign in with Google</button>
+      </div>
+    </div>
+
+    <div class="file-list">
+      <div class="file-list-header">Course Materials</div>
+      <div id="fileList"></div>
+    </div>
   </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-social">
+        <h3>Follow Us</h3>
+        <div class="social-links">
+          <a href="https://www.facebook.com/ctudevcomofficial" class="social-link">
+            <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+            Guild of Development Communicators
+          </a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-brand">CTU-MC | BS-DEVCOM | ACCESS POINT</div>
+        <div class="footer-nav">
+          <a href="/pages/ToS.html">Privacy and Terms</a>
+          <a href="/error.html">About Access Point</a>
+          <a href="/pages/help.html">
+            <svg class="help-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+            </svg>
+            Help
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
+    UPLOADCARE_PUBLIC_KEY = 'fedffcfab625a665a88f';
+    
     // ===== Firebase Setup =====
     const firebaseConfig = {
       apiKey: "AIzaSyAsynsRyRVwNYzOtqG4yDdcy5HWw74aOzY",
@@ -54,96 +1108,340 @@
     const auth = firebase.auth();
     const db = firebase.database();
 
-    // Subjects
+    // Subjects with associated image URLs
     const subjects = [
-      "COMMUNICATION",
-      "CULTURE & SOCIETY",
-      "INTERPERSONAL COMMUNICATION IN DEVELOPMENT",
-      "THE CONTEMPORARY WORLD",
-      "PURPOSIVE COMMUNICATION",
-      "ETHICS",
-      "INTRODUCTION TO COMMUNICATION MEDIA"
+      { name: "PHYSICAL ACTIVITY TOWARDS HEALTH AND FITNESS", image: "/src/subject1.png" },
+      { name: "COMMUNICIATE, CULTURE & SOCIETY", image: "/src/subject2.png" },
+      { name: "INTERPERSONAL COMMUNICATION IN DEVELOPMENT", image: "/src/subject3.png" },
+      { name: "G.E.C.-THE CONTEMPORARY WORLD", image: "/src/subject4.png" },
+      { name: "PURPOSIVE COMMUNICATION", image: "/src/subject5.png" },
+      { name: "ETHICS", image: "/src/subject6.png" },
+      { name: "INTRODUCTION TO COMMUNICATION MEDIA", image: "/src/hero.png" }
     ];
 
-    // Auth
+    // Elements
     const loginBtn = document.getElementById("loginBtn");
+    const overlayLoginBtn = document.getElementById("overlayLoginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
+    const userProfile = document.getElementById("userProfile");
+    const userName = document.getElementById("userName");
+    const userAvatar = document.getElementById("userAvatar");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+    const dropdownName = document.getElementById("dropdownName");
+    const dropdownEmail = document.getElementById("dropdownEmail");
+    const dropdownAvatar = document.getElementById("dropdownAvatar");
+    const authOverlay = document.getElementById("authOverlay");
     const mainPage = document.getElementById("mainPage");
+    const subjectPage = document.getElementById("subjectPage");
+    const subjectTitle = document.getElementById("subjectTitle");
+    const subjectHeader = document.getElementById("subjectHeader");
+    const fileList = document.getElementById("fileList");
+    const backBtn = document.getElementById("backBtn");
+    const uploadSectionAuth = document.getElementById("uploadSectionAuth");
+    const uploadSectionGuest = document.getElementById("uploadSectionGuest");
+    const toast = document.getElementById("toast");
+    const toastAction = document.getElementById("toastAction");
+    const toastClose = document.getElementById("toastClose");
 
-    loginBtn.onclick = () => {
+    // Auth functions
+    const signInWithGoogle = () => {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider);
     };
-    logoutBtn.onclick = () => auth.signOut();
 
+    loginBtn.onclick = signInWithGoogle;
+    overlayLoginBtn.onclick = signInWithGoogle;
+    toastAction.onclick = signInWithGoogle;
+
+    // Auth state observer
     auth.onAuthStateChanged(user => {
       if (user) {
+        console.log("User logged in:", user);
+        
+        // Hide login button and overlay
         loginBtn.style.display = "none";
-        logoutBtn.style.display = "inline";
+        authOverlay.style.display = "none";
+        
+        // Show and populate user profile
+        userProfile.style.display = "flex";
+        userName.textContent = user.displayName || "User";
+        
+        // Set avatar image with fallback
+        const avatarUrl = user.photoURL || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'%3E%3Cpath fill='%235f6368' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E";
+        userAvatar.src = avatarUrl;
+        
+        // Populate dropdown
+        dropdownName.textContent = user.displayName || "User";
+        dropdownEmail.textContent = user.email || "";
+        dropdownAvatar.src = avatarUrl;
+        
+        // Add logout functionality
+        logoutBtn.onclick = () => {
+          auth.signOut();
+          dropdownMenu.classList.remove('show');
+        };
+        
+        // Add avatar click handler
+        userAvatar.onclick = (e) => {
+          e.stopPropagation();
+          dropdownMenu.classList.toggle('show');
+        };
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!userProfile.contains(e.target)) {
+            dropdownMenu.classList.remove('show');
+          }
+        });
+        
+        // Show main page and update upload section
         mainPage.style.display = "block";
+        updateUploadSection();
+        
       } else {
-        loginBtn.style.display = "inline";
-        logoutBtn.style.display = "none";
-        mainPage.style.display = "none";
-        document.getElementById("subjectPage").style.display = "none";
+        console.log("User logged out");
+        
+        // Show login elements
+        loginBtn.style.display = "inline-block";
+        authOverlay.style.display = "none";
+        mainPage.style.display = "block";
+        subjectPage.style.display = "none";
+        
+        // Hide user profile
+        userProfile.style.display = "none";
+        dropdownMenu.classList.remove('show');
+        
+        // Update upload section for guests
+        updateUploadSection();
       }
     });
 
-    // Render subject cards
+    // Toast functionality
+    function showToast() {
+      toast.style.display = 'flex';
+      toast.classList.add('show');
+      
+      // Auto hide after 8 seconds
+      setTimeout(() => {
+        hideToast();
+      }, 8000);
+    }
+
+    function hideToast() {
+      toast.classList.remove('show');
+      toast.classList.add('hide');
+      setTimeout(() => {
+        toast.style.display = 'none';
+        toast.classList.remove('hide');
+      }, 300);
+    }
+
+    // Toast event handlers
+    toastClose.onclick = hideToast;
+
+    // Show toast on first visit
+    function checkFirstVisit() {
+      const hasVisited = localStorage.getItem('hasVisitedStudentHelp');
+      if (!hasVisited && !auth.currentUser) {
+        setTimeout(() => {
+          showToast();
+        }, 2000);
+        localStorage.setItem('hasVisitedStudentHelp', 'true');
+      }
+    }
+
+    // Function to update upload section based on auth state
+    function updateUploadSection() {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        uploadSectionAuth.style.display = "block";
+        uploadSectionGuest.style.display = "none";
+      } else {
+        uploadSectionAuth.style.display = "none";
+        uploadSectionGuest.style.display = "block";
+      }
+    }
+
+    // Check for first visit when page loads
+    setTimeout(checkFirstVisit, 1000);
+
+    // Populate subject cards
     const subjectCards = document.getElementById("subjectCards");
-    subjects.forEach(sub => {
+    subjects.forEach(subject => {
       const card = document.createElement("div");
-      card.className = "card";
-      card.textContent = sub;
-      card.onclick = () => openSubject(sub);
+      card.className = "subject-card";
+      card.style.backgroundImage = `url(${subject.image})`;
+      card.innerHTML = `
+        <div class="subject-title">${subject.name}</div>
+      `;
+      // Enhanced click functionality with visual feedback
+      card.onclick = () => {
+        card.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          card.style.transform = '';
+          openSubject(subject.name, subject.image);
+        }, 150);
+      };
       subjectCards.appendChild(card);
     });
 
-    // Subject page logic
-    const subjectPage = document.getElementById("subjectPage");
-    const subjectTitle = document.getElementById("subjectTitle");
-    const fileList = document.getElementById("fileList");
-    const backBtn = document.getElementById("backBtn");
+    // Search functionality
+    const searchBox = document.querySelector(".search-box");
+    const clearIcon = document.querySelector(".clear-icon");
 
+    searchBox.addEventListener("input", () => {
+      const query = searchBox.value.trim().toLowerCase();
+      const subjectCards = document.querySelectorAll(".subject-card");
+
+      // Show or hide clear icon based on input
+      clearIcon.style.display = query ? "block" : "none";
+
+      subjectCards.forEach(card => {
+        const subjectName = card.querySelector(".subject-title").textContent.toLowerCase();
+        if (subjectName.includes(query)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+
+    clearIcon.addEventListener("click", () => {
+      searchBox.value = "";
+      clearIcon.style.display = "none";
+      const subjectCards = document.querySelectorAll(".subject-card");
+      subjectCards.forEach(card => {
+        card.style.display = "block";
+      });
+      searchBox.focus();
+    });
+
+    // Subject page logic
     let currentSubject = null;
     let uploader = uploadcare.Widget("#fileUploader");
 
-    function openSubject(subject) {
+    function openSubject(subject, imageUrl) {
       currentSubject = subject;
       subjectTitle.textContent = subject;
+      subjectHeader.style.backgroundImage = `url(${imageUrl})`;
       mainPage.style.display = "none";
       subjectPage.style.display = "block";
       fileList.innerHTML = "";
+      
+      // Update upload section based on auth state
+      updateUploadSection();
 
-      // Listen for files in this subject only
+      // Listen for files in this subject
       db.ref("files").orderByChild("subject").equalTo(subject).on("child_added", snap => {
         const data = snap.val();
+        const fileId = snap.key;
+        const currentUser = auth.currentUser;
+        
         const div = document.createElement("div");
         div.className = "file-item";
-        div.innerHTML = `<a href="${data.url}" target="_blank">${data.name}</a>`;
+        
+        // Check if current user uploaded this file
+        const isOwner = currentUser && data.uploaderId === currentUser.uid;
+        const uploaderName = data.uploaderName || data.uploaderEmail || "Unknown";
+        
+        div.innerHTML = `
+          <div class="file-info">
+            <svg class="file-icon" viewBox="0 0 24 24">
+              <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+            </svg>
+            <a href="${data.url}" target="_blank" class="file-link">${data.name}</a>
+          </div>
+          <div class="file-actions">
+            <span class="uploaded-by">by ${uploaderName}</span>
+            ${isOwner ? `
+              <button class="delete-btn" data-file-id="${fileId}" data-file-name="${data.name}">
+                <svg class="delete-icon" viewBox="0 0 24 24">
+                  <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+                </svg>
+                Delete
+              </button>
+            ` : ''}
+          </div>
+        `;
+        
         fileList.appendChild(div);
+        
+        // Add event listener for delete button if it exists
+        const deleteBtn = div.querySelector('.delete-btn');
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', function() {
+            const fileId = this.getAttribute('data-file-id');
+            const fileName = this.getAttribute('data-file-name');
+            deleteFile(fileId, fileName);
+          });
+        }
+      });
+
+      // Listen for file removals to update UI
+      db.ref("files").orderByChild("subject").equalTo(subject).on("child_removed", snap => {
+        const fileItems = Array.from(fileList.querySelectorAll('.file-item'));
+        fileItems.forEach(item => {
+          const deleteBtn = item.querySelector('.delete-btn');
+          if (deleteBtn && deleteBtn.getAttribute('data-file-id') === snap.key) {
+            item.remove();
+          }
+        });
       });
     }
 
     backBtn.onclick = () => {
       subjectPage.style.display = "none";
       mainPage.style.display = "block";
-      db.ref("files").off(); // detach old listener
+      db.ref("files").off();
     };
 
     // Upload handling
     uploader.onUploadComplete(fileInfo => {
       if (!currentSubject) {
-        alert("Please open a subject before uploading.");
+        alert("Please select a subject before uploading.");
         return;
       }
+      
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
+        alert("Please sign in to upload files.");
+        return;
+      }
+      
       db.ref("files").push({
         subject: currentSubject,
         url: fileInfo.cdnUrl,
         name: fileInfo.name,
-        uploadedAt: Date.now()
+        uploadedAt: Date.now(),
+        uploaderId: currentUser.uid,
+        uploaderName: currentUser.displayName || "Anonymous",
+        uploaderEmail: currentUser.email
+      }).then(() => {
+        console.log("File uploaded successfully");
+      }).catch((error) => {
+        console.error("Error uploading file:", error);
       });
     });
+
+    // Delete file function
+    function deleteFile(fileId, fileName) {
+      const currentUser = auth.currentUser;
+      if (!currentUser) {
+        alert("Please sign in to delete files.");
+        return;
+      }
+
+      if (confirm(`Are you sure you want to delete "${fileName}"?`)) {
+        db.ref("files/" + fileId).remove()
+          .then(() => {
+            console.log("File deleted successfully");
+          })
+          .catch((error) => {
+            console.error("Error deleting file:", error);
+            alert("Error deleting file. Please try again.");
+          });
+      }
+    }
   </script>
 </body>
 </html>
