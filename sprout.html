@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sprout - Access Point</title>
+    <link rel="icon" type="image/x-icon" href="/src/logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-dark': '#353539',
+                        'green-dark': '#0e3521',
+                        'green-medium': '#006936',
+                        'green-light': '#5fb14c',
+                        'accent-yellow': '#f1ec33',
+                        'green-muted': '#4a7c59'
+                    },
+                    fontFamily: {
+                        'sans': ['Google Sans', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-primary-dark font-sans">
+    <!-- Main Content -->
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="flex items-center justify-between px-4 md:px-6 py-4 border-b border-green-muted/20 bg-white">
+            <div class="flex items-center space-x-3">
+                <!-- Added logo image -->
+                <img src="/src/logo.png" alt="Sprout Logo" class="w-8 h-8">
+                <h1 class="text-xl font-medium text-green-dark">Sprout</h1>
+                <div class="hidden sm:flex items-center space-x-1 bg-green-muted/10 px-3 py-1 rounded-full border border-green-muted/20">
+                    <span class="text-sm text-green-dark">AI Support</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-2 md:space-x-4">
+                <!-- Added new chat button for mobile -->
+                <button onclick="clearChat()" class="p-2 hover:bg-green-muted/10 rounded-lg transition-colors text-green-muted">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Area -->
+        <main class="flex flex-col h-[calc(100vh-80px)] bg-white">
+            <!-- Welcome Screen (shown when no messages) -->
+            <div id="welcomeScreen" class="flex flex-col items-center justify-center flex-1 px-4 md:px-6">
+                <!-- Greeting -->
+                <div class="text-center mb-8 md:mb-12">
+                    <h2 class="text-3xl md:text-4xl font-normal text-green-medium mb-4 md:mb-8">Yoohoo, stranger!</h2>
+                    <p class="text-green-muted text-lg">I'm here to support your mental wellness journey</p>
+                </div>
+
+                <!-- Suggestion Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full max-w-4xl mb-8 md:mb-12">
+                    <div onclick="sendMessage('I\'m feeling anxious and need some coping strategies')" class="bg-white hover:bg-green-muted/5 rounded-2xl p-4 cursor-pointer transition-colors border border-green-muted/20 hover:border-green-medium/40 shadow-sm">
+                        <div class="text-sm font-medium text-green-dark mb-1">Anxiety support</div>
+                        <div class="text-sm text-green-muted">coping strategies and techniques</div>
+                    </div>
+                    
+                    <div onclick="sendMessage('Can you help me with mindfulness exercises for stress relief?')" class="bg-white hover:bg-green-muted/5 rounded-2xl p-4 cursor-pointer transition-colors border border-green-muted/20 hover:border-green-medium/40 shadow-sm">
+                        <div class="text-sm font-medium text-green-dark mb-1">Mindfulness practice</div>
+                        <div class="text-sm text-green-muted">stress relief exercises</div>
+                    </div>
+                    
+                    <div onclick="sendMessage('I\'m having trouble sleeping and need some guidance')" class="bg-white hover:bg-green-muted/5 rounded-2xl p-4 cursor-pointer transition-colors border border-green-muted/20 hover:border-green-medium/40 shadow-sm sm:col-span-2 lg:col-span-1">
+                        <div class="text-sm font-medium text-green-dark mb-1">Sleep support</div>
+                        <div class="text-sm text-green-muted">better rest and recovery</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chat Messages (hidden initially) -->
+            <div id="chatMessages" class="flex-1 overflow-hidden hidden">
+                <div class="h-full overflow-y-auto px-4 md:px-6 py-6" id="scrollContainer">
+                    <div class="max-w-4xl mx-auto space-y-6" id="messagesContainer">
+                        <!-- Messages will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Area (fixed at bottom) -->
+            <div class="px-4 md:px-6 py-4 md:py-6 bg-white">
+                <div class="w-full max-w-3xl mx-auto">
+                    <!-- Added background, border, and shadow back to input container -->
+                    <div class="relative bg-white border border-green-muted/20 rounded-2xl shadow-sm">
+                        <div class="flex items-center px-4 md:px-6 py-3 md:py-4">
+                            <!-- Removed plus icon button -->
+                            
+                            <input 
+                                id="messageInput"
+                                type="text" 
+                                placeholder="Share what's on your mind..." 
+                                class="flex-1 bg-transparent text-primary-dark placeholder-green-muted/60 outline-none text-base md:text-lg"
+                                onkeypress="handleKeyPress(event)"
+                            />
+                            
+                            <button class="hidden sm:flex items-center space-x-2 px-3 md:px-4 py-2 hover:bg-green-muted/10 rounded-full transition-colors mr-2 md:mr-3 text-green-muted">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 7.172V5L8 4z"></path>
+                                </svg>
+                                <span class="text-sm">Tools</span>
+                            </button>
+                            
+                            <button onclick="sendCurrentMessage()" class="p-2 hover:bg-green-muted/10 rounded-full transition-colors text-green-muted">
+                                <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Added disclaimer below input -->
+                    <div class="text-center mt-3">
+                        <p class="text-xs text-green-muted/70">
+                            Sprout can make mistakes. Please verify important information and consider professional help when needed.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_KEY = "z99HUO9u2vu9E4YTRRfeue6hbdkdOcM8zWQDfbcq"; // Replace with your Cohere API key
+        const MODEL = "command-r"; // Faster than command-r-plus
+        const API_URL = "https://api.cohere.ai/v1/chat";
+
+        let chatHistory = [];
+        let isAIResponding = false;
+        let currentTypewriterTimeout = null;
+        let abortController = null;
+
+        // Handle Enter key press in input
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendCurrentMessage();
+            }
+        }
+
+        // Send current message from input
+        function sendCurrentMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (message) {
+                input.value = '';
+                sendMessage(message);
+            }
+        }
+
+        // Send message to AI
+        async function sendMessage(message) {
+            // Hide welcome screen and show chat
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('chatMessages').classList.remove('hidden');
+
+            addMessage(message, 'user');
+
+            isAIResponding = true;
+            updateSendButton();
+
+            // Add loading message
+            const loadingId = addMessage('Thinking...', 'assistant', true);
+
+            try {
+                const cohereHistory = chatHistory.map(msg => ({
+                    role: msg.role === 'assistant' ? 'CHATBOT' : 'USER',
+                    message: msg.content
+                }));
+
+                abortController = new AbortController();
+
+                const startTime = performance.now();
+
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${API_KEY}`
+                    },
+                    body: JSON.stringify({
+                        model: MODEL,
+                        message: message,
+                        chat_history: cohereHistory,
+                        temperature: 0.7,
+                        max_tokens: 800,
+                        preamble: "You are a compassionate AI mental health support assistant. Provide empathetic, helpful responses while encouraging users to seek professional help when needed. Focus on emotional support, coping strategies, and wellness techniques."
+                    }),
+                    signal: abortController.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const aiResponse = data.text;
+
+                const endTime = performance.now();
+                console.log(`[v0] API response time: ${(endTime - startTime).toFixed(0)}ms`);
+
+                // Remove loading message and add AI response
+                removeMessage(loadingId);
+                addMessage(aiResponse, 'assistant');
+
+                // Update chat history
+                chatHistory.push({ role: "user", content: message });
+                chatHistory.push({ role: "assistant", content: aiResponse });
+
+            } catch (error) {
+                if (error.name === 'AbortError') {
+                    removeMessage(loadingId);
+                    addMessage('Response stopped.', 'assistant');
+                } else {
+                    console.error('Error:', error);
+                    removeMessage(loadingId);
+                    addMessage('I apologize, but I\'m having trouble connecting right now. Please try again in a moment.', 'assistant');
+                }
+                isAIResponding = false;
+                updateSendButton();
+            } finally {
+                abortController = null;
+            }
+        }
+
+        function stopAIResponse() {
+            if (isAIResponding) {
+                // Stop the fetch request
+                if (abortController) {
+                    abortController.abort();
+                }
+                
+                // Stop the typewriter animation
+                if (currentTypewriterTimeout) {
+                    clearTimeout(currentTypewriterTimeout);
+                    currentTypewriterTimeout = null;
+                }
+                
+                isAIResponding = false;
+                updateSendButton();
+            }
+        }
+
+        function updateSendButton() {
+            const button = document.querySelector('button[onclick="sendCurrentMessage()"]');
+            if (isAIResponding) {
+                button.onclick = stopAIResponse;
+                button.innerHTML = `
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <rect x="6" y="6" width="12" height="12" rx="2" stroke-width="2"></rect>
+                    </svg>
+                `;
+                button.title = "Stop response";
+            } else {
+                button.onclick = sendCurrentMessage;
+                button.innerHTML = `
+                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                    </svg>
+                `;
+                button.title = "Send message";
+            }
+        }
+
+        // Add message to chat
+        function addMessage(content, role, isLoading = false) {
+            const messagesContainer = document.getElementById('messagesContainer');
+            const scrollContainer = document.getElementById('scrollContainer');
+            const messageId = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            
+            const messageDiv = document.createElement('div');
+            messageDiv.id = messageId;
+            messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start items-start'} mb-4`;
+            
+            if (role === 'assistant') {
+                const avatarDiv = document.createElement('div');
+                avatarDiv.className = 'flex-shrink-0 mr-3';
+                avatarDiv.innerHTML = `
+                    <img src="/src/logo.png" 
+                         alt="AI Assistant" 
+                         class="w-8 h-8 rounded-full border border-green-muted/20">
+                `;
+                messageDiv.appendChild(avatarDiv);
+            }
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.className = `max-w-xs sm:max-w-md md:max-w-3xl px-4 py-3 ${
+                role === 'user' 
+                    ? 'bg-green-medium text-white ml-4 sm:ml-12 rounded-2xl' 
+                    : 'text-primary-dark mr-4 sm:mr-12'
+            }`;
+            
+            if (isLoading) {
+                contentDiv.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <div class="flex space-x-1">
+                            <div class="w-2 h-2 bg-green-medium rounded-full animate-bounce" style="animation-delay: 0ms"></div>
+                            <div class="w-2 h-2 bg-green-medium rounded-full animate-bounce" style="animation-delay: 150ms"></div>
+                            <div class="w-2 h-2 bg-green-medium rounded-full animate-bounce" style="animation-delay: 300ms"></div>
+                        </div>
+                        <span class="text-green-muted">Thinking...</span>
+                    </div>
+                `;
+            } else if (role === 'assistant') {
+                contentDiv.innerHTML = '';
+                typeWriter(contentDiv, content, 10);
+            } else {
+                contentDiv.textContent = content;
+            }
+            
+            messageDiv.appendChild(contentDiv);
+            messagesContainer.appendChild(messageDiv);
+            
+            setTimeout(() => {
+                scrollContainer.scrollTop = scrollContainer.scrollHeight;
+            }, 10);
+            
+            return messageId;
+        }
+
+        function typeWriter(element, text, speed = 10) {
+            let i = 0;
+            element.innerHTML = '';
+            
+            // Format markdown before typing
+            const formattedText = formatMarkdown(text);
+            
+            const typingStart = performance.now();
+            
+            function type() {
+                if (i < formattedText.length) {
+                    element.innerHTML = formattedText.substring(0, i + 1);
+                    i++;
+                    currentTypewriterTimeout = setTimeout(type, speed);
+                    
+                    // Auto-scroll as text appears
+                    const scrollContainer = document.getElementById('scrollContainer');
+                    scrollContainer.scrollTop = scrollContainer.scrollHeight;
+                } else if (i >= formattedText.length) {
+                    const typingEnd = performance.now();
+                    console.log(`[v0] Typing animation completed in: ${(typingEnd - typingStart).toFixed(0)}ms`);
+                    
+                    isAIResponding = false;
+                    updateSendButton();
+                    currentTypewriterTimeout = null;
+                }
+            }
+            
+            type();
+        }
+
+        function formatMarkdown(text) {
+            return text
+                // Bold text (**text** or __text__)
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/__(.*?)__/g, '<strong>$1</strong>')
+                // Italic text (*text* or _text_)
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/_(.*?)_/g, '<em>$1</em>')
+                // Line breaks
+                .replace(/\n\n/g, '<br><br>')
+                .replace(/\n/g, '<br>')
+                // Lists
+                .replace(/^\* (.*$)/gim, '• $1')
+                .replace(/^- (.*$)/gim, '• $1')
+                // Add proper spacing after periods and colons
+                .replace(/\. /g, '. ')
+                .replace(/: /g, ': ');
+        }
+
+        // Remove message from chat
+        function removeMessage(messageId) {
+            const message = document.getElementById(messageId);
+            if (message) {
+                message.remove();
+            }
+        }
+
+        // Clear chat and return to welcome screen
+        function clearChat() {
+            chatHistory = [];
+            document.getElementById('messagesContainer').innerHTML = '';
+            document.getElementById('chatMessages').classList.add('hidden');
+            document.getElementById('welcomeScreen').classList.remove('hidden');
+            document.getElementById('messageInput').value = '';
+        }
+    </script>
+</body>
+</html>
