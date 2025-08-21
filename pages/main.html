@@ -847,8 +847,8 @@
                 mainContent.style.display = 'flex';
             } else {
                 // User is signed out, redirect to login
-                console.log('[v0] User not authenticated, redirecting to login');
-                window.location.href = 'login.html';
+                console.log('User not authenticated, redirecting to login');
+                window.location.href = '/pages/login';
             }
         });
 
@@ -893,7 +893,7 @@
                 console.log('[v0] User signed out successfully');
                 // Firebase auth state change will handle redirect
             }).catch((error) => {
-                console.error('[v0] Error signing out:', error);
+                console.error('Error signing out:', error);
                 logoutLoader.classList.remove('show');
                 alert('Error signing out. Please try again.');
             });
