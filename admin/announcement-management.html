@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Point - Announcement Management System</title>
+    <link rel="icon" type="image/x-icon" href="/src/godc.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!-- Added TinyMCE and Firebase scripts -->
+    <script src="https://cdn.tiny.cloud/1/j7qnff495omp83a4o0vbewp8fak9yco4iz0x76sr8mq9m70a/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, push, onValue, remove, update } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsynsRyRVwNYzOtqG4yDdcy5HWw74aOzY",
+            authDomain: "student-s-helpdesk.firebaseapp.com",
+            databaseURL: "https://student-s-helpdesk-default-rtdb.firebaseio.com",
+            projectId: "student-s-helpdesk",
+            storageBucket: "student-s-helpdesk.firebasestorage.app",
+            messagingSenderId: "270861175145",
+            appId: "1:270861175145:web:b66a5f9fef8ac3104855f8",
+            measurementId: "G-VRKD5P955F"
+        };
+
+        console.log('Initializing Firebase...');
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const analytics = getAnalytics(app);
+        console.log('Firebase initialized successfully');
+
+        window.firebaseApp = { app, database, ref, push, onValue, remove, update };
+    </script>
+
+    <style>
+        :root {
+            --primary-dark: #353539;
+            --green-dark: #0e3521;
+            --green-medium: #006936;
+            --green-light: #5fb14c;
+            --accent-yellow: #f1ec33;
+            --green-muted: #4a7c59;
+            --surface-white: #ffffff;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --border-light: #e8eaed;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: #f8f9fa;
+            color: var(--text-primary);
+        }
+
+        .header {
+            background: var(--surface-white);
+            border-bottom: 1px solid var(--border-light);
+            padding: 8px 24px;
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 64px;
+        }
+
+        .menu-icon {
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            color: var(--green-medium);
+        }
+
+        .menu-icon:hover {
+            background-color: #f1f3f4;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-img {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            color: var(--green-medium);
+            font-weight: 500;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 720px;
+            position: relative;
+        }
+
+        .search-box {
+            width: 100%;
+            height: 48px;
+            border: 1px solid var(--border-light);
+            border-radius: 24px;
+            padding: 0 48px 0 16px;
+            font-size: 16px;
+            background-color: #f8f9fa;
+            outline: none;
+        }
+
+        .search-box:focus {
+            background-color: var(--surface-white);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-color: var(--green-medium);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--green-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            color: var(--green-medium);
+        }
+
+        .header-icon:hover {
+            background-color: #f1f3f4;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-yellow);
+            border-radius: 50%;
+        }
+
+        .main-container {
+            display: flex;
+            margin-top: 64px;
+            min-height: calc(100vh - 64px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--surface-white);
+            border-right: 1px solid var(--border-light);
+            padding: 16px 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .nav-item.active {
+            background-color: rgba(95, 177, 76, 0.1);
+            color: var(--green-medium);
+            border-right: 3px solid var(--green-medium);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            color: var(--green-muted);
+        }
+
+        .content {
+            flex: 1;
+            padding: 24px;
+            background-color: #f8f9fa;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 400;
+            margin-bottom: 32px;
+            color: var(--primary-dark);
+        }
+
+        .insight-card {
+            background: var(--surface-white);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 4px solid var(--green-light);
+        }
+
+        .insight-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .insight-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--green-medium);
+        }
+
+        .insight-text {
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .insight-link {
+            color: var(--green-medium);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .section-card {
+            background: var(--surface-white);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 400;
+            color: var(--primary-dark);
+        }
+
+        .section-link {
+            color: var(--green-medium);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .announcement-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--green-medium);
+        }
+
+        .announcement-header {
+            display: flex;
+            justify-content: between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .announcement-title {
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--text-primary);
+            flex: 1;
+            margin-bottom: 4px;
+        }
+
+        .announcement-date {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .announcement-content {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.4;
+            margin-bottom: 12px;
+            max-height: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .announcement-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--green-medium);
+            font-family: 'Google Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn:hover {
+            background-color: #f8f9fa;
+        }
+
+        .action-btn.delete {
+            color: #ea4335;
+            border-color: #ea4335;
+        }
+
+        .editor-container {
+            background: var(--surface-white);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .publish-btn {
+            background-color: var(--green-medium);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 16px;
+            font-family: 'Google Sans', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .publish-btn:hover {
+            background-color: var(--green-dark);
+        }
+
+        .publish-btn:disabled {
+            background-color: #dadce0;
+            cursor: not-allowed;
+        }
+
+        .sidebar-header {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--border-light);
+            margin-bottom: 16px;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+        }
+
+        .announcements-list {
+            padding: 0 16px;
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+
+        .no-announcements {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+            padding: 32px 16px;
+        }
+
+        .edit-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .edit-modal.show {
+            display: flex;
+        }
+
+        .edit-modal-content {
+            background: var(--surface-white);
+            border-radius: 8px;
+            padding: 24px;
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+
+        .cancel-btn,
+        .save-btn {
+            background: none;
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .save-btn {
+            background-color: var(--green-medium);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .save-btn:hover {
+            background-color: var(--green-dark);
+        }
+
+        /* Mobile tabs for published announcements */
+        .mobile-tabs {
+            display: none;
+            background: white;
+            border-bottom: 1px solid #e8eaed;
+            padding: 0 16px;
+            position: sticky;
+            top: 60px;
+            z-index: 100;
+        }
+
+        .mobile-tab-buttons {
+            display: flex;
+            gap: 0;
+        }
+
+        .mobile-tab-btn {
+            flex: 1;
+            padding: 12px 16px;
+            border: none;
+            background: transparent;
+            color: var(--green-muted);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-tab-btn.active {
+            color: var(--green-medium);
+            border-bottom-color: var(--green-medium);
+        }
+
+        .mobile-tab-btn:hover {
+            background: rgba(95, 177, 76, 0.1);
+        }
+
+        .mobile-tab-content {
+            display: none;
+        }
+
+        .mobile-tab-content.active {
+            display: block;
+        }
+
+        /* Mobile responsive styles */
+        @media (max-width: 768px) {
+            .mobile-tabs {
+                display: block;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 16px;
+            }
+
+            .main-container {
+                flex-direction: column;
+            }
+
+            .header {
+                padding: 8px 16px;
+                gap: 12px;
+            }
+
+            .logo-text {
+                font-size: 18px;
+            }
+
+            .search-container {
+                max-width: none;
+                flex: 1;
+            }
+
+            .search-box {
+                height: 40px;
+                font-size: 14px;
+                padding: 0 40px 0 12px;
+            }
+
+            .header-actions {
+                gap: 4px;
+            }
+
+            .header-icon {
+                width: 36px;
+                height: 36px;
+            }
+
+            .page-title {
+                font-size: 24px;
+                margin-bottom: 24px;
+            }
+
+            .insight-card {
+                padding: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .editor-container {
+                padding: 16px;
+            }
+
+            .announcement-item {
+                padding: 12px;
+                margin-bottom: 8px;
+            }
+
+            .announcement-content {
+                font-size: 12px;
+                max-height: 40px;
+            }
+
+            .announcement-actions {
+                gap: 6px;
+            }
+
+            .action-btn {
+                padding: 3px 6px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 8px 12px;
+                gap: 8px;
+            }
+
+            .logo-text {
+                display: none;
+            }
+
+            .search-box {
+                height: 36px;
+                font-size: 14px;
+            }
+
+            .header-actions .header-icon:nth-child(1),
+            .header-actions .header-icon:nth-child(2) {
+                display: none;
+            }
+
+            .content {
+                padding: 12px;
+            }
+
+            .page-title {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+
+            .insight-card {
+                padding: 12px;
+            }
+
+            .editor-container {
+                padding: 12px;
+            }
+
+            .announcement-item {
+                padding: 10px;
+            }
+
+            .announcement-content {
+                max-height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        
+        <div class="logo-section">
+            <img src="/src/helpdesk.png" alt="Helpdesk Logo" class="logo-img" onerror="this.style.display='none'">
+            <span class="logo-text">Access Point</span>
+        </div>
+    </header>
+
+    <!-- Mobile tabs for announcements -->
+    <div class="mobile-tabs">
+        <div class="mobile-tab-buttons">
+            <button class="mobile-tab-btn active" onclick="switchMobileTab('create')">
+                <span class="material-icons" style="font-size: 16px; margin-right: 8px; vertical-align: middle;">create</span>
+                Create
+            </button>
+            <button class="mobile-tab-btn" onclick="switchMobileTab('published')">
+                <span class="material-icons" style="font-size: 16px; margin-right: 8px; vertical-align: middle;">campaign</span>
+                Published
+            </button>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <!-- Desktop sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Published Announcements</div>
+                <div style="font-size: 12px; color: #5f6368;">Manage your announcements</div>
+            </div>
+            
+            <div class="announcements-list" id="announcementsList">
+                <div class="no-announcements">
+                    No announcements published yet.
+                </div>
+            </div>
+        </nav>
+
+        <main class="content">
+            <!-- Mobile tab content wrapper for create tab -->
+            <div class="mobile-tab-content active" id="createTab">
+                <!-- Updated page title -->
+                <h1 class="page-title">Create Announcement</h1>
+                
+                <div class="insight-card">
+                    <div class="insight-content">
+                        <span class="material-icons insight-icon">campaign</span>
+                        <span class="insight-text">Create and manage announcements for your audience</span>
+                    </div>
+                </div>
+                
+                <!-- Replaced Performance section with TinyMCE editor -->
+                <div class="editor-container">
+                    <div class="section-header">
+                        <h2 class="section-title">Announcement Editor</h2>
+                    </div>
+                    
+                    <div>
+                        <!-- Added title input field above TinyMCE editor -->
+                        <div class="title-input-container" style="margin-bottom: 16px;">
+                            <input 
+                                type="text" 
+                                id="announcementTitle" 
+                                placeholder="Enter announcement title..." 
+                                style="width: 100%; padding: 12px 16px; border: 1px solid #dadce0; border-radius: 8px; font-family: 'Google Sans', sans-serif; font-size: 16px; outline: none; transition: border-color 0.2s;"
+                                onfocus="this.style.borderColor='var(--green-medium)'"
+                                onblur="this.style.borderColor='#dadce0'"
+                            />
+                        </div>
+                        <textarea id="announcementEditor" placeholder="Write your announcement here..."></textarea>
+                        <button class="publish-btn" onclick="publishAnnouncement()">
+                            <span class="material-icons" style="font-size: 16px; margin-right: 8px; vertical-align: middle;">publish</span>
+                            Publish Announcement
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile tab content for published announcements -->
+            <div class="mobile-tab-content" id="publishedTab">
+                <h1 class="page-title">Published Announcements</h1>
+                
+                <div class="insight-card">
+                    <div class="insight-content">
+                        <span class="material-icons insight-icon">list</span>
+                        <span class="insight-text">Manage your published announcements</span>
+                    </div>
+                </div>
+
+                <div class="announcements-list" id="mobileAnnouncementsList">
+                    <div class="no-announcements">
+                        No announcements published yet.
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit modal -->
+    <div class="edit-modal" id="editModal">
+        <div class="edit-modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Announcement</h3>
+                <button class="close-btn" onclick="closeEditModal()">&times;</button>
+            </div>
+            <div class="title-input-container" style="margin-bottom: 16px;">
+                <input 
+                    type="text" 
+                    id="editAnnouncementTitle" 
+                    placeholder="Enter announcement title..." 
+                    style="width: 100%; padding: 12px 16px; border: 1px solid #dadce0; border-radius: 8px; font-family: 'Google Sans', sans-serif; font-size: 16px; outline: none; transition: border-color 0.2s;"
+                    onfocus="this.style.borderColor='var(--green-medium)'"
+                    onblur="this.style.borderColor='#dadce0'"
+                />
+            </div>
+            <textarea id="editAnnouncementEditor"></textarea>
+            <div class="modal-actions">
+                <button class="cancel-btn" onclick="closeEditModal()">Cancel</button>
+                <button class="save-btn" onclick="saveEditedAnnouncement()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentEditId = null;
+        let editTinyMCEInstance = null;
+
+        // Mobile tab switching
+        function switchMobileTab(tabName) {
+            console.log('Switching to mobile tab:', tabName);
+            
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.mobile-tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add active class to clicked button
+            const activeButton = document.querySelector(`[onclick="switchMobileTab('${tabName}')"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+            
+            // Hide all tab contents
+            const createTab = document.getElementById('createTab');
+            const publishedTab = document.getElementById('publishedTab');
+            
+            if (createTab) createTab.style.display = 'none';
+            if (publishedTab) publishedTab.style.display = 'none';
+            
+            // Show selected tab
+            const selectedTab = document.getElementById(tabName + 'Tab');
+            if (selectedTab) {
+                selectedTab.style.display = 'block';
+                console.log('Showing tab:', tabName + 'Tab');
+                
+                if (tabName === 'published') {
+                    syncMobileAnnouncementsList();
+                    console.log('Synced mobile announcements list');
+                }
+            }
+        }
+
+        function toggleMobileMenu() {
+            // Mobile menu toggle functionality can be added here
+            console.log('Mobile menu toggled');
+        }
+
+        tinymce.init({
+            selector: '#announcementEditor',
+            height: window.innerWidth <= 768 ? 300 : 400,
+            menubar: false,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount'
+            ],
+            toolbar: window.innerWidth <= 768 ? 
+                'undo redo | bold italic | bullist numlist | removeformat' :
+                'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+            content_style: 'body { font-family: Google Sans, sans-serif; font-size: 14px }',
+            mobile: {
+                theme: 'mobile'
+            }
+        });
+
+        function initEditTinyMCE() {
+            if (editTinyMCEInstance) {
+                tinymce.remove('#editAnnouncementEditor');
+            }
+            
+            tinymce.init({
+                selector: '#editAnnouncementEditor',
+                height: window.innerWidth <= 768 ? 250 : 300,
+                menubar: false,
+                plugins: [
+                    'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                    'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                    'insertdatetime', 'media', 'table', 'help', 'wordcount'
+                ],
+                toolbar: window.innerWidth <= 768 ? 
+                    'undo redo | bold italic | bullist numlist | removeformat' :
+                    'undo redo | blocks | bold italic forecolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help',
+                content_style: 'body { font-family: Google Sans, sans-serif; font-size: 14px }',
+                mobile: {
+                    theme: 'mobile'
+                },
+                setup: function(editor) {
+                    editTinyMCEInstance = editor;
+                }
+            });
+        }
+
+        function publishAnnouncement() {
+            const title = document.getElementById('announcementTitle').value.trim();
+            const content = tinymce.get('announcementEditor').getContent();
+            
+            if (!title) {
+                alert('Please enter a title for your announcement.');
+                return;
+            }
+            
+            if (!content.trim()) {
+                alert('Please write an announcement before publishing.');
+                return;
+            }
+
+            console.log('Publishing announcement to Firebase...');
+            const announcement = {
+                title: title,
+                content: content,
+                timestamp: Date.now(),
+                date: new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                })
+            };
+
+            const { database, ref, push } = window.firebaseApp;
+            const announcementsRef = ref(database, 'announcements');
+            
+            push(announcementsRef, announcement)
+                .then(() => {
+                    console.log('Announcement published successfully to Firebase');
+                    document.getElementById('announcementTitle').value = '';
+                    tinymce.get('announcementEditor').setContent('');
+                })
+                .catch((error) => {
+                    console.error('Error publishing announcement to Firebase:', error);
+                    alert('Error publishing announcement. Please try again.');
+                });
+        }
+
+        function loadAnnouncements() {
+            console.log('Loading announcements from Firebase...');
+            const { database, ref, onValue } = window.firebaseApp;
+            const announcementsRef = ref(database, 'announcements');
+            
+            onValue(announcementsRef, (snapshot) => {
+                const data = snapshot.val();
+                const announcementsList = document.getElementById('announcementsList');
+                const mobileAnnouncementsList = document.getElementById('mobileAnnouncementsList');
+                
+                console.log('Desktop list element:', announcementsList);
+                console.log('Mobile list element:', mobileAnnouncementsList);
+                
+                if (data) {
+                    const announcements = Object.entries(data)
+                        .map(([id, announcement]) => ({ id, ...announcement }))
+                        .sort((a, b) => b.timestamp - a.timestamp);
+                    
+                    console.log('Found announcements:', announcements.length);
+                    displayAnnouncements(announcements);
+                } else {
+                    const noAnnouncementsHTML = '<div class="no-announcements">No announcements published yet.</div>';
+                    if (announcementsList) {
+                        announcementsList.innerHTML = noAnnouncementsHTML;
+                    }
+                    if (mobileAnnouncementsList) {
+                        mobileAnnouncementsList.innerHTML = noAnnouncementsHTML;
+                    }
+                }
+            });
+        }
+
+        function displayAnnouncements(announcements) {
+            const desktopList = document.getElementById('announcementsList');
+            const mobileList = document.getElementById('mobileAnnouncementsList');
+            
+            console.log('Displaying announcements to both lists');
+            console.log('Desktop list exists:', !!desktopList);
+            console.log('Mobile list exists:', !!mobileList);
+            
+            if (announcements.length === 0) {
+                const noAnnouncementsHTML = '<div class="no-announcements">No announcements published yet.</div>';
+                if (desktopList) desktopList.innerHTML = noAnnouncementsHTML;
+                if (mobileList) mobileList.innerHTML = noAnnouncementsHTML;
+                return;
+            }
+
+            const announcementsHTML = announcements.map(announcement => `
+                <div class="announcement-item" data-id="${announcement.id}">
+                    <div class="announcement-header">
+                        <h3 class="announcement-title">${announcement.title}</h3>
+                        <div class="announcement-actions">
+                            <button class="action-btn edit-btn" onclick="editAnnouncement('${announcement.id}')">
+                                <span class="material-icons">edit</span>
+                            </button>
+                            <button class="action-btn delete-btn" onclick="deleteAnnouncement('${announcement.id}')">
+                                <span class="material-icons">delete</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="announcement-content">${announcement.content}</div>
+                    <div class="announcement-meta">
+                        <span class="announcement-date">${new Date(announcement.createdAt).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            if (desktopList) {
+                desktopList.innerHTML = announcementsHTML;
+            }
+            if (mobileList) {
+                mobileList.innerHTML = announcementsHTML;
+                console.log('Mobile list updated with HTML length:', announcementsHTML.length);
+            }
+        }
+
+        function editAnnouncement(id) {
+            currentEditId = id;
+            const announcement = document.querySelector(`.announcement-item[data-id="${id}"]`);
+            const title = announcement.querySelector('.announcement-title').innerText;
+            const content = announcement.querySelector('.announcement-content').innerText;
+            
+            document.getElementById('editAnnouncementTitle').value = title;
+            document.getElementById('editModal').style.display = 'flex';
+            
+            setTimeout(() => {
+                initEditTinyMCE();
+                setTimeout(() => {
+                    if (editTinyMCEInstance) {
+                        editTinyMCEInstance.setContent(content);
+                    }
+                }, 500);
+            }, 100);
+        }
+
+        function saveEditedAnnouncement() {
+            const title = document.getElementById('editAnnouncementTitle').value.trim();
+            const content = editTinyMCEInstance ? editTinyMCEInstance.getContent() : '';
+            
+            if (!title) {
+                alert('Please enter a title for your announcement.');
+                return;
+            }
+            
+            if (!content.trim()) {
+                alert('Please write an announcement before saving.');
+                return;
+            }
+
+            console.log('Updating announcement in Firebase...');
+            const { database, ref, update } = window.firebaseApp;
+            const announcementRef = ref(database, `announcements/${currentEditId}`);
+            update(announcementRef, {
+                title: title,
+                content: content,
+                lastModified: Date.now()
+            }).then(() => {
+                console.log('Announcement updated successfully');
+                closeEditModal();
+                document.getElementById('announcementTitle').value = '';
+                tinymce.get('announcementEditor').setContent('');
+            }).catch((error) => {
+                console.error('Error updating announcement:', error);
+                alert('Error updating announcement. Please try again.');
+            });
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            currentEditId = null;
+        }
+
+        function deleteAnnouncement(id) {
+            if (!confirm('Are you sure you want to delete this announcement?')) {
+                return;
+            }
+
+            const { database, ref, remove } = window.firebaseApp;
+            const announcementRef = ref(database, `announcements/${id}`);
+            
+            remove(announcementRef)
+                .then(() => {
+                    console.log('Announcement deleted successfully');
+                })
+                .catch((error) => {
+                    console.error('Error deleting announcement:', error);
+                    alert('Error deleting announcement. Please try again.');
+                });
+        }
+
+        function syncMobileAnnouncementsList() {
+            const desktopList = document.getElementById('announcementsList');
+            const mobileList = document.getElementById('mobileAnnouncementsList');
+            if (desktopList && mobileList) {
+                mobileList.innerHTML = desktopList.innerHTML;
+            }
+        }
+
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (window.firebaseApp) {
+                    loadAnnouncements();
+                    initEditTinyMCE();
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
