@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Point - Announcements</title>
+    <link rel="icon" type="image/x-icon" href="/src/godc.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-dark: #353539;
+            --green-dark: #0e3521;
+            --green-medium: #006936;
+            --green-light: #5fb14c;
+            --accent-yellow: #f1ec33;
+            --green-muted: #4a7c59;
+            --white-surface: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background-color: var(--white-surface);
+            color: var(--primary-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: var(--white-surface);
+            border-bottom: 1px solid #dadce0;
+            padding: 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .helpdesk-logo {
+            width: 40px;
+            height: 40px;
+            background-image: url('/src/helpdesk.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .site-title {
+            font-size: 22px;
+            font-weight: 400;
+            color: var(--green-muted);
+            margin-left: 16px;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-item {
+            color: var(--green-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 400;
+            padding: 12px 0;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--green-medium);
+            border-bottom-color: var(--green-medium);
+        }
+
+        .nav-item:hover {
+            color: var(--primary-dark);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--green-muted);
+            transition: background-color 0.2s;
+        }
+
+        .icon-btn:hover {
+            background: #f1f3f4;
+        }
+
+        .subscribe-btn {
+            background: var(--green-medium);
+            color: var(--white-surface);
+            padding: 8px 24px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: background-color 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .subscribe-btn:hover {
+            background: var(--green-dark);
+        }
+
+        .search-container {
+            display: none;
+            position: absolute;
+            top: 64px;
+            left: 0;
+            right: 0;
+            background: var(--white-surface);
+            padding: 16px;
+            border-bottom: 1px solid #dadce0;
+            z-index: 99;
+        }
+
+        .search-container.active {
+            display: block;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 8px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--green-medium);
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 48px 24px;
+        }
+
+        .featured-section {
+            display: flex;
+            gap: 48px;
+            margin-bottom: 64px;
+            align-items: flex-start;
+        }
+
+        .featured-left {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .collection-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--green-muted);
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .featured-title {
+            font-size: 48px;
+            font-weight: 400;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .featured-description {
+            font-size: 16px;
+            color: var(--green-muted);
+            margin-bottom: 24px;
+            line-height: 1.5;
+        }
+
+        .view-all-link {
+            color: var(--green-medium);
+            text-decoration: none;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+        }
+
+        .view-all-link:hover {
+            text-decoration: underline;
+        }
+
+        .featured-right {
+            flex: 2;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background: var(--white-surface);
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--green-muted);
+            transition: all 0.2s;
+        }
+
+        .toggle-btn.active {
+            background: var(--green-medium);
+            color: var(--white-surface);
+            border-color: var(--green-medium);
+        }
+
+        .toggle-btn:hover {
+            background: #f1f3f4;
+        }
+
+        /* Card view - horizontal layout on mobile */
+        .announcements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        /* List view - clean list with line separators */
+        .announcements-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .announcement-card {
+            background: var(--white-surface);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #dadce0;
+            transition: all 0.2s;
+            cursor: pointer;
+            height: fit-content;
+        }
+
+        .announcement-card:hover {
+            box-shadow: 0 1px 6px rgba(32,33,36,.28);
+            border-color: #dadce0;
+        }
+
+        /* List mode styling - remove card appearance */
+        .announcement-card.list-mode {
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            border-bottom: 1px solid #e8eaed;
+            padding: 16px 0;
+            margin: 0;
+        }
+
+        .announcement-card.list-mode:hover {
+            background: #f8f9fa;
+            box-shadow: none;
+            border-bottom: 1px solid #e8eaed;
+        }
+
+        .announcement-card.list-mode:last-child {
+            border-bottom: none;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 160px;
+            background-image: url('/src/announcements.png');
+            background-size: cover;
+            background-position: center;
+            background-color: #f8f9fa;
+            position: relative;
+        }
+
+        .card-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.1) 100%);
+        }
+
+        .announcement-card.list-mode .card-image {
+            display: none;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .announcement-card.list-mode .card-content {
+            padding: 0;
+        }
+
+        .card-category {
+            color: var(--green-medium);
+            font-size: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 8px;
+        }
+
+        .announcement-card.list-mode .card-category {
+            margin-bottom: 4px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 400;
+            color: var(--primary-dark);
+            margin-bottom: 8px;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .announcement-card.list-mode .card-title {
+            font-size: 16px;
+            margin-bottom: 4px;
+            -webkit-line-clamp: 3;
+        }
+
+        .card-description {
+            font-size: 13px;
+            color: var(--green-muted);
+            line-height: 1.4;
+            margin-bottom: 12px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .announcement-card.list-mode .card-description {
+            font-size: 12px;
+            margin-bottom: 8px;
+            -webkit-line-clamp: 3;
+        }
+
+        .card-meta {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            color: var(--green-muted);
+        }
+
+        .announcement-card.list-mode .card-meta {
+            font-size: 12px;
+        }
+
+        .card-author {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .detailed-view {
+            display: none;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+
+        .detailed-header {
+            margin-bottom: 32px;
+        }
+
+        .detailed-title {
+            font-size: 48px;
+            font-weight: 400;
+            color: var(--primary-dark);
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .detailed-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--green-muted);
+            margin-bottom: 32px;
+        }
+
+        .detailed-content {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--primary-dark);
+        }
+
+        .detailed-content h1,
+        .detailed-content h2,
+        .detailed-content h3 {
+            margin: 32px 0 16px 0;
+            color: var(--primary-dark);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background: var(--white-surface);
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--green-muted);
+            text-decoration: none;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+        }
+
+        .back-btn:hover {
+            background: #f1f3f4;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--green-muted);
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #e8eaed;
+            border-top: 3px solid var(--green-medium);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .no-announcements {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--green-muted);
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                padding: 0 16px;
+                height: 56px;
+            }
+
+            .site-title {
+                font-size: 18px;
+            }
+
+            .helpdesk-logo {
+                width: 32px;
+                height: 32px;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .header-actions {
+                gap: 8px;
+            }
+
+            .icon-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+
+            .subscribe-btn {
+                padding: 6px 16px;
+                font-size: 13px;
+            }
+
+            .search-container {
+                top: 56px;
+                padding: 12px;
+            }
+
+            .search-input {
+                font-size: 13px;
+            }
+
+            .main-container {
+                padding: 24px 16px;
+            }
+
+            .featured-section {
+                flex-direction: column;
+                gap: 16px;
+                margin-bottom: 32px;
+            }
+
+            .featured-left {
+                max-width: none;
+            }
+
+            .featured-title {
+                font-size: 28px;
+                margin-bottom: 12px;
+            }
+
+            .featured-description {
+                font-size: 15px;
+                margin-bottom: 16px;
+            }
+
+            .view-toggle {
+                margin-bottom: 12px;
+            }
+
+            .toggle-btn {
+                padding: 6px 12px;
+                font-size: 13px;
+            }
+
+            .announcements-grid {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 16px;
+                width: 100%;
+            }
+
+            .announcements-grid .announcement-card {
+                width: 100%;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+
+            .announcements-list {
+                gap: 0;
+            }
+
+            .announcement-card {
+                border-radius: 8px;
+            }
+
+            .announcement-card.list-mode {
+                max-width: none;
+                padding: 12px 0;
+            }
+
+            .card-image {
+                height: 120px;
+            }
+
+            .card-content {
+                padding: 12px;
+            }
+
+            .announcement-card.list-mode .card-content {
+                padding: 0;
+            }
+
+            .card-title {
+                font-size: 16px;
+                margin-bottom: 6px;
+            }
+
+            .card-description {
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+
+            .card-meta {
+                font-size: 12px;
+            }
+
+            .announcement-card.list-mode .card-title {
+                font-size: 15px;
+            }
+
+            .announcement-card.list-mode .card-description {
+                font-size: 12px;
+            }
+
+            .announcement-card.list-mode .card-meta {
+                font-size: 11px;
+            }
+
+            .detailed-view {
+                padding: 20px 16px;
+            }
+
+            .detailed-title {
+                font-size: 24px;
+                margin-bottom: 16px;
+            }
+
+            .detailed-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                margin-bottom: 20px;
+            }
+
+            .detailed-content {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                padding: 0 12px;
+            }
+
+            .main-container {
+                padding: 16px 12px;
+            }
+
+            .featured-title {
+                font-size: 24px;
+            }
+
+            .featured-description {
+                font-size: 14px;
+            }
+
+            .view-toggle {
+                margin-bottom: 10px;
+            }
+
+            .toggle-btn {
+                padding: 5px 10px;
+                font-size: 12px;
+            }
+
+            .announcements-grid .announcement-card {
+                width: 100%;
+                max-width: 350px;
+            }
+
+            .announcements-list {
+                gap: 0;
+            }
+
+            .announcement-card.list-mode {
+                max-width: none;
+                padding: 10px 0;
+            }
+
+            .card-image {
+                height: 100px;
+            }
+
+            .card-content {
+                padding: 10px;
+            }
+
+            .card-title {
+                font-size: 15px;
+            }
+
+            .card-description {
+                font-size: 12px;
+            }
+
+            .card-meta {
+                font-size: 11px;
+            }
+
+            .announcement-card.list-mode .card-title {
+                font-size: 14px;
+            }
+
+            .announcement-card.list-mode .card-description {
+                font-size: 11px;
+            }
+
+            .announcement-card.list-mode .card-meta {
+                font-size: 10px;
+            }
+
+            .detailed-title {
+                font-size: 20px;
+            }
+
+            .detailed-content {
+                font-size: 14px;
+            }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .announcement-card:active,
+            .toggle-btn:active,
+            .icon-btn:active,
+            .back-btn:active {
+                transform: scale(0.95);
+                transition: transform 0.1s;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="helpdesk-logo"></div>
+                <div class="site-title">Access Point</div>
+            </div>
+            <nav class="nav-menu">
+                <a href="/index" class="nav-item">Home</a>
+                <a href="#" class="nav-item active">Announcements</a>
+                <a href="/pages/help" class="nav-item">Help</a>
+            </nav>
+            <div class="header-actions">
+                <div class="search-container active" style="position: relative; display: block; top: 0; padding: 0; border: none; background: transparent;">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search announcements..." oninput="searchAnnouncements()" style="width: 200px; padding: 6px 12px; font-size: 13px;">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="main-view">
+        <div class="main-container">
+            <div class="featured-section">
+                <div class="featured-left">
+                    <h1 class="featured-title">Latest Updates</h1>
+                    <p class="featured-description">
+                        Stay informed with the latest announcements, news, and important updates for CTU BS-DEVCOM.
+                    </p>
+                </div>
+                <div class="featured-right">
+                    <div class="view-toggle">
+                        <button class="toggle-btn active" onclick="setViewMode('card')">Card View</button>
+                        <button class="toggle-btn" onclick="setViewMode('list')">List View</button>
+                    </div>
+                    <div id="featured-announcements" class="announcements-grid">
+                        <!-- Announcements will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="loading" class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading announcements...</p>
+            </div>
+
+            <div id="no-announcements" class="no-announcements" style="display: none;">
+                <h3>No announcements yet</h3>
+                <p>Check back later for updates and news.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailed-view" class="detailed-view">
+        <div class="detailed-header">
+            <button class="back-btn" onclick="goBack()">Back to Announcements</button>
+            <h1 id="detailed-title" class="detailed-title"></h1>
+            <div id="detailed-meta" class="detailed-meta"></div>
+        </div>
+        <div id="detailed-content" class="detailed-content"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAsynsRyRVwNYzOtqG4yDdcy5HWw74aOzY",
+            authDomain: "student-s-helpdesk.firebaseapp.com",
+            databaseURL: "https://student-s-helpdesk-default-rtdb.firebaseio.com",
+            projectId: "student-s-helpdesk",
+            storageBucket: "student-s-helpdesk.firebasestorage.app",
+            messagingSenderId: "270861175145",
+            appId: "1:270861175145:web:b66a5f9fef8ac3104855f8",
+            measurementId: "G-VRKD5P955F"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+        const analytics = getAnalytics(app);
+
+        let allAnnouncements = [];
+        let filteredAnnouncements = [];
+        let viewMode = 'card';
+
+        function getTextPreview(html) {
+            const div = document.createElement('div');
+            div.innerHTML = html;
+            const text = div.textContent || div.innerText || '';
+            return text.length > 150 ? text.substring(0, 150) + '...' : text;
+        }
+
+        function formatDateShort(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        function formatDateLong(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function renderAnnouncements(announcements) {
+            const featuredGrid = document.getElementById('featured-announcements');
+            const noAnnouncements = document.getElementById('no-announcements');
+            
+            if (announcements.length > 0) {
+                featuredGrid.className = viewMode === 'card' ? 'announcements-grid' : 'announcements-list';
+                featuredGrid.innerHTML = announcements.map(announcement => `
+                    <div class="announcement-card ${viewMode === 'list' ? 'list-mode' : ''}" onclick="showDetailedView('${announcement.id}')">
+                        <div class="card-image"></div>
+                        <div class="card-content">
+                            <div class="card-category">ANNOUNCEMENT</div>
+                            <h3 class="card-title">${escapeHtml(announcement.title)}</h3>
+                            <p class="card-description">${getTextPreview(announcement.content)}</p>
+                            <div class="card-meta">
+                                <div class="card-author">
+                                    <span>By</span>
+                                    <span>Admin</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                noAnnouncements.style.display = 'none';
+            } else {
+                featuredGrid.innerHTML = '';
+                noAnnouncements.style.display = 'block';
+            }
+        }
+
+        function loadAnnouncements() {
+            const announcementsRef = ref(database, 'announcements');
+            
+            onValue(announcementsRef, (snapshot) => {
+                const data = snapshot.val();
+                const loading = document.getElementById('loading');
+                
+                loading.style.display = 'none';
+                
+                if (data) {
+                    allAnnouncements = Object.entries(data)
+                        .map(([id, announcement]) => ({
+                            id,
+                            ...announcement
+                        }))
+                        .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                    
+                    filteredAnnouncements = allAnnouncements;
+                    renderAnnouncements(filteredAnnouncements);
+                } else {
+                    allAnnouncements = [];
+                    filteredAnnouncements = [];
+                    renderAnnouncements([]);
+                }
+            });
+        }
+
+        function showDetailedView(announcementId) {
+            const announcement = filteredAnnouncements.find(a => a.id === announcementId);
+            if (!announcement) return;
+
+            document.getElementById('detailed-title').textContent = announcement.title;
+            document.getElementById('detailed-meta').innerHTML = `
+                <span>${formatDateLong(announcement.timestamp)}</span>
+            `;
+            document.getElementById('detailed-content').innerHTML = announcement.content;
+
+            document.getElementById('main-view').style.display = 'none';
+            document.getElementById('detailed-view').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function goBack() {
+            document.getElementById('detailed-view').style.display = 'none';
+            document.getElementById('main-view').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+
+        function setViewMode(mode) {
+            viewMode = mode;
+            const cardBtn = document.querySelector('.toggle-btn[onclick="setViewMode(\'card\')"]');
+            const listBtn = document.querySelector('.toggle-btn[onclick="setViewMode(\'list\')"]');
+            
+            if (mode === 'card') {
+                cardBtn.classList.add('active');
+                listBtn.classList.remove('active');
+            } else {
+                listBtn.classList.add('active');
+                cardBtn.classList.remove('active');
+            }
+            
+            renderAnnouncements(filteredAnnouncements);
+        }
+
+        function searchAnnouncements() {
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+            filteredAnnouncements = allAnnouncements.filter(announcement => 
+                announcement.title.toLowerCase().includes(searchInput) ||
+                getTextPreview(announcement.content).toLowerCase().includes(searchInput)
+            );
+            renderAnnouncements(filteredAnnouncements);
+        }
+
+        window.showDetailedView = showDetailedView;
+        window.setViewMode = setViewMode;
+        window.searchAnnouncements = searchAnnouncements;
+        window.goBack = goBack;
+
+        loadAnnouncements();
+    </script>
+</body>
+</html>
