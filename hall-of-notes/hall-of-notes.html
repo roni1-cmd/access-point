@@ -8,7 +8,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
   <style>
     :root {
       --primary-dark: #353539;
@@ -794,6 +794,17 @@
       fill: var(--green-dark);
     }
 
+    .upload-progress {
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      display: none;
+    }
+
+    .upload-progress.active {
+      display: block;
+    }
+
     @media (max-width: 768px) {
       .menu-icon {
         display: block;
@@ -972,14 +983,14 @@
               <div id="dropdownName" class="dropdown-name"></div>
               <div id="dropdownEmail" class="dropdown-email"></div>
             </div>
-          <button class="dropdown-item" onclick="window.location.href='/pages/ToS.html'">Privacy and Terms</button>
+            <button class="dropdown-item" onclick="window.location.href='/pages/ToS.html'">Privacy and Terms</button>
             <button id="logoutBtn" class="dropdown-item">Sign out</button>
           </div>
         </div>
       </div>
     </div>
   </header>
-
+  
   <!-- Auth Overlay -->
   <div id="authOverlay" class="auth-overlay" style="display: none;">
     <div class="auth-card">
@@ -1038,8 +1049,9 @@
         <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
       </svg>
       <h3 style="margin-bottom: 8px; color: var(--text-primary);">Upload Files</h3>
-      <p style="color: var(--text-secondary); margin-bottom: 16px;">Drag and drop files or click to browse</p>
-      <input type="hidden" role="uploadcare-uploader" id="fileUploader" />
+      <p style="color: var(--text-secondary); margin-bottom: 16px;">Drag and drop files (PDF, DOC, PPT, images) or click to browse</p>
+      <button id="fileUploader" class="btn btn-primary">Upload Files</button>
+      <div id="uploadProgress" class="upload-progress"></div>
     </div>
 
     <div class="upload-section-guest" id="uploadSectionGuest" style="display: none;">
@@ -1076,9 +1088,9 @@
       <div class="footer-bottom">
         <div class="footer-brand">CTU-MC | BS-DEVCOM | ACCESS POINT</div>
         <div class="footer-nav">
-          <a href="/pages/ToS">Privacy and Terms</a>
-          <a href="/page/about">About Access Point</a>
-          <a href="/pages/help">
+          <a href="/pages/ToS.html">Privacy and Terms</a>
+          <a href="/error.html">About Access Point</a>
+          <a href="/pages/help.html">
             <svg class="help-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
             </svg>
@@ -1090,8 +1102,6 @@
   </footer>
 
   <script>
-    UPLOADCARE_PUBLIC_KEY = 'fedffcfab625a665a88f';
-    
     // ===== Firebase Setup =====
     const firebaseConfig = {
       apiKey: "AIzaSyAsynsRyRVwNYzOtqG4yDdcy5HWw74aOzY",
@@ -1141,6 +1151,8 @@
     const toast = document.getElementById("toast");
     const toastAction = document.getElementById("toastAction");
     const toastClose = document.getElementById("toastClose");
+    const fileUploader = document.getElementById("fileUploader");
+    const uploadProgress = document.getElementById("uploadProgress");
 
     // Auth functions
     const signInWithGoogle = () => {
@@ -1152,75 +1164,103 @@
     overlayLoginBtn.onclick = signInWithGoogle;
     toastAction.onclick = signInWithGoogle;
 
+    // Initialize Cloudinary upload widget
+    const cloudinaryWidget = cloudinary.createUploadWidget(
+      {
+        cloudName: "dnfy4mgoh",
+        uploadPreset: "Access Point",
+        apiKey: "369439718827736",
+        multiple: true,
+        maxFiles: 5,
+        maxFileSize: 10000000, // 10MB limit
+        resourceType: "auto",
+        clientAllowedFormats: ["pdf", "doc", "docx", "ppt", "pptx", "png", "jpg", "jpeg"],
+        cropping: false,
+        folder: "hall_of_notes",
+        theme: "minimal",
+        showPoweredBy: false,
+        buttonClass: "btn btn-primary"
+      },
+      (error, result) => {
+        if (!error && result && result.event === "success") {
+          handleUploadSuccess(result.info);
+        } else if (error) {
+          console.error("Upload error:", error);
+          showToast("Error uploading file. Please try again.");
+        } else if (result && result.event === "progress") {
+          const percent = Math.round((result.info.loaded / result.info.total) * 100);
+          uploadProgress.textContent = `Uploading: ${percent}%`;
+          uploadProgress.classList.add("active");
+        } else if (result && result.event === "close") {
+          uploadProgress.classList.remove("active");
+          uploadProgress.textContent = "";
+        }
+      }
+    );
+
+    fileUploader.onclick = () => {
+      cloudinaryWidget.open();
+    };
+
     // Auth state observer
     auth.onAuthStateChanged(user => {
       if (user) {
         console.log("User logged in:", user);
         
-        // Hide login button and overlay
         loginBtn.style.display = "none";
         authOverlay.style.display = "none";
         
-        // Show and populate user profile
         userProfile.style.display = "flex";
         userName.textContent = user.displayName || "User";
         
-        // Set avatar image with fallback
         const avatarUrl = user.photoURL || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'%3E%3Cpath fill='%235f6368' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E";
         userAvatar.src = avatarUrl;
         
-        // Populate dropdown
         dropdownName.textContent = user.displayName || "User";
         dropdownEmail.textContent = user.email || "";
         dropdownAvatar.src = avatarUrl;
         
-        // Add logout functionality
         logoutBtn.onclick = () => {
           auth.signOut();
           dropdownMenu.classList.remove('show');
         };
         
-        // Add avatar click handler
         userAvatar.onclick = (e) => {
           e.stopPropagation();
           dropdownMenu.classList.toggle('show');
         };
         
-        // Close dropdown when clicking outside
         document.addEventListener('click', (e) => {
           if (!userProfile.contains(e.target)) {
             dropdownMenu.classList.remove('show');
           }
         });
         
-        // Show main page and update upload section
         mainPage.style.display = "block";
         updateUploadSection();
         
       } else {
         console.log("User logged out");
         
-        // Show login elements
         loginBtn.style.display = "inline-block";
         authOverlay.style.display = "none";
         mainPage.style.display = "block";
         subjectPage.style.display = "none";
         
-        // Hide user profile
         userProfile.style.display = "none";
         dropdownMenu.classList.remove('show');
         
-        // Update upload section for guests
         updateUploadSection();
       }
     });
 
     // Toast functionality
-    function showToast() {
+    function showToast(message = "Want to upload files? Sign in with Google to share course materials.", action = signInWithGoogle) {
+      toastMessage.textContent = message;
+      toastAction.onclick = action;
       toast.style.display = 'flex';
       toast.classList.add('show');
       
-      // Auto hide after 8 seconds
       setTimeout(() => {
         hideToast();
       }, 8000);
@@ -1235,10 +1275,8 @@
       }, 300);
     }
 
-    // Toast event handlers
     toastClose.onclick = hideToast;
 
-    // Show toast on first visit
     function checkFirstVisit() {
       const hasVisited = localStorage.getItem('hasVisitedStudentHelp');
       if (!hasVisited && !auth.currentUser) {
@@ -1249,7 +1287,6 @@
       }
     }
 
-    // Function to update upload section based on auth state
     function updateUploadSection() {
       const currentUser = auth.currentUser;
       if (currentUser) {
@@ -1261,10 +1298,8 @@
       }
     }
 
-    // Check for first visit when page loads
     setTimeout(checkFirstVisit, 1000);
 
-    // Populate subject cards
     const subjectCards = document.getElementById("subjectCards");
     subjects.forEach(subject => {
       const card = document.createElement("div");
@@ -1273,7 +1308,6 @@
       card.innerHTML = `
         <div class="subject-title">${subject.name}</div>
       `;
-      // Enhanced click functionality with visual feedback
       card.onclick = () => {
         card.style.transform = 'scale(0.98)';
         setTimeout(() => {
@@ -1284,15 +1318,14 @@
       subjectCards.appendChild(card);
     });
 
-    // Search functionality
     const searchBox = document.querySelector(".search-box");
     const clearIcon = document.querySelector(".clear-icon");
+    const toastMessage = document.querySelector(".toast-message");
 
     searchBox.addEventListener("input", () => {
       const query = searchBox.value.trim().toLowerCase();
       const subjectCards = document.querySelectorAll(".subject-card");
 
-      // Show or hide clear icon based on input
       clearIcon.style.display = query ? "block" : "none";
 
       subjectCards.forEach(card => {
@@ -1315,9 +1348,7 @@
       searchBox.focus();
     });
 
-    // Subject page logic
     let currentSubject = null;
-    let uploader = uploadcare.Widget("#fileUploader");
 
     function openSubject(subject, imageUrl) {
       currentSubject = subject;
@@ -1327,10 +1358,8 @@
       subjectPage.style.display = "block";
       fileList.innerHTML = "";
       
-      // Update upload section based on auth state
       updateUploadSection();
 
-      // Listen for files in this subject
       db.ref("files").orderByChild("subject").equalTo(subject).on("child_added", snap => {
         const data = snap.val();
         const fileId = snap.key;
@@ -1339,7 +1368,6 @@
         const div = document.createElement("div");
         div.className = "file-item";
         
-        // Check if current user uploaded this file
         const isOwner = currentUser && data.uploaderId === currentUser.uid;
         const uploaderName = data.uploaderName || data.uploaderEmail || "Unknown";
         
@@ -1353,7 +1381,7 @@
           <div class="file-actions">
             <span class="uploaded-by">by ${uploaderName}</span>
             ${isOwner ? `
-              <button class="delete-btn" data-file-id="${fileId}" data-file-name="${data.name}">
+              <button class="delete-btn" data-file-id="${fileId}" data-file-name="${data.name}" data-public-id="${data.publicId}">
                 <svg class="delete-icon" viewBox="0 0 24 24">
                   <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
                 </svg>
@@ -1365,18 +1393,17 @@
         
         fileList.appendChild(div);
         
-        // Add event listener for delete button if it exists
         const deleteBtn = div.querySelector('.delete-btn');
         if (deleteBtn) {
           deleteBtn.addEventListener('click', function() {
             const fileId = this.getAttribute('data-file-id');
             const fileName = this.getAttribute('data-file-name');
-            deleteFile(fileId, fileName);
+            const publicId = this.getAttribute('data-public-id');
+            deleteFile(fileId, fileName, publicId);
           });
         }
       });
 
-      // Listen for file removals to update UI
       db.ref("files").orderByChild("subject").equalTo(subject).on("child_removed", snap => {
         const fileItems = Array.from(fileList.querySelectorAll('.file-item'));
         fileItems.forEach(item => {
@@ -1394,51 +1421,67 @@
       db.ref("files").off();
     };
 
-    // Upload handling
-    uploader.onUploadComplete(fileInfo => {
+    function handleUploadSuccess(fileInfo) {
       if (!currentSubject) {
-        alert("Please select a subject before uploading.");
+        showToast("Please select a subject before uploading.");
         return;
       }
       
       const currentUser = auth.currentUser;
       if (!currentUser) {
-        alert("Please sign in to upload files.");
+        showToast("Please sign in to upload files.");
         return;
       }
       
       db.ref("files").push({
         subject: currentSubject,
-        url: fileInfo.cdnUrl,
-        name: fileInfo.name,
+        url: fileInfo.secure_url,
+        name: fileInfo.original_filename + '.' + fileInfo.format,
         uploadedAt: Date.now(),
         uploaderId: currentUser.uid,
         uploaderName: currentUser.displayName || "Anonymous",
-        uploaderEmail: currentUser.email
+        uploaderEmail: currentUser.email,
+        publicId: fileInfo.public_id
       }).then(() => {
         console.log("File uploaded successfully");
+        showToast("File uploaded successfully!", () => {});
+        uploadProgress.classList.remove("active");
+        uploadProgress.textContent = "";
       }).catch((error) => {
         console.error("Error uploading file:", error);
+        showToast("Error uploading file. Please try again.");
       });
-    });
+    }
 
-    // Delete file function
-    function deleteFile(fileId, fileName) {
+    async function deleteFile(fileId, fileName, publicId) {
       const currentUser = auth.currentUser;
       if (!currentUser) {
-        alert("Please sign in to delete files.");
+        showToast("Please sign in to delete files.");
         return;
       }
 
       if (confirm(`Are you sure you want to delete "${fileName}"?`)) {
-        db.ref("files/" + fileId).remove()
-          .then(() => {
-            console.log("File deleted successfully");
-          })
-          .catch((error) => {
-            console.error("Error deleting file:", error);
-            alert("Error deleting file. Please try again.");
+        try {
+          // Delete from Firebase
+          await db.ref("files/" + fileId).remove();
+          
+          // Delete from Cloudinary
+          const response = await fetch('/api/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ public_id: publicId })
           });
+          
+          if (response.ok) {
+            console.log("File deleted successfully");
+            showToast("File deleted successfully!", () => {});
+          } else {
+            throw new Error("Failed to delete from Cloudinary");
+          }
+        } catch (error) {
+          console.error("Error deleting file:", error);
+          showToast("Error deleting file. Please try again.");
+        }
       }
     }
   </script>
