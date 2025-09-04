@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Access Point - Hall of Notes</title>
   <link rel="icon" type="image/x-icon" href="/src/godc.png">
   <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -22,6 +23,17 @@
       --text-primary: #202124;
       --text-secondary: #5f6368;
       --text-muted: #9aa0a6;
+    }
+
+    body.dark-mode {
+      --primary-dark: #ffffff;
+      --surface-white: #121212;
+      --text-primary: #e8eaed;
+      --text-secondary: #9aa0a6;
+      --text-muted: #5f6368;
+      --border-color: #3c4043;
+      --green-medium: #5fb14c;
+      --green-dark: #4a7c59;
     }
 
     * {
@@ -326,6 +338,11 @@
       padding: 16px;
     }
 
+    .subject-card img {
+      max-width: 100%;
+      height: auto;
+    }
+
     .subject-card:hover {
       box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       border-color: var(--green-medium);
@@ -353,28 +370,42 @@
       gap: 8px;
       background: none;
       border: none;
-      color: var(--green-medium);
+      color: white;
       font-size: 14px;
       cursor: pointer;
-      margin-bottom: 24px;
-      padding: 8px 0;
+      padding: 8px 16px;
       font-family: 'Google Sans', sans-serif;
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 24px;
     }
 
     .back-button:hover {
-      text-decoration: underline;
+      background: rgba(0, 0, 0, 0.7);
     }
 
     .subject-header {
       background-size: cover;
       background-position: center;
-      border-radius: 12px;
-      padding: 32px;
-      margin-bottom: 24px;
+      background-attachment: fixed;
+      min-height: 70vh;
+      border-radius: 0;
+      padding: 80px 0;
+      margin: 0;
       text-align: center;
-      border: 1px solid var(--border-color);
+      border: none;
       position: relative;
       color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      margin-right: calc(-50vw + 50%);
     }
 
     .subject-header::before {
@@ -384,41 +415,60 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.4);
+      background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
       z-index: 0;
     }
 
     .subject-page-title {
-      font-size: 32px;
+      font-size: 48px;
       color: inherit;
-      margin-bottom: 16px;
-      font-weight: 400;
+      margin-bottom: 24px;
+      font-weight: 600;
       position: relative;
       z-index: 1;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
     }
 
     .subject-description {
-      font-size: 14px;
-      color: white;
+      font-size: 18px;
+      color: rgba(255, 255, 255, 0.9);
       position: relative;
       z-index: 1;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+      max-width: 600px;
+      line-height: 1.5;
+      margin-bottom: 32px;
+    }
+
+    .hero-action {
+      position: relative;
+      z-index: 1;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 12px 32px;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .hero-action:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: translateY(-2px);
     }
 
     .upload-section {
       background: var(--surface-white);
+      margin-top: 32px;
       border-radius: 12px;
       padding: 24px;
-      margin-bottom: 24px;
-      border: 2px dashed var(--border-color);
-      text-align: center;
-      transition: all 0.2s;
-    }
-
-    .upload-section:hover {
-      border-color: var(--green-medium);
-      background: #f8fff8;
+      border: 1px solid var(--border-color);
     }
 
     .upload-section-guest {
@@ -567,6 +617,64 @@
       border-bottom: 1px solid var(--border-color);
       font-weight: 500;
       color: var(--text-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .file-controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .file-search {
+      position: relative;
+      width: 200px;
+    }
+
+    .file-search-input {
+      width: 100%;
+      height: 32px;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 8px 32px 8px 12px;
+      font-size: 14px;
+      outline: none;
+      font-family: 'Google Sans', sans-serif;
+    }
+
+    .file-search-input:focus {
+      border-color: var(--green-medium);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .file-search-icon {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: var(--text-muted);
+    }
+
+    .file-sort {
+      height: 32px;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 0 12px;
+      font-size: 14px;
+      font-family: 'Google Sans', sans-serif;
+      background: var(--surface-white);
+      cursor: pointer;
+    }
+
+    .file-sort:focus {
+      outline: none;
+      border-color: var(--green-medium);
     }
 
     .file-item {
@@ -576,12 +684,14 @@
       border-bottom: 1px solid #f1f3f4;
       transition: background 0.2s;
       justify-content: space-between;
+      flex-wrap: wrap;
     }
 
     .file-info {
       display: flex;
       align-items: center;
       flex: 1;
+      min-width: 200px;
     }
 
     .file-actions {
@@ -590,12 +700,11 @@
       gap: 8px;
     }
 
-    .delete-btn {
+    .delete-btn, .preview-btn, .share-btn {
       padding: 6px 8px;
       background: none;
       border: 1px solid var(--border-color);
       border-radius: 4px;
-      color: #d93025;
       cursor: pointer;
       font-size: 12px;
       transition: all 0.2s;
@@ -605,12 +714,34 @@
       font-family: 'Google Sans', sans-serif;
     }
 
+    .delete-btn {
+      color: #d93025;
+    }
+
     .delete-btn:hover {
       background: #fce8e6;
       border-color: #d93025;
     }
 
-    .delete-icon {
+    .preview-btn {
+      color: var(--green-medium);
+    }
+
+    .preview-btn:hover {
+      background: #e6f4ea;
+      border-color: var(--green-medium);
+    }
+
+    .share-btn {
+      color: #4285f4;
+    }
+
+    .share-btn:hover {
+      background: #e8f0fe;
+      border-color: #4285f4;
+    }
+
+    .delete-icon, .preview-icon, .share-icon {
       width: 14px;
       height: 14px;
       fill: currentColor;
@@ -685,6 +816,92 @@
       line-height: 1.5;
     }
 
+    .preview-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+
+    .preview-modal.show {
+      display: flex;
+    }
+
+    .preview-content {
+      background: var(--surface-white);
+      border-radius: 12px;
+      padding: 24px;
+      max-width: 90%;
+      max-height: 90%;
+      overflow: auto;
+      position: relative;
+    }
+
+    .preview-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--text-primary);
+    }
+
+    .preview-image {
+      max-width: 100%;
+      max-height: 70vh;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .preview-iframe {
+      width: 100%;
+      height: 70vh;
+      border: none;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .pagination-btn {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      background: var(--surface-white);
+      color: var(--text-primary);
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+
+    .pagination-btn:hover {
+      background: #f8f9fa;
+    }
+
+    .pagination-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .dark-mode-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      fill: var(--text-secondary);
+      width: 24px;
+      height: 24px;
+    }
+
     footer {
       background: var(--surface-white);
       border-top: 1px solid var(--border-color);
@@ -716,6 +933,7 @@
       display: flex;
       justify-content: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
 
     .social-link {
@@ -766,6 +984,7 @@
       display: flex;
       gap: 16px;
       align-items: center;
+      flex-wrap: wrap;
     }
 
     .footer-nav a {
@@ -812,6 +1031,7 @@
 
       .header {
         padding: 12px 16px;
+        flex-wrap: wrap;
       }
 
       .logo {
@@ -846,15 +1066,29 @@
       }
 
       .subject-header {
-        padding: 20px 16px;
+        min-height: 60vh;
+        padding: 60px 0;
+        width: 100%;
+        margin-left: 0;
+        margin-right: 0;
       }
 
       .subject-page-title {
-        font-size: 24px;
+        font-size: 36px;
+      }
+
+      .subject-description {
+        font-size: 16px;
       }
 
       .upload-section, .upload-section-guest {
         padding: 20px 16px;
+      }
+
+      .file-list-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
       }
 
       .file-item {
@@ -871,6 +1105,7 @@
       .file-actions {
         width: 100%;
         justify-content: space-between;
+        flex-wrap: wrap;
       }
 
       .uploaded-by {
@@ -878,7 +1113,7 @@
         font-size: 11px;
       }
 
-      .delete-btn {
+      .delete-btn, .preview-btn, .share-btn {
         font-size: 11px;
         padding: 4px 6px;
       }
@@ -900,6 +1135,21 @@
         right: 16px;
         transform: none;
         max-width: none;
+      }
+
+      .file-controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .file-search {
+        width: 100%;
+      }
+
+      .file-sort {
+        width: 100%;
       }
 
       .footer-bottom {
@@ -956,6 +1206,15 @@
       .footer-nav a {
         font-size: 13px;
       }
+
+      .pagination {
+        gap: 4px;
+      }
+
+      .pagination-btn {
+        padding: 6px 8px;
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -972,6 +1231,11 @@
       </div>
     </div>
     <div class="auth-section">
+      <button id="darkModeToggle" class="dark-mode-toggle">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98.37-2.03.57-3.1.57-4.97 0-9-4.03-9-9 0-1.07.2-2.12.57-3.1C3.92 3.04 3.46 3 3 3z"/>
+        </svg>
+      </button>
       <button id="loginBtn" class="btn btn-primary">Sign in with Google</button>
       <div id="userProfile" class="user-profile" style="display:none;">
         <span id="userName" class="user-name"></span>
@@ -1019,7 +1283,7 @@
         <div class="search-container">
           <input type="text" class="search-box" placeholder="Search for course materials or subjects">
           <svg class="search-icon" viewBox="0 0 24 24">
-            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5S13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
           </svg>
           <svg class="clear-icon" viewBox="0 0 24 24" style="display: none;">
             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -1032,14 +1296,13 @@
 
   <!-- Subject Page -->
   <div id="subjectPage" class="subject-page">
-    <button id="backBtn" class="back-button">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-      </svg>
-      Back to subjects
-    </button>
-    
     <div class="subject-header" id="subjectHeader">
+      <button id="backBtn" class="back-button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+        Back to subjects
+      </button>
       <h2 id="subjectTitle" class="subject-page-title"></h2>
       <p class="subject-description">Share and access course materials</p>
     </div>
@@ -1066,8 +1329,36 @@
     </div>
 
     <div class="file-list">
-      <div class="file-list-header">Course Materials</div>
+      <div class="file-list-header">
+        Course Materials
+        <div class="file-controls">
+          <div class="file-search">
+            <input type="text" class="file-search-input" placeholder="Search files...">
+            <svg class="file-search-icon" viewBox="0 0 24 24">
+              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5S13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+            </svg>
+          </div>
+          <select class="file-sort">
+            <option value="name-asc">Name (A-Z)</option>
+            <option value="name-desc">Name (Z-A)</option>
+            <option value="date-asc">Date (Oldest)</option>
+            <option value="date-desc">Date (Newest)</option>
+            <option value="uploader-asc">Uploader (A-Z)</option>
+            <option value="uploader-desc">Uploader (Z-A)</option>
+          </select>
+          <button id="downloadAllBtn" class="btn btn-secondary">Download All</button>
+        </div>
+      </div>
       <div id="fileList"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="preview-modal">
+      <div class="preview-content">
+        <button id="previewClose" class="preview-close">×</button>
+        <div id="previewContent"></div>
+      </div>
     </div>
   </div>
 
@@ -1153,6 +1444,25 @@
     const toastClose = document.getElementById("toastClose");
     const fileUploader = document.getElementById("fileUploader");
     const uploadProgress = document.getElementById("uploadProgress");
+    const fileSearchInput = document.querySelector(".file-search-input");
+    const fileSort = document.querySelector(".file-sort");
+    const downloadAllBtn = document.getElementById("downloadAllBtn");
+    const previewModal = document.getElementById("previewModal");
+    const previewContent = document.getElementById("previewContent");
+    const previewClose = document.getElementById("previewClose");
+    const pagination = document.getElementById("pagination");
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const toastMessage = document.querySelector(".toast-message");
+
+    // Dark mode toggle
+    darkModeToggle.onclick = () => {
+      document.body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+    };
+
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.body.classList.add('dark-mode');
+    }
 
     // Auth functions
     const signInWithGoogle = () => {
@@ -1320,7 +1630,6 @@
 
     const searchBox = document.querySelector(".search-box");
     const clearIcon = document.querySelector(".clear-icon");
-    const toastMessage = document.querySelector(".toast-message");
 
     searchBox.addEventListener("input", () => {
       const query = searchBox.value.trim().toLowerCase();
@@ -1349,20 +1658,68 @@
     });
 
     let currentSubject = null;
+    let fileData = [];
+    const itemsPerPage = 10;
+    let currentPage = 1;
 
     function openSubject(subject, imageUrl) {
       currentSubject = subject;
+      fileData = [];
+      currentPage = 1;
       subjectTitle.textContent = subject;
+      const subjectDesc = document.querySelector('.subject-description');
+      if (subjectDesc) {
+        subjectDesc.textContent = `Explore and manage files for ${subject}. Upload, organize, and share your content seamlessly.`;
+      }
       subjectHeader.style.backgroundImage = `url(${imageUrl})`;
       mainPage.style.display = "none";
       subjectPage.style.display = "block";
       fileList.innerHTML = "";
       
       updateUploadSection();
+      loadFiles(subject);
+    }
 
-      db.ref("files").orderByChild("subject").equalTo(subject).on("child_added", snap => {
-        const data = snap.val();
-        const fileId = snap.key;
+    function loadFiles(subject) {
+      fileList.innerHTML = "";
+      db.ref("files").orderByChild("subject").equalTo(subject).on("value", snap => {
+        fileData = [];
+        snap.forEach(childSnap => {
+          const data = childSnap.val();
+          data.id = childSnap.key;
+          fileData.push(data);
+        });
+        renderFiles();
+      });
+    }
+
+    function renderFiles() {
+      fileList.innerHTML = "";
+      const query = fileSearchInput.value.trim().toLowerCase();
+      const sortOption = fileSort.value;
+
+      let filteredFiles = fileData.filter(file => 
+        file.name.toLowerCase().includes(query)
+      );
+
+      filteredFiles.sort((a, b) => {
+        switch (sortOption) {
+          case 'name-asc': return a.name.localeCompare(b.name);
+          case 'name-desc': return b.name.localeCompare(a.name);
+          case 'date-asc': return a.uploadedAt - b.uploadedAt;
+          case 'date-desc': return b.uploadedAt - a.uploadedAt;
+          case 'uploader-asc': return (a.uploaderName || a.uploaderEmail).localeCompare(b.uploaderName || b.uploaderEmail);
+          case 'uploader-desc': return (b.uploaderName || b.uploaderEmail).localeCompare(a.uploaderName || a.uploaderEmail);
+          default: return 0;
+        }
+      });
+
+      const startIndex = (currentPage - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+      const paginatedFiles = filteredFiles.slice(startIndex, endIndex);
+
+      paginatedFiles.forEach(data => {
+        const fileId = data.id;
         const currentUser = auth.currentUser;
         
         const div = document.createElement("div");
@@ -1370,6 +1727,7 @@
         
         const isOwner = currentUser && data.uploaderId === currentUser.uid;
         const uploaderName = data.uploaderName || data.uploaderEmail || "Unknown";
+        const fileExtension = data.name.split('.').pop().toLowerCase();
         
         div.innerHTML = `
           <div class="file-info">
@@ -1380,6 +1738,18 @@
           </div>
           <div class="file-actions">
             <span class="uploaded-by">by ${uploaderName}</span>
+            <button class="preview-btn" data-file-url="${data.url}" data-file-type="${fileExtension}">
+              <svg class="preview-icon" viewBox="0 0 24 24">
+                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+              </svg>
+              Preview
+            </button>
+            <button class="share-btn" data-file-url="${data.url}">
+              <svg class="share-icon" viewBox="0 0 24 24">
+                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2c0 .24.04.47.09.7L8.04 11.81C7.5 11.31 6.79 11 6 11c-1.1 0-2 .9-2 2s.9 2 2 2c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.23-.09.46-.09.7 0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2zm0-4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-12 0c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/>
+              </svg>
+              Share
+            </button>
             ${isOwner ? `
               <button class="delete-btn" data-file-id="${fileId}" data-file-name="${data.name}" data-public-id="${data.publicId}">
                 <svg class="delete-icon" viewBox="0 0 24 24">
@@ -1402,24 +1772,115 @@
             deleteFile(fileId, fileName, publicId);
           });
         }
-      });
 
-      db.ref("files").orderByChild("subject").equalTo(subject).on("child_removed", snap => {
-        const fileItems = Array.from(fileList.querySelectorAll('.file-item'));
-        fileItems.forEach(item => {
-          const deleteBtn = item.querySelector('.delete-btn');
-          if (deleteBtn && deleteBtn.getAttribute('data-file-id') === snap.key) {
-            item.remove();
-          }
+        const previewBtn = div.querySelector('.preview-btn');
+        previewBtn.addEventListener('click', function() {
+          const fileUrl = this.getAttribute('data-file-url');
+          const fileType = this.getAttribute('data-file-type');
+          showPreview(fileUrl, fileType);
+        });
+
+        const shareBtn = div.querySelector('.share-btn');
+        shareBtn.addEventListener('click', function() {
+          const fileUrl = this.getAttribute('data-file-url');
+          navigator.clipboard.writeText(fileUrl).then(() => {
+            showToast("Link copied to clipboard!");
+          }).catch(() => {
+            showToast("Failed to copy link.");
+          });
         });
       });
+
+      renderPagination(filteredFiles.length);
+    }
+
+    function renderPagination(totalItems) {
+      pagination.innerHTML = "";
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      const prevBtn = document.createElement("button");
+      prevBtn.className = "pagination-btn";
+      prevBtn.textContent = "Previous";
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.classList.toggle("disabled", currentPage === 1);
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderFiles();
+        }
+      };
+      pagination.appendChild(prevBtn);
+
+      const nextBtn = document.createElement("button");
+      nextBtn.className = "pagination-btn";
+      nextBtn.textContent = "Next";
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.classList.toggle("disabled", currentPage === totalPages);
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderFiles();
+        }
+      };
+      pagination.appendChild(nextBtn);
     }
 
     backBtn.onclick = () => {
       subjectPage.style.display = "none";
       mainPage.style.display = "block";
       db.ref("files").off();
+      fileSearchInput.value = "";
     };
+
+    fileSearchInput.addEventListener("input", () => {
+      currentPage = 1;
+      renderFiles();
+    });
+
+    fileSort.addEventListener("change", () => {
+      currentPage = 1;
+      renderFiles();
+    });
+
+    downloadAllBtn.addEventListener("click", () => {
+      if (fileData.length === 0) {
+        showToast("No files to download.");
+        return;
+      }
+      showToast("Downloading all files... (Simulated)");
+      fileData.forEach(file => {
+        const link = document.createElement("a");
+        link.href = file.url;
+        link.download = file.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+    });
+
+    function showPreview(fileUrl, fileType) {
+      previewContent.innerHTML = "";
+      if (['png', 'jpg', 'jpeg'].includes(fileType)) {
+        previewContent.innerHTML = `<img src="${fileUrl}" class="preview-image" alt="File Preview">`;
+      } else if (fileType === 'pdf') {
+        previewContent.innerHTML = `<iframe src="${fileUrl}" class="preview-iframe"></iframe>`;
+      } else {
+        showToast("Preview not supported for this file type.");
+        return;
+      }
+      previewModal.classList.add('show');
+    }
+
+    previewClose.addEventListener('click', () => {
+      previewModal.classList.remove('show');
+      previewContent.innerHTML = "";
+    });
+
+    document.addEventListener('click', (e) => {
+      if (e.target === previewModal) {
+        previewModal.classList.remove('show');
+        previewContent.innerHTML = "";
+      }
+    });
 
     function handleUploadSuccess(fileInfo) {
       if (!currentSubject) {
