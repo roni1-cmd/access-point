@@ -29,13 +29,12 @@
         }
     </script>
 </head>
-<body class="bg-white text-primary-dark font-sans">
+<body class="bg-white text-primary-dark font-sans transition-colors duration-300">
     <!-- Main Content -->
     <div class="min-h-screen">
         <!-- Header -->
         <header class="flex items-center justify-between px-4 md:px-6 py-4 border-b border-green-muted/20 bg-white">
             <div class="flex items-center space-x-3">
-                <!-- Added logo image -->
                 <img src="/src/logo.png" alt="Sprout Logo" class="w-8 h-8">
                 <h1 class="text-xl font-medium text-green-dark">Sprout</h1>
                 <div class="hidden sm:flex items-center space-x-1 bg-green-muted/10 px-3 py-1 rounded-full border border-green-muted/20">
@@ -50,10 +49,31 @@
                     <span class="text-sm text-green-dark font-medium">Corea Inner Support V1</span>
                 </div>
                 
-                <!-- Added new chat button for mobile -->
+                <!-- New Chat Button -->
                 <button onclick="clearChat()" class="p-2 hover:bg-green-muted/10 rounded-lg transition-colors text-green-muted">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                </button>
+
+                <!-- Dark Mode Toggle -->
+                <button id="darkModeToggle" class="p-2 hover:bg-green-muted/10 rounded-lg transition-colors text-green-muted">
+                    <svg id="darkModeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                    </svg>
+                </button>
+
+                <!-- Crisis Help Button -->
+                <button onclick="showCrisisHelp()" class="p-2 hover:bg-green-muted/10 rounded-lg transition-colors text-green-muted">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </button>
+
+                <!-- Feedback Button -->
+                <button onclick="showFeedbackModal()" class="p-2 hover:bg-green-muted/10 rounded-lg transition-colors text-green-muted">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
                     </svg>
                 </button>
             </div>
@@ -61,9 +81,8 @@
 
         <!-- Chat Area -->
         <main class="flex flex-col h-[calc(100vh-80px)] bg-white">
-            <!-- Welcome Screen (shown when no messages) -->
+            <!-- Welcome Screen -->
             <div id="welcomeScreen" class="flex flex-col items-center justify-center flex-1 px-4 md:px-6">
-                <!-- Greeting -->
                 <div class="text-center mb-8 md:mb-12">
                     <h2 class="text-3xl md:text-4xl font-normal text-green-medium mb-4 md:mb-8">Yoohoo, stranger!</h2>
                     <p class="text-green-muted text-lg">I'm here to support your mental wellness journey</p>
@@ -88,23 +107,18 @@
                 </div>
             </div>
 
-            <!-- Chat Messages (hidden initially) -->
+            <!-- Chat Messages -->
             <div id="chatMessages" class="flex-1 overflow-hidden hidden">
                 <div class="h-full overflow-y-auto px-4 md:px-6 py-6" id="scrollContainer">
-                    <div class="max-w-4xl mx-auto space-y-6" id="messagesContainer">
-                        <!-- Messages will be added here dynamically -->
-                    </div>
+                    <div class="max-w-4xl mx-auto space-y-6" id="messagesContainer"></div>
                 </div>
             </div>
 
-            <!-- Input Area (fixed at bottom) -->
+            <!-- Input Area -->
             <div class="px-4 md:px-6 py-4 md:py-6 bg-white">
                 <div class="w-full max-w-3xl mx-auto">
-                    <!-- Added background, border, and shadow back to input container -->
                     <div class="relative bg-white border border-green-muted/20 rounded-2xl shadow-sm">
                         <div class="flex items-center px-4 md:px-6 py-3 md:py-4">
-                            <!-- Removed plus icon button -->
-                            
                             <input 
                                 id="messageInput"
                                 type="text" 
@@ -113,7 +127,7 @@
                                 onkeypress="handleKeyPress(event)"
                             />
                             
-                            <!-- Made Tools Button visible on mobile and added dropdown functionality -->
+                            <!-- Tools Button -->
                             <div class="relative">
                                 <button id="toolsButton" onclick="toggleModelDropdown()" class="flex items-center space-x-2 px-2 md:px-4 py-2 hover:bg-green-muted/10 rounded-full transition-colors mr-2 md:mr-3 text-green-muted">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -125,11 +139,10 @@
                                     </svg>
                                 </button>
                                 
-                                <!-- Added mobile-responsive dropdown with proper positioning -->
+                                <!-- Model Dropdown -->
                                 <div id="modelDropdown" class="absolute bottom-full right-0 mb-2 w-64 sm:w-72 bg-white border border-green-muted/20 rounded-2xl shadow-lg hidden z-50">
                                     <div class="p-2">
                                         <div class="text-xs font-medium text-green-muted px-3 py-2 mb-1">Powered by Corea Starstroupe</div>
-                                        
                                         <div onclick="selectModel('wellness', 'Corea Inner Support V1', 'general mental health support')" class="flex items-start p-3 hover:bg-green-muted/5 rounded-xl cursor-pointer transition-colors model-option" data-model="wellness">
                                             <div class="w-2 h-2 bg-green-light rounded-full mt-2 mr-3 flex-shrink-0"></div>
                                             <div class="flex-1 min-w-0">
@@ -137,7 +150,6 @@
                                                 <div class="text-xs text-green-muted mt-0.5 truncate">general mental health support</div>
                                             </div>
                                         </div>
-                                        
                                         <div onclick="selectModel('anxiety', 'Corea Resilience 2B', 'anxiety & stress management')" class="flex items-start p-3 hover:bg-green-muted/5 rounded-xl cursor-pointer transition-colors model-option" data-model="anxiety">
                                             <div class="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
                                             <div class="flex-1 min-w-0">
@@ -145,7 +157,6 @@
                                                 <div class="text-xs text-green-muted mt-0.5 truncate">anxiety & stress management</div>
                                             </div>
                                         </div>
-                                        
                                         <div onclick="selectModel('mood', 'Corea Mindcare 7S', 'depression & emotional support')" class="flex items-start p-3 hover:bg-green-muted/5 rounded-xl cursor-pointer transition-colors model-option" data-model="mood">
                                             <div class="w-2 h-2 bg-purple-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
                                             <div class="flex-1 min-w-0">
@@ -153,7 +164,6 @@
                                                 <div class="text-xs text-green-muted mt-0.5 truncate">depression & emotional support</div>
                                             </div>
                                         </div>
-                                        
                                         <div onclick="selectModel('sleep', 'Corea Rest Advisor 3C', 'sleep & relaxation guidance')" class="flex items-start p-3 hover:bg-green-muted/5 rounded-xl cursor-pointer transition-colors model-option" data-model="sleep">
                                             <div class="w-2 h-2 bg-indigo-500 rounded-full mt-2 mr-3 flex-shrink-0"></div>
                                             <div class="flex-1 min-w-0">
@@ -173,7 +183,6 @@
                         </div>
                     </div>
                     
-                    <!-- Added disclaimer below input -->
                     <div class="text-center mt-3">
                         <p class="text-xs text-green-muted/70">
                             Sprout can make mistakes. Please verify important information and consider professional help when needed.
@@ -182,14 +191,39 @@
                 </div>
             </div>
         </main>
+
+        <!-- Crisis Help Modal -->
+        <div id="crisisModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-6 rounded-2xl max-w-md w-full mx-4">
+                <h3 class="text-xl font-medium text-green-dark mb-4">Crisis Support</h3>
+                <p class="text-green-muted mb-4">If you're in crisis, please contact professional help immediately.</p>
+                <ul class="space-y-2 mb-6">
+                    <li class="text-green-dark">US National Suicide Prevention Lifeline: 988</li>
+                    <li class="text-green-dark">Crisis Text Line: Text HOME to 741741</li>
+                    <li class="text-green-dark">International: Find help at befrienders.org</li>
+                </ul>
+                <button onclick="closeCrisisModal()" class="w-full bg-green-medium text-white py-3 rounded-xl">Close</button>
+            </div>
+        </div>
+
+        <!-- Feedback Modal -->
+        <div id="feedbackModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white p-6 rounded-2xl max-w-md w-full mx-4">
+                <h3 class="text-xl font-medium text-green-dark mb-4">Provide Feedback</h3>
+                <textarea id="feedbackInput" class="w-full h-32 p-3 border border-green-muted/20 rounded-xl mb-4" placeholder="Share your feedback or suggestions..."></textarea>
+                <div class="flex justify-end space-x-2">
+                    <button onclick="closeFeedbackModal()" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-xl">Cancel</button>
+                    <button onclick="submitFeedback()" class="px-4 py-2 bg-green-medium text-white rounded-xl">Submit</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
         // API Configuration
-        const API_KEY = "z99HUO9u2vu9E4YTRRfeue6hbdkdOcM8zWQDfbcq"; // Replace with your Cohere API key
-        const MODEL = "command-r"; // Faster than command-r-plus
+        const API_KEY = "z99HUO9u2vu9E4YTRRfeue6hbdkdOcM8zWQDfbcq";
+        const MODEL = "command-r";
         const API_URL = "https://api.cohere.ai/v1/chat";
-
         let chatHistory = [];
         let isAIResponding = false;
         let currentTypewriterTimeout = null;
@@ -228,60 +262,44 @@
         function toggleModelDropdown() {
             const dropdown = document.getElementById('modelDropdown');
             const arrow = document.getElementById('dropdownArrow');
-            
-            if (dropdown.classList.contains('hidden')) {
-                dropdown.classList.remove('hidden');
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                dropdown.classList.add('hidden');
-                arrow.style.transform = 'rotate(0deg)';
-            }
+            dropdown.classList.toggle('hidden');
+            arrow.style.transform = dropdown.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
         }
 
         function selectModel(modelId, modelName, modelRole) {
             currentModel = modelId;
-            
-            // Update current model display
             const currentModelDisplay = document.getElementById('currentModel');
             currentModelDisplay.innerHTML = `
                 <div class="w-2 h-2 bg-${aiModels[modelId].color} rounded-full"></div>
                 <span class="text-sm text-green-dark font-medium">${modelName}</span>
             `;
-            
-            // Update visual selection in dropdown
             document.querySelectorAll('.model-option').forEach(option => {
                 option.classList.remove('bg-green-muted/10');
             });
             document.querySelector(`[data-model="${modelId}"]`).classList.add('bg-green-muted/10');
-            
-            // Close dropdown
             toggleModelDropdown();
-            
-            // Add system message about model change
             if (chatHistory.length > 0) {
                 addSystemMessage(`Switched to ${modelName} - ${modelRole}`);
             }
         }
 
-        // Close dropdown when clicking outside
         document.addEventListener('click', function(event) {
             const dropdown = document.getElementById('modelDropdown');
             const toolsButton = document.getElementById('toolsButton');
-            
             if (!dropdown.contains(event.target) && !toolsButton.contains(event.target)) {
                 dropdown.classList.add('hidden');
                 document.getElementById('dropdownArrow').style.transform = 'rotate(0deg)';
             }
         });
 
-        // Handle Enter key press in input
+        // Handle Enter key press
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 sendCurrentMessage();
             }
         }
 
-        // Send current message from input
+        // Send message from input
         function sendCurrentMessage() {
             const input = document.getElementById('messageInput');
             const message = input.value.trim();
@@ -293,16 +311,13 @@
 
         // Send message to AI
         async function sendMessage(message) {
-            // Hide welcome screen and show chat
             document.getElementById('welcomeScreen').classList.add('hidden');
             document.getElementById('chatMessages').classList.remove('hidden');
 
             addMessage(message, 'user');
-
             isAIResponding = true;
             updateSendButton();
 
-            // Add loading message
             const loadingId = addMessage('Thinking...', 'assistant', true);
 
             try {
@@ -312,7 +327,6 @@
                 }));
 
                 abortController = new AbortController();
-
                 const startTime = performance.now();
 
                 const response = await fetch(API_URL, {
@@ -342,14 +356,11 @@
                 const endTime = performance.now();
                 console.log(`[v0] API response time: ${(endTime - startTime).toFixed(0)}ms`);
 
-                // Remove loading message and add AI response
                 removeMessage(loadingId);
                 addMessage(aiResponse, 'assistant');
-
-                // Update chat history
                 chatHistory.push({ role: "user", content: message });
                 chatHistory.push({ role: "assistant", content: aiResponse });
-
+                saveChatHistory();
             } catch (error) {
                 if (error.name === 'AbortError') {
                     removeMessage(loadingId);
@@ -368,17 +379,13 @@
 
         function stopAIResponse() {
             if (isAIResponding) {
-                // Stop the fetch request
                 if (abortController) {
                     abortController.abort();
                 }
-                
-                // Stop the typewriter animation
                 if (currentTypewriterTimeout) {
                     clearTimeout(currentTypewriterTimeout);
                     currentTypewriterTimeout = null;
                 }
-                
                 isAIResponding = false;
                 updateSendButton();
             }
@@ -409,17 +416,13 @@
         function addSystemMessage(content) {
             const messagesContainer = document.getElementById('messagesContainer');
             const scrollContainer = document.getElementById('scrollContainer');
-            
             const messageDiv = document.createElement('div');
             messageDiv.className = 'flex justify-center mb-4';
-            
             const contentDiv = document.createElement('div');
             contentDiv.className = 'bg-green-muted/10 text-green-muted px-4 py-2 rounded-full text-sm border border-green-muted/20';
             contentDiv.textContent = content;
-            
             messageDiv.appendChild(contentDiv);
             messagesContainer.appendChild(messageDiv);
-            
             setTimeout(() => {
                 scrollContainer.scrollTop = scrollContainer.scrollHeight;
             }, 10);
@@ -430,27 +433,24 @@
             const messagesContainer = document.getElementById('messagesContainer');
             const scrollContainer = document.getElementById('scrollContainer');
             const messageId = 'msg-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-            
             const messageDiv = document.createElement('div');
             messageDiv.id = messageId;
-            messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start items-start'} mb-4`;
+            messageDiv.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start items-start'} mb-4 group`;
             
             if (role === 'assistant') {
                 const avatarDiv = document.createElement('div');
                 avatarDiv.className = 'flex-shrink-0 mr-3';
                 avatarDiv.innerHTML = `
-                    <img src="/src/logo.png" 
-                         alt="AI Assistant" 
-                         class="w-8 h-8 rounded-full border border-green-muted/20">
+                    <img src="/src/logo.png" alt="AI Assistant" class="w-8 h-8 rounded-full border border-green-muted/20">
                 `;
                 messageDiv.appendChild(avatarDiv);
             }
             
+            const contentWrapper = document.createElement('div');
+            contentWrapper.className = 'relative';
             const contentDiv = document.createElement('div');
             contentDiv.className = `max-w-xs sm:max-w-md md:max-w-3xl px-4 py-3 ${
-                role === 'user' 
-                    ? 'bg-green-medium text-white ml-4 sm:ml-12 rounded-2xl' 
-                    : 'text-primary-dark mr-4 sm:mr-12'
+                role === 'user' ? 'bg-green-medium text-white ml-4 sm:ml-12 rounded-2xl' : 'text-primary-dark mr-4 sm:mr-12'
             }`;
             
             if (isLoading) {
@@ -470,8 +470,48 @@
             } else {
                 contentDiv.textContent = content;
             }
+
+            contentWrapper.appendChild(contentDiv);
+
+            // Add copy, regenerate, and reaction buttons for assistant messages
+            if (role === 'assistant' && !isLoading) {
+                const buttonWrapper = document.createElement('div');
+                buttonWrapper.className = 'absolute top-2 right-2 flex space-x-1 opacity-0 group-hover:opacity-100';
+                
+                const copyButton = document.createElement('button');
+                copyButton.className = 'p-1 hover:bg-green-muted/10 rounded transition-colors text-green-muted';
+                copyButton.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
+                `;
+                copyButton.onclick = () => copyToClipboard(content);
+
+                const regenerateButton = document.createElement('button');
+                regenerateButton.className = 'p-1 hover:bg-green-muted/10 rounded transition-colors text-green-muted';
+                regenerateButton.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9.582M4 20v-5h.582m15.356 2A8.001 8.001 0 014.582 14.582"></path>
+                    </svg>
+                `;
+                regenerateButton.onclick = () => regenerateMessage(messageId);
+
+                const reactionButton = document.createElement('button');
+                reactionButton.className = 'p-1 hover:bg-green-muted/10 rounded transition-colors text-green-muted';
+                reactionButton.innerHTML = `
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                `;
+                reactionButton.onclick = () => toggleReactionMenu(messageId, buttonWrapper);
+
+                buttonWrapper.appendChild(copyButton);
+                buttonWrapper.appendChild(regenerateButton);
+                buttonWrapper.appendChild(reactionButton);
+                contentWrapper.appendChild(buttonWrapper);
+            }
             
-            messageDiv.appendChild(contentDiv);
+            messageDiv.appendChild(contentWrapper);
             messagesContainer.appendChild(messageDiv);
             
             setTimeout(() => {
@@ -481,13 +521,46 @@
             return messageId;
         }
 
+        // Reaction menu
+        function toggleReactionMenu(messageId, buttonWrapper) {
+            let reactionMenu = document.getElementById(`reaction-menu-${messageId}`);
+            if (reactionMenu) {
+                reactionMenu.remove();
+                return;
+            }
+
+            reactionMenu = document.createElement('div');
+            reactionMenu.id = `reaction-menu-${messageId}`;
+            reactionMenu.className = 'absolute right-0 mt-8 bg-white border border-green-muted/20 rounded-xl shadow-lg z-50';
+            reactionMenu.innerHTML = `
+                <div class="flex space-x-2 p-2">
+                    <button onclick="addReaction('${messageId}', '👍')" class="p-1 hover:bg-green-muted/10 rounded">👍</button>
+                    <button onclick="addReaction('${messageId}', '❤️')" class="p-1 hover:bg-green-muted/10 rounded">❤️</button>
+                    <button onclick="addReaction('${messageId}', '😊')" class="p-1 hover:bg-green-muted/10 rounded">😊</button>
+                </div>
+            `;
+            buttonWrapper.appendChild(reactionMenu);
+        }
+
+        function addReaction(messageId, emoji) {
+            const messageDiv = document.getElementById(messageId);
+            let reactionContainer = messageDiv.querySelector('.reaction-container');
+            if (!reactionContainer) {
+                reactionContainer = document.createElement('div');
+                reactionContainer.className = 'reaction-container text-sm mt-2';
+                messageDiv.querySelector('.relative').appendChild(reactionContainer);
+            }
+            const existingReactions = reactionContainer.textContent.split(' ');
+            if (!existingReactions.includes(emoji)) {
+                reactionContainer.textContent = existingReactions.filter(r => r).concat(emoji).join(' ');
+            }
+            document.getElementById(`reaction-menu-${messageId}`)?.remove();
+        }
+
         function typeWriter(element, text, speed = 10) {
             let i = 0;
             element.innerHTML = '';
-            
-            // Format markdown before typing
             const formattedText = formatMarkdown(text);
-            
             const typingStart = performance.now();
             
             function type() {
@@ -495,14 +568,11 @@
                     element.innerHTML = formattedText.substring(0, i + 1);
                     i++;
                     currentTypewriterTimeout = setTimeout(type, speed);
-                    
-                    // Auto-scroll as text appears
                     const scrollContainer = document.getElementById('scrollContainer');
                     scrollContainer.scrollTop = scrollContainer.scrollHeight;
-                } else if (i >= formattedText.length) {
+                } else {
                     const typingEnd = performance.now();
                     console.log(`[v0] Typing animation completed in: ${(typingEnd - typingStart).toFixed(0)}ms`);
-                    
                     isAIResponding = false;
                     updateSendButton();
                     currentTypewriterTimeout = null;
@@ -514,24 +584,18 @@
 
         function formatMarkdown(text) {
             return text
-                // Bold text (**text** or __text__)
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
                 .replace(/__(.*?)__/g, '<strong>$1</strong>')
-                // Italic text (*text* or _text_)
                 .replace(/\*(.*?)\*/g, '<em>$1</em>')
                 .replace(/_(.*?)_/g, '<em>$1</em>')
-                // Line breaks
                 .replace(/\n\n/g, '<br><br>')
                 .replace(/\n/g, '<br>')
-                // Lists
                 .replace(/^\* (.*$)/gim, '• $1')
                 .replace(/^- (.*$)/gim, '• $1')
-                // Add proper spacing after periods and colons
                 .replace(/\. /g, '. ')
                 .replace(/: /g, ': ');
         }
 
-        // Remove message from chat
         function removeMessage(messageId) {
             const message = document.getElementById(messageId);
             if (message) {
@@ -539,19 +603,228 @@
             }
         }
 
-        // Clear chat and return to welcome screen
         function clearChat() {
             chatHistory = [];
             document.getElementById('messagesContainer').innerHTML = '';
             document.getElementById('chatMessages').classList.add('hidden');
             document.getElementById('welcomeScreen').classList.remove('hidden');
             document.getElementById('messageInput').value = '';
+            localStorage.removeItem('sproutChatHistory');
         }
 
-        // Initialize default model selection
+        function saveChatHistory() {
+            localStorage.setItem('sproutChatHistory', JSON.stringify(chatHistory));
+        }
+
+        function loadChatHistory() {
+            const savedHistory = localStorage.getItem('sproutChatHistory');
+            if (savedHistory) {
+                chatHistory = JSON.parse(savedHistory);
+                if (chatHistory.length > 0) {
+                    document.getElementById('welcomeScreen').classList.add('hidden');
+                    document.getElementById('chatMessages').classList.remove('hidden');
+                    chatHistory.forEach(msg => {
+                        addMessage(msg.content, msg.role);
+                    });
+                }
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('Copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+        function regenerateMessage(messageId) {
+            const index = chatHistory.findIndex((_, i) => chatHistory[i+1]?.messageId === messageId);
+            if (index >= 0 && chatHistory[index].role === 'user') {
+                const userMessage = chatHistory[index].content;
+                chatHistory.splice(index + 1, 1);
+                removeMessage(messageId);
+                sendMessage(userMessage);
+            }
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-20 right-4 bg-green-medium text-white px-4 py-2 rounded-xl shadow-lg';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+            const isDark = document.body.classList.contains('dark');
+            localStorage.setItem('sproutDarkMode', isDark ? 'true' : 'false');
+            const icon = document.getElementById('darkModeIcon');
+            icon.innerHTML = isDark ? 
+                `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>` :
+                `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>`;
+        }
+
+        function loadDarkMode() {
+            const isDark = localStorage.getItem('sproutDarkMode') === 'true';
+            if (isDark) {
+                document.body.classList.add('dark');
+                document.getElementById('darkModeIcon').innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>`;
+            }
+        }
+
+        function showCrisisHelp() {
+            document.getElementById('crisisModal').classList.remove('hidden');
+        }
+
+        function closeCrisisModal() {
+            document.getElementById('crisisModal').classList.add('hidden');
+        }
+
+        function showFeedbackModal() {
+            document.getElementById('feedbackModal').classList.remove('hidden');
+        }
+
+        function closeFeedbackModal() {
+            document.getElementById('feedbackModal').classList.add('hidden');
+            document.getElementById('feedbackInput').value = '';
+        }
+
+        function submitFeedback() {
+            const feedback = document.getElementById('feedbackInput').value.trim();
+            if (feedback) {
+                console.log('Feedback submitted:', feedback);
+                showToast('Thank you for your feedback!');
+                closeFeedbackModal();
+            }
+        }
+
+        function exportChatHistory() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(chatHistory));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute('href', dataStr);
+            downloadAnchor.setAttribute('download', 'sprout_chat_history.json');
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+            showToast('Chat history exported!');
+        }
+
+        function importChatHistory(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    try {
+                        const importedHistory = JSON.parse(e.target.result);
+                        if (Array.isArray(importedHistory)) {
+                            chatHistory = importedHistory.filter(msg => msg.role && msg.content);
+                            clearChat();
+                            loadChatHistory();
+                            showToast('Chat history imported!');
+                        } else {
+                            showToast('Invalid chat history format');
+                        }
+                    } catch (error) {
+                        showToast('Error importing chat history');
+                    }
+                };
+                reader.readAsText(file);
+            }
+        }
+
+        // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             selectModel('wellness', 'Corea Inner Support V1', 'general mental health support');
+            loadChatHistory();
+            loadDarkMode();
+            document.getElementById('darkModeToggle').onclick = toggleDarkMode;
+            
+            // Add import/export to tools dropdown
+            const modelDropdown = document.getElementById('modelDropdown');
+            const toolsDiv = document.createElement('div');
+            toolsDiv.className = 'p-2 border-t border-green-muted/20 mt-2';
+            toolsDiv.innerHTML = `
+                <div class="flex items-center space-x-2 px-3 py-2 hover:bg-green-muted/5 rounded-xl cursor-pointer" onclick="document.getElementById('importInput').click()">
+                    <svg class="w-4 h-4 text-green-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                    </svg>
+                    <span class="text-sm text-green-muted">Import Chat</span>
+                </div>
+                <div class="flex items-center space-x-2 px-3 py-2 hover:bg-green-muted/5 rounded-xl cursor-pointer" onclick="exportChatHistory()">
+                    <svg class="w-4 h-4 text-green-muted" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16V4m0 0l-4 4m4-4l4 4m-10 0v12m0 0l-4-4m4 4l4-4"></path>
+                    </svg>
+                    <span class="text-sm text-green-muted">Export Chat</span>
+                </div>
+                <input type="file" id="importInput" accept=".json" class="hidden" onchange="importChatHistory(event)">
+            `;
+            modelDropdown.appendChild(toolsDiv);
         });
     </script>
+
+    <style>
+        /* Dark Mode Styles */
+        body.dark {
+            background-color: #1a1a1a;
+            color: #ffffff;
+        }
+        body.dark header {
+            background-color: #1a1a1a;
+            border-color: #4a7c59/20;
+        }
+        body.dark main {
+            background-color: #1a1a1a;
+        }
+        body.dark .bg-white {
+            background-color: #1a1a1a !important;
+        }
+        body.dark .text-primary-dark {
+            color: #ffffff;
+        }
+        body.dark .text-green-dark {
+            color: #ffffff;
+        }
+        body.dark .text-green-medium {
+            color: #ffffff;
+        }
+        body.dark .text-green-muted {
+            color: #ffffff;
+        }
+        body.dark .border-green-muted\/20 {
+            border-color: #4a7c59/20;
+        }
+        body.dark .bg-green-muted\/10 {
+            background-color: #4a7c59/10;
+        }
+        body.dark .bg-green-light\/10 {
+            background-color: #5fb14c/10;
+        }
+        body.dark .border-green-light\/20 {
+            border-color: #5fb14c/20;
+        }
+        body.dark .hover\:bg-green-muted\/5:hover {
+            background-color: #4a7c59/5;
+        }
+        body.dark .hover\:border-green-medium\/40:hover {
+            border-color: #006936/40;
+        }
+        body.dark .placeholder-green-muted\/60::placeholder {
+            color: #ffffff/60;
+        }
+        body.dark #crisisModal .bg-white,
+        body.dark #feedbackModal .bg-white {
+            background-color: #2a2a2a;
+        }
+        body.dark #feedbackModal textarea {
+            background-color: #3a3a3a;
+            color: #ffffff;
+            border-color: #4a7c59/20;
+        }
+    </style>
 </body>
 </html>
