@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Under Construction</title>
+    <link rel="icon" type="image/png" href="/src/godc.png">
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Added Google Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Google Sans', sans-serif;
+            background: #ffffff;
+            min-height: 100vh;
+            /* Changed to flex column to accommodate header and footer */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Added header styles */
+        .header {
+            background: #ffffff;
+            padding: 20px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+        }
+
+        .brand-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #353539;
+        }
+
+        /* Updated main container to flex-grow */
+        .main-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .illustration-section {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .illustration {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.1));
+        }
+
+        .content-section {
+            padding: 40px 0;
+        }
+
+        .content-section h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            /* Updated to primary-dark color */
+            color: #353539;
+            line-height: 1.1;
+            margin-bottom: 24px;
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            /* Updated to green-muted for better contrast on white */
+            color: #4a7c59;
+            line-height: 1.6;
+            margin-bottom: 32px;
+            max-width: 400px;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #006936 0%, #5fb14c 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: 'Google Sans', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            /* Updated shadow to use green-medium */
+            box-shadow: 0 4px 15px rgba(0, 105, 54, 0.3);
+            /* Added flex display for icon and text */
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            /* Added width constraint to prevent button expansion */
+            width: fit-content;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            /* Updated hover shadow to use green-medium */
+            box-shadow: 0 6px 20px rgba(0, 105, 54, 0.4);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            /* Updated to accent-yellow */
+            background: #f1ec33;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-text {
+            font-size: 0.9rem;
+            /* Updated to green-muted */
+            color: #4a7c59;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Added footer styles */
+        .footer {
+            background: #353539;
+            color: white;
+            padding: 40px 0 20px;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-social {
+            margin-bottom: 30px;
+        }
+
+        .footer-social h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #5fb14c;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .social-link:hover {
+            color: #5fb14c;
+        }
+
+        .social-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #4a7c59;
+            padding-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-brand {
+            font-weight: 600;
+            color: #5fb14c;
+        }
+
+        .footer-nav {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-nav a:hover {
+            color: #5fb14c;
+        }
+
+        .help-icon {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .content-section h1 {
+                font-size: 2.5rem;
+            }
+
+            .content-section p {
+                max-width: 100%;
+            }
+
+            /* Center the CTA button on mobile */
+            .cta-button {
+                margin: 0 auto;
+                /* Removed display: inline-flex since width: fit-content handles sizing */
+            }
+
+            /* Center footer content on mobile */
+            .footer-social {
+                text-align: center;
+            }
+
+            .social-links {
+                align-items: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-nav {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .content-section h1 {
+                font-size: 2rem;
+            }
+
+            .container {
+                gap: 30px;
+            }
+
+            .header-container {
+                padding: 0 15px;
+            }
+
+            /* Stack footer nav vertically and center on small mobile */
+            .footer-nav {
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Added header with logo -->
+    <header class="header">
+        <div class="header-container">
+            <img src="/src/helpdesk.png" alt="Company Logo" class="logo">
+            <div class="brand-text">Access Point</div>
+        </div>
+    </header>
+
+    <!-- Wrapped main content -->
+    <main class="main-content">
+        <div class="container">
+            <div class="illustration-section">
+                <img src="/src/maintenance.png" alt="Website Under Construction Illustration" class="illustration">
+            </div>
+            
+            <div class="content-section">
+                <h1>Website<br>Under<br>Construction</h1>
+                <p>Visit our sitemap to experience our website current features. More updates are coming. Stay tuned.</p>
+                <!-- Updated button text and added icon -->
+                <a href="/sitemap.html" class="cta-button">
+                    <span class="material-icons">map</span>
+                    Visit Sitemap
+                </a>
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span class="status-text">Our developers are brainstorming to deliver you the best features possible.</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Added footer from provided content -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-social">
+                <h3>Follow Us</h3>
+                <div class="social-links">
+                    <a href="https://www.facebook.com/ctudevcomofficial" class="social-link">
+                        <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        Guild of Development Communicators
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-brand">CTU-MC | BS-DEVCOM | ACCESS POINT</div>
+                <div class="footer-nav">
+                    <a href="/pages/ToS">Privacy and Terms</a>
+                    <a href="/pages/about">About Access Point</a>
+                    <a href="/pages/help">
+                        <svg class="help-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                        </svg>
+                        Help
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
