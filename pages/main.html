@@ -655,23 +655,23 @@
                     <span class="material-icons">dashboard</span>
                     Dashboard
                 </a>
-                <a href="/error.html" class="nav-item">
-                    <span class="material-icons">folder</span>
-                    Project
+                <a href="/freedom-wall/Thoughts" class="nav-item">
+                    <span class="material-icons">diversity_3</span>
+                    Freedom Wall - Commons
                 </a>
-                <a href="/error.html" class="nav-item">
-                    <span class="material-icons">people</span>
-                    Team
+                <a href="/notes/hall-of-notes" class="nav-item">
+                    <span class="material-icons">notes</span>
+                    Notes
                 </a>
-                <a href="/error.html" class="nav-item">
-                    <span class="material-icons">star</span>
-                    Review
+                <a href="/sprout" class="nav-item">
+                    <span class="material-icons">compost</span>
+                    Sprout AI
                 </a>
-                <a href="/error.html" class="nav-item">
+                <a href="/maintenance" class="nav-item">
                     <span class="material-icons">message</span>
                     Message
                 </a>
-                <a href="/error.html" class="nav-item">
+                <a href="/maintenance" class="nav-item">
                     <span class="material-icons">settings</span>
                     Settings
                 </a>
@@ -711,7 +711,7 @@
                 
                 <div class="slider-container">
                     <div class="slider-wrapper">
-                        <div class="slide active" data-redirect="https://example.com/nature">
+                        <div class="slide active" data-redirect="/maintenance">
                             <img src="/src/hero.png" alt="Nature Landscape">
                             <div class="slide-overlay">
                                 <div class="slide-title">Consult With Us</div>
@@ -719,7 +719,7 @@
                             </div>
                         </div>
                         
-                        <div class="slide" data-redirect="https://example.com/technology">
+                        <div class="slide" data-redirect="/maintenance">
                             <img src="/src/hero2.png" alt="Technology Workspace">
                             <div class="slide-overlay">
                                 <div class="slide-title">Consider Yourself</div>
@@ -727,7 +727,7 @@
                             </div>
                         </div>
                         
-                        <div class="slide" data-redirect="https://example.com/business">
+                        <div class="slide" data-redirect="/maintenance">
                             <img src="/src/hero3.png" alt="Business Meeting">
                             <div class="slide-overlay">
                                 <div class="slide-title">Growth</div>
@@ -735,7 +735,7 @@
                             </div>
                         </div>
                         
-                        <div class="slide" data-redirect="https://example.com/creative">
+                        <div class="slide" data-redirect="/maintenance">
                             <img src="/src/hero4.png" alt="Creative Studio">
                             <div class="slide-overlay">
                                 <div class="slide-title">Terms and Privacy</div>
@@ -837,7 +837,7 @@
             if (user) {
                 // User is signed in
                 currentUser = user;
-                console.log('[v0] User authenticated:', user.email);
+                console.log('User authenticated:', user.email);
                 
                 // Update UI with user information
                 updateUserInterface(user);
@@ -848,7 +848,7 @@
             } else {
                 // User is signed out, redirect to login
                 console.log('User not authenticated, redirecting to login');
-                window.location.href = '/pages/login';
+                window.location.href = 'login.html';
             }
         });
 
@@ -881,7 +881,7 @@
                 userAvatarText.style.display = 'flex';
             }
 
-            console.log('[v0] UI updated with user data:', { displayName, email, photoURL: user.photoURL });
+            console.log('UI updated with user data:', { displayName, email, photoURL: user.photoURL });
         }
 
         // Logout functionality with Firebase
@@ -890,7 +890,7 @@
             logoutLoader.classList.add('show');
             
             auth.signOut().then(() => {
-                console.log('[v0] User signed out successfully');
+                console.log('User signed out successfully');
                 // Firebase auth state change will handle redirect
             }).catch((error) => {
                 console.error('Error signing out:', error);
