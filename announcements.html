@@ -21,10 +21,10 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Google Sans', sans-serif;
         }
 
         body {
-            font-family: 'Google Sans', sans-serif;
             background-color: var(--white-surface);
             color: var(--primary-dark);
             line-height: 1.6;
@@ -114,6 +114,7 @@
             cursor: pointer;
             color: var(--green-muted);
             transition: background-color 0.2s;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .icon-btn:hover {
@@ -131,6 +132,7 @@
             transition: background-color 0.2s;
             border: none;
             cursor: pointer;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .subscribe-btn:hover {
@@ -138,27 +140,16 @@
         }
 
         .search-container {
-            display: none;
-            position: absolute;
-            top: 64px;
-            left: 0;
-            right: 0;
-            background: var(--white-surface);
-            padding: 16px;
-            border-bottom: 1px solid #dadce0;
-            z-index: 99;
-        }
-
-        .search-container.active {
+            position: relative;
             display: block;
         }
 
         .search-input {
-            width: 100%;
-            padding: 8px 16px;
+            width: 200px;
+            padding: 6px 12px;
             border: 1px solid #dadce0;
             border-radius: 4px;
-            font-size: 14px;
+            font-size: 13px;
             font-family: 'Google Sans', sans-serif;
         }
 
@@ -167,10 +158,75 @@
             border-color: var(--green-medium);
         }
 
+        .search-input::placeholder {
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--white-surface);
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+        }
+
+        .search-suggestions.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .suggestion-item:hover {
+            background: #f1f3f4;
+        }
+
         .main-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 48px 24px;
+        }
+
+        .filter-section {
+            margin-bottom: 24px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 14px;
+            color: var(--green-muted);
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .filter-select,
+        .filter-date {
+            padding: 8px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .filter-select option {
+            font-family: 'Google Sans', sans-serif;
         }
 
         .featured-section {
@@ -185,24 +241,13 @@
             max-width: 400px;
         }
 
-        .collection-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--green-muted);
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
         .featured-title {
             font-size: 48px;
             font-weight: 400;
             color: var(--primary-dark);
             margin-bottom: 16px;
             line-height: 1.2;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .featured-description {
@@ -210,20 +255,7 @@
             color: var(--green-muted);
             margin-bottom: 24px;
             line-height: 1.5;
-        }
-
-        .view-all-link {
-            color: var(--green-medium);
-            text-decoration: none;
-            font-weight: 500;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-        }
-
-        .view-all-link:hover {
-            text-decoration: underline;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .featured-right {
@@ -245,6 +277,7 @@
             font-size: 14px;
             color: var(--green-muted);
             transition: all 0.2s;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .toggle-btn.active {
@@ -253,18 +286,12 @@
             border-color: var(--green-medium);
         }
 
-        .toggle-btn:hover {
-            background: #f1f3f4;
-        }
-
-        /* Card view - horizontal layout on mobile */
         .announcements-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 16px;
         }
 
-        /* List view - clean list with line separators */
         .announcements-list {
             display: flex;
             flex-direction: column;
@@ -279,6 +306,7 @@
             transition: all 0.2s;
             cursor: pointer;
             height: fit-content;
+            position: relative;
         }
 
         .announcement-card:hover {
@@ -286,7 +314,6 @@
             border-color: #dadce0;
         }
 
-        /* List mode styling - remove card appearance */
         .announcement-card.list-mode {
             background: transparent;
             border: none;
@@ -294,16 +321,6 @@
             border-bottom: 1px solid #e8eaed;
             padding: 16px 0;
             margin: 0;
-        }
-
-        .announcement-card.list-mode:hover {
-            background: #f8f9fa;
-            box-shadow: none;
-            border-bottom: 1px solid #e8eaed;
-        }
-
-        .announcement-card.list-mode:last-child {
-            border-bottom: none;
         }
 
         .card-image {
@@ -316,26 +333,8 @@
             position: relative;
         }
 
-        .card-image::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.1) 100%);
-        }
-
-        .announcement-card.list-mode .card-image {
-            display: none;
-        }
-
         .card-content {
             padding: 16px;
-        }
-
-        .announcement-card.list-mode .card-content {
-            padding: 0;
         }
 
         .card-category {
@@ -345,10 +344,7 @@
             text-transform: uppercase;
             letter-spacing: 0.8px;
             margin-bottom: 8px;
-        }
-
-        .announcement-card.list-mode .card-category {
-            margin-bottom: 4px;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .card-title {
@@ -361,12 +357,7 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-        }
-
-        .announcement-card.list-mode .card-title {
-            font-size: 16px;
-            margin-bottom: 4px;
-            -webkit-line-clamp: 3;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .card-description {
@@ -378,29 +369,66 @@
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
-        }
-
-        .announcement-card.list-mode .card-description {
-            font-size: 12px;
-            margin-bottom: 8px;
-            -webkit-line-clamp: 3;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .card-meta {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             font-size: 13px;
             color: var(--green-muted);
+            font-family: 'Google Sans', sans-serif;
         }
 
-        .announcement-card.list-mode .card-meta {
-            font-size: 12px;
+        .card-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
         }
 
-        .card-author {
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
             display: flex;
             align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--green-muted);
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .action-btn.saved {
+            color: var(--green-medium);
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
             gap: 8px;
+            margin-top: 24px;
+        }
+
+        .page-btn {
+            padding: 8px 16px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            background: var(--white-surface);
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--green-muted);
+            font-family: 'Google Sans', sans-serif;
+        }
+
+        .page-btn.active {
+            background: var(--green-medium);
+            color: var(--white-surface);
+            border-color: var(--green-medium);
         }
 
         .detailed-view {
@@ -420,6 +448,7 @@
             color: var(--primary-dark);
             margin-bottom: 24px;
             line-height: 1.2;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .detailed-meta {
@@ -429,22 +458,23 @@
             font-size: 14px;
             color: var(--green-muted);
             margin-bottom: 32px;
+            font-family: 'Google Sans', sans-serif;
         }
 
         .detailed-content {
             font-size: 16px;
             line-height: 1.7;
             color: var(--primary-dark);
+            font-family: 'Google Sans', sans-serif;
         }
 
-        .detailed-content h1,
-        .detailed-content h2,
-        .detailed-content h3 {
-            margin: 32px 0 16px 0;
-            color: var(--primary-dark);
+        .detailed-actions {
+            margin-top: 24px;
+            display: flex;
+            gap: 16px;
         }
 
-        .back-btn {
+        .back-btn, .action-btn {
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -457,10 +487,10 @@
             color: var(--green-muted);
             text-decoration: none;
             transition: all 0.2s;
-            margin-bottom: 16px;
+            font-family: 'Google Sans', sans-serif;
         }
 
-        .back-btn:hover {
+        .back-btn:hover, .action-btn:hover {
             background: #f1f3f4;
         }
 
@@ -468,6 +498,7 @@
             text-align: center;
             padding: 60px 20px;
             color: var(--green-muted);
+            font-family: 'Google Sans', sans-serif;
         }
 
         .loading-spinner {
@@ -489,260 +520,25 @@
             text-align: center;
             padding: 60px 20px;
             color: var(--green-muted);
+            font-family: 'Google Sans', sans-serif;
         }
 
         @media (max-width: 768px) {
-            .header-content {
-                padding: 0 16px;
-                height: 56px;
-            }
-
-            .site-title {
-                font-size: 18px;
-            }
-
-            .helpdesk-logo {
-                width: 32px;
-                height: 32px;
-            }
-
-            .nav-menu {
-                display: none;
-            }
-
-            .header-actions {
-                gap: 8px;
-            }
-
-            .icon-btn {
-                width: 36px;
-                height: 36px;
-                font-size: 16px;
-            }
-
-            .subscribe-btn {
-                padding: 6px 16px;
-                font-size: 13px;
-            }
-
-            .search-container {
-                top: 56px;
-                padding: 12px;
-            }
-
-            .search-input {
-                font-size: 13px;
-            }
-
-            .main-container {
-                padding: 24px 16px;
-            }
-
-            .featured-section {
-                flex-direction: column;
-                gap: 16px;
-                margin-bottom: 32px;
-            }
-
-            .featured-left {
-                max-width: none;
-            }
-
-            .featured-title {
-                font-size: 28px;
-                margin-bottom: 12px;
-            }
-
-            .featured-description {
-                font-size: 15px;
-                margin-bottom: 16px;
-            }
-
-            .view-toggle {
-                margin-bottom: 12px;
-            }
-
-            .toggle-btn {
-                padding: 6px 12px;
-                font-size: 13px;
-            }
-
-            .announcements-grid {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 16px;
-                width: 100%;
-            }
-
-            .announcements-grid .announcement-card {
-                width: 100%;
-                max-width: 400px;
-                margin: 0 auto;
-            }
-
-            .announcements-list {
-                gap: 0;
-            }
-
-            .announcement-card {
-                border-radius: 8px;
-            }
-
-            .announcement-card.list-mode {
-                max-width: none;
-                padding: 12px 0;
-            }
-
-            .card-image {
-                height: 120px;
-            }
-
-            .card-content {
-                padding: 12px;
-            }
-
-            .announcement-card.list-mode .card-content {
-                padding: 0;
-            }
-
-            .card-title {
-                font-size: 16px;
-                margin-bottom: 6px;
-            }
-
-            .card-description {
-                font-size: 12px;
-                margin-bottom: 10px;
-            }
-
-            .card-meta {
-                font-size: 12px;
-            }
-
-            .announcement-card.list-mode .card-title {
-                font-size: 15px;
-            }
-
-            .announcement-card.list-mode .card-description {
-                font-size: 12px;
-            }
-
-            .announcement-card.list-mode .card-meta {
-                font-size: 11px;
-            }
-
-            .detailed-view {
-                padding: 20px 16px;
-            }
-
-            .detailed-title {
-                font-size: 24px;
-                margin-bottom: 16px;
-            }
-
-            .detailed-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-                margin-bottom: 20px;
-            }
-
-            .detailed-content {
-                font-size: 15px;
-                line-height: 1.6;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-content {
-                padding: 0 12px;
-            }
-
-            .main-container {
-                padding: 16px 12px;
-            }
-
-            .featured-title {
-                font-size: 24px;
-            }
-
-            .featured-description {
-                font-size: 14px;
-            }
-
-            .view-toggle {
-                margin-bottom: 10px;
-            }
-
-            .toggle-btn {
-                padding: 5px 10px;
-                font-size: 12px;
-            }
-
-            .announcements-grid .announcement-card {
-                width: 100%;
-                max-width: 350px;
-            }
-
-            .announcements-list {
-                gap: 0;
-            }
-
-            .announcement-card.list-mode {
-                max-width: none;
-                padding: 10px 0;
-            }
-
-            .card-image {
-                height: 100px;
-            }
-
-            .card-content {
-                padding: 10px;
-            }
-
-            .card-title {
-                font-size: 15px;
-            }
-
-            .card-description {
-                font-size: 12px;
-            }
-
-            .card-meta {
-                font-size: 11px;
-            }
-
-            .announcement-card.list-mode .card-title {
-                font-size: 14px;
-            }
-
-            .announcement-card.list-mode .card-description {
-                font-size: 11px;
-            }
-
-            .announcement-card.list-mode .card-meta {
-                font-size: 10px;
-            }
-
-            .detailed-title {
-                font-size: 20px;
-            }
-
-            .detailed-content {
-                font-size: 14px;
-            }
-        }
-
-        @media (hover: none) and (pointer: coarse) {
-            .announcement-card:active,
-            .toggle-btn:active,
-            .icon-btn:active,
-            .back-btn:active {
-                transform: scale(0.95);
-                transition: transform 0.1s;
-            }
+            .header-content { padding: 0 16px; height: 56px; }
+            .site-title { font-size: 18px; }
+            .helpdesk-logo { width: 32px; height: 32px; }
+            .nav-menu { display: none; }
+            .header-actions { gap: 8px; }
+            .search-input { width: 100%; }
+            .main-container { padding: 24px 16px; }
+            .featured-section { flex-direction: column; gap: 16px; margin-bottom: 32px; }
+            .featured-left { max-width: none; }
+            .featured-title { font-size: 28px; margin-bottom: 12px; }
+            .featured-description { font-size: 15px; margin-bottom: 16px; }
+            .announcements-grid { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; }
+            .announcements-grid .announcement-card { width: 100%; max-width: 400px; margin: 0 auto; }
+            .detailed-view { padding: 20px 16px; }
+            .detailed-title { font-size: 24px; margin-bottom: 16px; }
         }
     </style>
 </head>
@@ -759,8 +555,9 @@
                 <a href="/pages/help" class="nav-item">Help</a>
             </nav>
             <div class="header-actions">
-                <div class="search-container active" style="position: relative; display: block; top: 0; padding: 0; border: none; background: transparent;">
-                    <input type="text" id="search-input" class="search-input" placeholder="Search announcements..." oninput="searchAnnouncements()" style="width: 200px; padding: 6px 12px; font-size: 13px;">
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="Search announcements..." oninput="searchAnnouncements()" onfocus="showSuggestions()" onblur="hideSuggestions()">
+                    <div id="search-suggestions" class="search-suggestions"></div>
                 </div>
             </div>
         </div>
@@ -768,6 +565,27 @@
 
     <div id="main-view">
         <div class="main-container">
+            <div class="filter-section">
+                <div class="filter-group">
+                    <label for="category-filter">Category</label>
+                    <select id="category-filter" class="filter-select" onchange="applyFilters()">
+                        <option value="all">All Categories</option>
+                        <option value="announcement">Announcement</option>
+                        <option value="event">Event</option>
+                        <option value="update">Update</option>
+                        <option value="urgent">Urgent</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="date-from">From</label>
+                    <input type="date" id="date-from" class="filter-date" onchange="applyFilters()">
+                </div>
+                <div class="filter-group">
+                    <label for="date-to">To</label>
+                    <input type="date" id="date-to" class="filter-date" onchange="applyFilters()">
+                </div>
+            </div>
+
             <div class="featured-section">
                 <div class="featured-left">
                     <h1 class="featured-title">Latest Updates</h1>
@@ -780,9 +598,8 @@
                         <button class="toggle-btn active" onclick="setViewMode('card')">Card View</button>
                         <button class="toggle-btn" onclick="setViewMode('list')">List View</button>
                     </div>
-                    <div id="featured-announcements" class="announcements-grid">
-                        <!-- Announcements will be loaded here -->
-                    </div>
+                    <div id="featured-announcements" class="announcements-grid"></div>
+                    <div class="pagination" id="pagination"></div>
                 </div>
             </div>
 
@@ -805,11 +622,15 @@
             <div id="detailed-meta" class="detailed-meta"></div>
         </div>
         <div id="detailed-content" class="detailed-content"></div>
+        <div class="detailed-actions">
+            <button class="action-btn" id="share-btn" onclick="shareAnnouncement()">Share</button>
+            <button class="action-btn" id="save-btn" onclick="toggleSaveAnnouncement()">Save</button>
+        </div>
     </div>
 
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getDatabase, ref, onValue } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+        import { getDatabase, ref, onValue, set } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
         import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js';
 
         const firebaseConfig = {
@@ -830,6 +651,10 @@
         let allAnnouncements = [];
         let filteredAnnouncements = [];
         let viewMode = 'card';
+        let currentPage = 1;
+        const itemsPerPage = 6;
+        let savedAnnouncements = JSON.parse(localStorage.getItem('savedAnnouncements') || '{}');
+        let currentAnnouncementId = null;
 
         function getTextPreview(html) {
             const div = document.createElement('div');
@@ -864,30 +689,65 @@
         function renderAnnouncements(announcements) {
             const featuredGrid = document.getElementById('featured-announcements');
             const noAnnouncements = document.getElementById('no-announcements');
-            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedAnnouncements = announcements.slice(startIndex, startIndex + itemsPerPage);
+
             if (announcements.length > 0) {
                 featuredGrid.className = viewMode === 'card' ? 'announcements-grid' : 'announcements-list';
-                featuredGrid.innerHTML = announcements.map(announcement => `
+                featuredGrid.innerHTML = paginatedAnnouncements.map(announcement => `
                     <div class="announcement-card ${viewMode === 'list' ? 'list-mode' : ''}" onclick="showDetailedView('${announcement.id}')">
                         <div class="card-image"></div>
                         <div class="card-content">
-                            <div class="card-category">ANNOUNCEMENT</div>
+                            <div class="card-category">${escapeHtml(announcement.category || 'ANNOUNCEMENT')}</div>
                             <h3 class="card-title">${escapeHtml(announcement.title)}</h3>
                             <p class="card-description">${getTextPreview(announcement.content)}</p>
                             <div class="card-meta">
                                 <div class="card-author">
                                     <span>By</span>
-                                    <span>Admin</span>
+                                    <span>${escapeHtml(announcement.author || 'Admin')}</span>
                                 </div>
+                                <span>${formatDateShort(announcement.timestamp)}</span>
                             </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="action-btn ${savedAnnouncements[announcement.id] ? 'saved' : ''}" 
+                                    onclick="event.stopPropagation(); toggleSaveAnnouncement('${announcement.id}')">
+                                <span>${savedAnnouncements[announcement.id] ? '★' : '☆'}</span>
+                            </button>
+                            <button class="action-btn" onclick="event.stopPropagation(); shareAnnouncement('${announcement.id}')">
+                                <span>↻</span>
+                            </button>
                         </div>
                     </div>
                 `).join('');
                 noAnnouncements.style.display = 'none';
+                renderPagination(announcements.length);
             } else {
                 featuredGrid.innerHTML = '';
                 noAnnouncements.style.display = 'block';
+                document.getElementById('pagination').innerHTML = '';
             }
+        }
+
+        function renderPagination(totalItems) {
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const pagination = document.getElementById('pagination');
+            let html = '';
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="setPage(${i})">${i}</button>`;
+            }
+            pagination.innerHTML = html;
+        }
+
+        function setPage(page) {
+            currentPage = page;
+            renderAnnouncements(filteredAnnouncements);
         }
 
         function loadAnnouncements() {
@@ -908,7 +768,7 @@
                         .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                     
                     filteredAnnouncements = allAnnouncements;
-                    renderAnnouncements(filteredAnnouncements);
+                    applyFilters();
                 } else {
                     allAnnouncements = [];
                     filteredAnnouncements = [];
@@ -921,11 +781,14 @@
             const announcement = filteredAnnouncements.find(a => a.id === announcementId);
             if (!announcement) return;
 
+            currentAnnouncementId = announcementId;
             document.getElementById('detailed-title').textContent = announcement.title;
             document.getElementById('detailed-meta').innerHTML = `
                 <span>${formatDateLong(announcement.timestamp)}</span>
+                <span>By ${escapeHtml(announcement.author || 'Admin')}</span>
             `;
             document.getElementById('detailed-content').innerHTML = announcement.content;
+            document.getElementById('save-btn').innerHTML = savedAnnouncements[announcementId] ? '★ Saved' : '☆ Save';
 
             document.getElementById('main-view').style.display = 'none';
             document.getElementById('detailed-view').style.display = 'block';
@@ -935,6 +798,7 @@
         function goBack() {
             document.getElementById('detailed-view').style.display = 'none';
             document.getElementById('main-view').style.display = 'block';
+            currentAnnouncementId = null;
             window.scrollTo(0, 0);
         }
 
@@ -951,22 +815,128 @@
                 cardBtn.classList.remove('active');
             }
             
+            currentPage = 1;
             renderAnnouncements(filteredAnnouncements);
         }
 
-        function searchAnnouncements() {
+        function applyFilters() {
             const searchInput = document.getElementById('search-input').value.toLowerCase();
-            filteredAnnouncements = allAnnouncements.filter(announcement => 
-                announcement.title.toLowerCase().includes(searchInput) ||
-                getTextPreview(announcement.content).toLowerCase().includes(searchInput)
-            );
+            const category = document.getElementById('category-filter').value;
+            const dateFrom = document.getElementById('date-from').value;
+            const dateTo = document.getElementById('date-to').value;
+
+            filteredAnnouncements = allAnnouncements.filter(announcement => {
+                const matchesSearch = announcement.title.toLowerCase().includes(searchInput) ||
+                    getTextPreview(announcement.content).toLowerCase().includes(searchInput);
+                
+                const matchesCategory = category === 'all' || announcement.category === category;
+                
+                const announcementDate = new Date(announcement.timestamp);
+                const fromDate = dateFrom ? new Date(dateFrom) : null;
+                const toDate = dateTo ? new Date(dateTo) : null;
+                
+                const matchesDate = (!fromDate || announcementDate >= fromDate) &&
+                                  (!toDate || announcementDate <= toDate);
+
+                return matchesSearch && matchesCategory && matchesDate;
+            });
+
+            currentPage = 1;
             renderAnnouncements(filteredAnnouncements);
+            updateSuggestions();
+        }
+
+        function searchAnnouncements() {
+            applyFilters();
+        }
+
+        function showSuggestions() {
+            updateSuggestions();
+            document.getElementById('search-suggestions').classList.add('active');
+        }
+
+        function hideSuggestions() {
+            setTimeout(() => {
+                document.getElementById('search-suggestions').classList.remove('active');
+            }, 200);
+        }
+
+        function updateSuggestions() {
+            const searchInput = document.getElementById('search-input').value.toLowerCase();
+            const suggestionsContainer = document.getElementById('search-suggestions');
+            
+            if (!searchInput) {
+                suggestionsContainer.innerHTML = '';
+                return;
+            }
+
+            const suggestions = allAnnouncements
+                .filter(announcement => 
+                    announcement.title.toLowerCase().includes(searchInput) ||
+                    getTextPreview(announcement.content).toLowerCase().includes(searchInput)
+                )
+                .slice(0, 5)
+                .map(announcement => `
+                    <div class="suggestion-item" onclick="selectSuggestion('${announcement.id}')">
+                        ${escapeHtml(announcement.title)}
+                    </div>
+                `).join('');
+
+            suggestionsContainer.innerHTML = suggestions || '<div class="suggestion-item">No suggestions</div>';
+        }
+
+        function selectSuggestion(announcementId) {
+            showDetailedView(announcementId);
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-suggestions').classList.remove('active');
+        }
+
+        function toggleSaveAnnouncement(announcementId = currentAnnouncementId) {
+            if (!announcementId) return;
+
+            if (savedAnnouncements[announcementId]) {
+                delete savedAnnouncements[announcementId];
+            } else {
+                savedAnnouncements[announcementId] = true;
+            }
+
+            localStorage.setItem('savedAnnouncements', JSON.stringify(savedAnnouncements));
+            renderAnnouncements(filteredAnnouncements);
+            
+            if (currentAnnouncementId === announcementId) {
+                document.getElementById('save-btn').innerHTML = savedAnnouncements[announcementId] ? '★ Saved' : '☆ Save';
+            }
+        }
+
+        function shareAnnouncement(announcementId = currentAnnouncementId) {
+            const announcement = filteredAnnouncements.find(a => a.id === announcementId);
+            if (!announcement) return;
+
+            const shareData = {
+                title: announcement.title,
+                text: getTextPreview(announcement.content),
+                url: window.location.href
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData).catch(console.error);
+            } else {
+                const shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareData.title + '\n' + shareData.text)}&url=${encodeURIComponent(shareData.url)}`;
+                window.open(shareUrl, '_blank');
+            }
         }
 
         window.showDetailedView = showDetailedView;
         window.setViewMode = setViewMode;
         window.searchAnnouncements = searchAnnouncements;
         window.goBack = goBack;
+        window.setPage = setPage;
+        window.applyFilters = applyFilters;
+        window.showSuggestions = showSuggestions;
+        window.hideSuggestions = hideSuggestions;
+        window.selectSuggestion = selectSuggestion;
+        window.toggleSaveAnnouncement = toggleSaveAnnouncement;
+        window.shareAnnouncement = shareAnnouncement;
 
         loadAnnouncements();
     </script>
