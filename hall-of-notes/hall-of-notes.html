@@ -9,6 +9,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script>
   <style>
     :root {
@@ -40,14 +41,12 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
+      font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     }
 
     body {
-      font-family: 'Google Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
       background: var(--surface-white);
       min-height: 100vh;
-      margin: 0;
-      padding: 0;
       color: var(--text-primary);
       display: flex;
       flex-direction: column;
@@ -72,6 +71,28 @@
       gap: 12px;
     }
 
+    .back-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+
+    .back-button:hover {
+      background-color: var(--border-color);
+    }
+
+    .back-button svg {
+      width: 20px;
+      height: 20px;
+      fill: var(--text-secondary);
+    }
+
     .menu-icon {
       width: 24px;
       height: 24px;
@@ -89,62 +110,56 @@
       font-weight: 500;
     }
 
-    .google-logo {
+    .logo-img {
       width: 24px;
       height: 24px;
-      background: var(--green-medium);
-      border-radius: 50%;
-      position: relative;
     }
 
-    .google-logo::before {
-      content: 'S';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
-      font-weight: bold;
-      font-size: 14px;
-    }
-
-    .auth-section {
+    .header-right {
       display: flex;
       align-items: center;
       gap: 12px;
+    }
+
+    .login-btn {
+      background: var(--green-medium);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+
+    .login-btn:hover {
+      background: var(--green-dark);
     }
 
     .user-profile {
-      display: flex;
+      position: relative;
+      display: none;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
+      cursor: pointer;
     }
 
     .user-avatar {
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      border: 2px solid var(--border-color);
-      cursor: pointer;
-      transition: border-color 0.2s;
-    }
-
-    .user-avatar:hover {
-      border-color: var(--green-medium);
+      object-fit: cover;
     }
 
     .user-name {
-      font-size: 14px;
-      color: var(--text-primary);
       font-weight: 500;
-      max-width: 150px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      color: var(--text-primary);
     }
 
-    .profile-dropdown {
-      position: relative;
+    @media (max-width: 768px) {
+      .user-name {
+        display: none;
+      }
     }
 
     .dropdown-menu {
@@ -155,32 +170,27 @@
       border: 1px solid var(--border-color);
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      padding: 8px 0;
       min-width: 200px;
       z-index: 1000;
-      display: none;
-      margin-top: 8px;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-10px);
+      transition: all 0.2s ease;
     }
 
     .dropdown-menu.show {
-      display: block;
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
     }
 
     .dropdown-header {
-      padding: 16px;
+      padding: 12px 16px;
       border-bottom: 1px solid var(--border-color);
-      text-align: center;
-    }
-
-    .dropdown-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      margin: 0 auto 8px;
-      display: block;
     }
 
     .dropdown-name {
-      font-size: 16px;
       font-weight: 500;
       color: var(--text-primary);
       margin-bottom: 4px;
@@ -192,220 +202,95 @@
     }
 
     .dropdown-item {
-      padding: 12px 16px;
-      cursor: pointer;
-      transition: background 0.2s;
-      font-size: 14px;
-      color: var(--text-primary);
-      border: none;
-      background: none;
       width: 100%;
+      background: none;
+      border: none;
+      padding: 12px 16px;
       text-align: left;
-      font-family: 'Google Sans', sans-serif;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
     .dropdown-item:hover {
-      background: #f8f9fa;
+      background-color: var(--border-color);
     }
 
-    .dropdown-item:last-child {
-      border-top: 1px solid var(--border-color);
-      color: #d93025;
-    }
-
-    .btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 24px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s;
-      font-family: 'Google Sans', sans-serif;
-    }
-
-    .btn-primary {
-      background: var(--green-medium);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      background: var(--green-dark);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--green-medium);
-      border: 1px solid var(--border-color);
-    }
-
-    .btn-secondary:hover {
-      background: #f8f9fa;
-    }
-
-    .main-container {
+    .main-content {
+      flex: 1;
+      padding: 20px;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 24px 16px;
-      text-align: center;
-      flex: 1;
-    }
-
-    .hero-section {
-      margin-bottom: 32px;
-    }
-
-    .hero-title {
-      font-size: 36px;
-      color: var(--primary-dark);
-      font-weight: 400;
-      margin-bottom: 24px;
-      font-family: 'Google Sans', sans-serif;
-    }
-
-    .search-container {
-      max-width: 584px;
-      margin: 0 auto 32px;
-      position: relative;
-    }
-
-    .search-box {
       width: 100%;
-      height: 48px;
-      border: 1px solid var(--border-color);
-      border-radius: 24px;
-      padding: 12px 48px 12px 16px;
-      font-size: 16px;
-      outline: none;
-      box-shadow: 0 2px 5px 1px rgba(64,60,67,0.16);
-      transition: box-shadow 0.2s;
-      font-family: 'Google Sans', sans-serif;
-      background: var(--surface-white);
     }
 
-    .search-box:focus {
-      box-shadow: 0 2px 8px 1px rgba(64,60,67,0.24);
-      border-color: var(--green-medium);
-    }
-
-    .search-icon {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      fill: var(--text-muted);
-    }
-
-    .clear-icon {
-      position: absolute;
-      right: 40px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      fill: var(--text-muted);
-      cursor: pointer;
+    .year-grid-container, .semester-grid-container, .subject-grid-container {
       display: none;
     }
 
-    .clear-icon:hover {
-      fill: var(--green-medium);
-    }
-
-    .subjects-grid {
+    .year-grid, .semester-grid, .subject-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 24px;
-      max-width: 1000px;
-      margin: 0 auto;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
     }
 
-    .subject-card {
-      position: relative;
-      height: 200px;
+    .year-card, .semester-card, .subject-card {
+      background: var(--surface-white);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
       background-size: cover;
       background-position: center;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      overflow: hidden;
+      min-height: 200px;
       display: flex;
       align-items: flex-end;
-      justify-content: flex-start;
-      padding: 16px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .subject-card img {
-      max-width: 100%;
-      height: auto;
+    .year-card::before, .semester-card::before, .subject-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.7) 100%);
     }
 
-    .subject-card:hover {
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      border-color: var(--green-medium);
-      transform: translateY(-2px);
-    }
-
-    .subject-title {
-      font-size: 16px;
-      font-weight: 500;
+    .year-title, .semester-title, .subject-title {
       color: white;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+      font-weight: 600;
+      font-size: 18px;
+      position: relative;
       z-index: 1;
+    }
+
+    .year-card:hover, .semester-card:hover, .subject-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
 
     .subject-page {
       display: none;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 24px;
-    }
-
-    .back-button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 14px;
-      cursor: pointer;
-      padding: 8px 16px;
-      font-family: 'Google Sans', sans-serif;
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 2;
-      background: rgba(0, 0, 0, 0.5);
-      border-radius: 24px;
-    }
-
-    .back-button:hover {
-      background: rgba(0, 0, 0, 0.7);
     }
 
     .subject-header {
+      background: var(--green-medium);
       background-size: cover;
       background-position: center;
-      background-attachment: fixed;
-      min-height: 70vh;
-      border-radius: 0;
-      padding: 80px 0;
-      margin: 0;
-      text-align: center;
-      border: none;
-      position: relative;
       color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      width: 100vw;
-      margin-left: calc(-50vw + 50%);
-      margin-right: calc(-50vw + 50%);
+      padding: 40px 20px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
     }
 
     .subject-header::before {
@@ -415,94 +300,321 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
-      z-index: 0;
+      background: linear-gradient(135deg, rgba(0,105,54,0.8) 0%, rgba(95,177,76,0.6) 100%);
     }
 
-    .subject-page-title {
-      font-size: 48px;
-      color: inherit;
-      margin-bottom: 24px;
-      font-weight: 600;
+    .subject-header-content {
       position: relative;
       z-index: 1;
-      text-shadow: 0 2px 8px rgba(0,0,0,0.7);
-      letter-spacing: -0.02em;
-      line-height: 1.1;
+    }
+
+    .subject-title {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
     }
 
     .subject-description {
-      font-size: 18px;
-      color: rgba(255, 255, 255, 0.9);
-      position: relative;
-      z-index: 1;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
-      max-width: 600px;
-      line-height: 1.5;
-      margin-bottom: 32px;
-    }
-
-    .hero-action {
-      position: relative;
-      z-index: 1;
-      background: rgba(255, 255, 255, 0.2);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      color: white;
-      padding: 12px 32px;
-      border-radius: 50px;
       font-size: 16px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
+      opacity: 0.9;
     }
 
-    .hero-action:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: rgba(255, 255, 255, 0.5);
-      transform: translateY(-2px);
+    .file-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .file-controls-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .file-controls-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .file-search-input {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--surface-white);
+      color: var(--text-primary);
+      min-width: 200px;
+    }
+
+    .file-sort {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--surface-white);
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      margin-bottom: 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .breadcrumb-item {
+      color: var(--green-medium);
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .breadcrumb-item:hover {
+      text-decoration: underline;
+    }
+
+    .breadcrumb-separator {
+      margin: 0 8px;
+    }
+
+    .breadcrumb-current {
+      color: var(--text-primary);
+      font-weight: 500;
     }
 
     .upload-section {
       background: var(--surface-white);
-      margin-top: 32px;
+      border: 2px dashed var(--border-color);
       border-radius: 12px;
-      padding: 24px;
-      border: 1px solid var(--border-color);
+      padding: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .upload-section-auth {
+      display: none;
     }
 
     .upload-section-guest {
-      background: #f8fff8;
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      border: 2px solid var(--border-color);
-      text-align: center;
+      display: none;
     }
 
-    .login-prompt {
+    .upload-buttons {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .upload-btn, .new-folder-btn {
+      background: var(--green-medium);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      display: flex;
       align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .upload-btn:hover, .new-folder-btn:hover {
+      background: var(--green-dark);
+    }
+
+    .upload-btn svg, .new-folder-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .upload-progress {
+      margin-top: 12px;
+      color: var(--green-medium);
+      font-weight: 500;
+      display: none;
+    }
+
+    .upload-progress.active {
+      display: block;
+    }
+
+    .file-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
+      margin-bottom: 20px;
     }
 
-    .login-prompt-icon {
-      width: 48px;
-      height: 48px;
-      fill: var(--text-secondary);
-    }
-
-    .login-prompt-text {
-      color: var(--text-secondary);
-      font-size: 16px;
-      margin-bottom: 8px;
-    }
-
-    .login-prompt-subtext {
+    .no-content {
+      text-align: center;
       color: var(--text-muted);
-      font-size: 14px;
-      margin-bottom: 16px;
+      font-size: 18px;
+      margin: 40px 0;
+    }
+
+    .file-item {
+      background: var(--surface-white);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .file-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      border-color: var(--green-medium);
+    }
+
+    .folder-item {
+      background: linear-gradient(135deg, #4285f4 0%, #34a853 100%);
+      color: white;
+      border: none;
+    }
+
+    .folder-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.3);
+    }
+
+    .folder-item .file-info {
+      color: white;
+    }
+
+    .folder-item .file-actions {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .folder-item .uploaded-by {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .file-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .file-icon, .folder-icon-small {
+      width: 24px;
+      height: 24px;
+      fill: var(--green-medium);
+      flex-shrink: 0;
+    }
+
+    .folder-item .folder-icon-small {
+      fill: white;
+    }
+
+    .file-link {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      flex: 1;
+      word-break: break-word;
+    }
+
+    .folder-item .file-link {
+      color: white;
+    }
+
+    .file-link:hover {
+      text-decoration: underline;
+    }
+
+    .file-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .uploaded-by {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .file-action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .preview-btn, .share-btn, .delete-btn {
+      background: none;
+      border: 1px solid var(--border-color);
+      padding: 6px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+      color: var(--text-secondary);
+    }
+
+    .preview-btn:hover, .share-btn:hover {
+      background: var(--green-medium);
+      color: white;
+      border-color: var(--green-medium);
+    }
+
+    .delete-btn:hover {
+      background: #dc3545;
+      color: white;
+      border-color: #dc3545;
+    }
+
+    .folder-item .delete-btn {
+      border-color: rgba(255, 255, 255, 0.3);
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .folder-item .delete-btn:hover {
+      background: rgba(220, 53, 69, 0.9);
+      border-color: rgba(220, 53, 69, 0.9);
+      color: white;
+    }
+
+    .preview-icon, .share-icon, .delete-icon {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .pagination-btn {
+      background: var(--surface-white);
+      border: 1px solid var(--border-color);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--text-primary);
+      transition: all 0.2s;
+    }
+
+    .pagination-btn:hover:not(.disabled) {
+      background: var(--green-medium);
+      color: white;
+      border-color: var(--green-medium);
+    }
+
+    .pagination-btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .toast {
@@ -510,310 +622,53 @@
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: var(--primary-dark);
-      color: white;
-      padding: 16px 24px;
+      background: var(--surface-white);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
-      font-size: 14px;
-      z-index: 1000;
-      display: flex;
+      padding: 16px 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      display: none;
       align-items: center;
       gap: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      max-width: 90vw;
-      font-family: 'Google Sans', sans-serif;
+      z-index: 1000;
+      max-width: 400px;
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
+      transition: all 0.3s ease;
     }
 
     .toast.show {
-      animation: slideUp 0.3s ease-out;
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     .toast.hide {
-      animation: slideDown 0.3s ease-out;
-    }
-
-    @keyframes slideUp {
-      from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(100%);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-    }
-
-    @keyframes slideDown {
-      from {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateX(-50%) translateY(100%);
-      }
-    }
-
-    .toast-icon {
-      width: 20px;
-      height: 20px;
-      fill: var(--green-light);
-      flex-shrink: 0;
+      opacity: 0;
+      transform: translateX(-50%) translateY(20px);
     }
 
     .toast-message {
       flex: 1;
+      color: var(--text-primary);
     }
 
     .toast-action {
-      background: none;
+      background: var(--green-medium);
+      color: white;
       border: none;
-      color: var(--green-light);
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
       font-size: 14px;
       font-weight: 500;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 4px;
-      transition: background 0.2s;
-      font-family: 'Google Sans', sans-serif;
-    }
-
-    .toast-action:hover {
-      background: rgba(95, 177, 76, 0.1);
     }
 
     .toast-close {
       background: none;
       border: none;
-      color: #ffffff;
-      font-size: 18px;
       cursor: pointer;
       padding: 4px;
-      line-height: 1;
-      opacity: 0.7;
-    }
-
-    .toast-close:hover {
-      opacity: 1;
-    }
-
-    .upload-icon {
-      width: 48px;
-      height: 48px;
-      margin: 0 auto 16px;
-      fill: var(--green-medium);
-    }
-
-    .file-list {
-      background: var(--surface-white);
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      overflow: hidden;
-    }
-
-    .file-list-header {
-      background: #f8f9fa;
-      padding: 16px 24px;
-      border-bottom: 1px solid var(--border-color);
-      font-weight: 500;
-      color: var(--text-primary);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .file-controls {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .file-search {
-      position: relative;
-      width: 200px;
-    }
-
-    .file-search-input {
-      width: 100%;
-      height: 32px;
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 8px 32px 8px 12px;
-      font-size: 14px;
-      outline: none;
-      font-family: 'Google Sans', sans-serif;
-    }
-
-    .file-search-input:focus {
-      border-color: var(--green-medium);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-
-    .file-search-icon {
-      position: absolute;
-      right: 8px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 16px;
-      height: 16px;
-      fill: var(--text-muted);
-    }
-
-    .file-sort {
-      height: 32px;
-      border: 1px solid var(--border-color);
-      border-radius: 16px;
-      padding: 0 12px;
-      font-size: 14px;
-      font-family: 'Google Sans', sans-serif;
-      background: var(--surface-white);
-      cursor: pointer;
-    }
-
-    .file-sort:focus {
-      outline: none;
-      border-color: var(--green-medium);
-    }
-
-    .file-item {
-      display: flex;
-      align-items: center;
-      padding: 16px 24px;
-      border-bottom: 1px solid #f1f3f4;
-      transition: background 0.2s;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-
-    .file-info {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      min-width: 200px;
-    }
-
-    .file-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .delete-btn, .preview-btn, .share-btn {
-      padding: 6px 8px;
-      background: none;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-family: 'Google Sans', sans-serif;
-    }
-
-    .delete-btn {
-      color: #d93025;
-    }
-
-    .delete-btn:hover {
-      background: #fce8e6;
-      border-color: #d93025;
-    }
-
-    .preview-btn {
-      color: var(--green-medium);
-    }
-
-    .preview-btn:hover {
-      background: #e6f4ea;
-      border-color: var(--green-medium);
-    }
-
-    .share-btn {
-      color: #4285f4;
-    }
-
-    .share-btn:hover {
-      background: #e8f0fe;
-      border-color: #4285f4;
-    }
-
-    .delete-icon, .preview-icon, .share-icon {
-      width: 14px;
-      height: 14px;
-      fill: currentColor;
-    }
-
-    .uploaded-by {
-      font-size: 12px;
-      color: var(--text-secondary);
-      margin-left: auto;
-      margin-right: 12px;
-    }
-
-    .file-item:hover {
-      background: #f8f9fa;
-    }
-
-    .file-item:last-child {
-      border-bottom: none;
-    }
-
-    .file-icon {
-      width: 24px;
-      height: 24px;
-      margin-right: 16px;
-      fill: var(--text-secondary);
-    }
-
-    .file-link {
-      color: var(--green-medium);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .file-link:hover {
-      text-decoration: underline;
-    }
-
-    .auth-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(255, 255, 255, 0.95);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
-
-    .auth-card {
-      background: var(--surface-white);
-      padding: 48px;
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-      text-align: center;
-      max-width: 400px;
-      border: 1px solid var(--border-color);
-    }
-
-    .auth-title {
-      font-size: 24px;
-      color: var(--text-primary);
-      margin-bottom: 16px;
-      font-weight: 400;
-    }
-
-    .auth-description {
-      color: var(--text-secondary);
-      margin-bottom: 32px;
-      line-height: 1.5;
+      color: var(--text-muted);
     }
 
     .preview-modal {
@@ -822,913 +677,1248 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .preview-modal.show {
+      display: flex;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .preview-content {
+      max-width: 90vw;
+      max-height: 90vh;
+      position: relative;
+    }
+
+    .preview-image {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+    }
+
+    .preview-iframe {
+      width: 80vw;
+      height: 80vh;
+      border: none;
+    }
+
+    .preview-close {
+      position: absolute;
+      top: -40px;
+      right: 0;
+      background: white;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .auth-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1500;
+    }
+
+    .auth-modal {
+      background: var(--surface-white);
+      border-radius: 12px;
+      padding: 40px;
+      text-align: center;
+      max-width: 400px;
+      margin: 20px;
+    }
+
+    .auth-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+
+    .auth-description {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .overlay-login-btn {
+      background: var(--green-medium);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 16px;
+      width: 100%;
+    }
+
+    .folder-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 2000;
     }
 
-    .preview-modal.show {
+    .folder-modal.show {
       display: flex;
     }
 
-    .preview-content {
+    .folder-modal-content {
       background: var(--surface-white);
       border-radius: 12px;
       padding: 24px;
-      max-width: 90%;
-      max-height: 90%;
-      overflow: auto;
-      position: relative;
+      max-width: 400px;
+      width: 90%;
+      margin: 20px;
     }
 
-    .preview-close {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      background: none;
-      border: none;
+    .folder-modal-title {
       font-size: 20px;
-      cursor: pointer;
-      color: var(--text-primary);
-    }
-
-    .preview-image {
-      max-width: 100%;
-      max-height: 70vh;
-      display: block;
-      margin: 0 auto;
-    }
-
-    .preview-iframe {
-      width: 100%;
-      height: 70vh;
-      border: none;
-    }
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 16px;
-    }
-
-    .pagination-btn {
-      padding: 8px 12px;
-      border: 1px solid var(--border-color);
-      background: var(--surface-white);
-      color: var(--text-primary);
-      cursor: pointer;
-      border-radius: 4px;
-      transition: background 0.2s;
-    }
-
-    .pagination-btn:hover {
-      background: #f8f9fa;
-    }
-
-    .pagination-btn.disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .dark-mode-toggle {
-      background: none;
-      border: none;
-      cursor: pointer;
-      fill: var(--text-secondary);
-      width: 24px;
-      height: 24px;
-    }
-
-    footer {
-      background: var(--surface-white);
-      border-top: 1px solid var(--border-color);
-      padding: 32px 16px;
-      margin-top: auto;
-    }
-
-    .footer-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .footer-social {
-      text-align: center;
-    }
-
-    .footer-social h3 {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--text-primary);
+      font-weight: 600;
       margin-bottom: 16px;
-      font-family: 'Google Sans', sans-serif;
+      color: var(--text-primary);
     }
 
-    .social-links {
+    .folder-input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      background: var(--surface-white);
+    }
+
+    .folder-input:focus {
+      outline: none;
+      border-color: var(--green-medium);
+    }
+
+    .folder-modal-buttons {
       display: flex;
-      justify-content: center;
       gap: 12px;
-      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
-    .social-link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--green-medium);
-      text-decoration: none;
-      font-size: 14px;
+    .folder-modal-cancel, .folder-modal-create {
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
       font-weight: 500;
-      font-family: 'Google Sans', sans-serif;
-      transition: color 0.2s;
+      border: none;
     }
 
-    .social-link:hover {
-      color: var(--green-dark);
-      text-decoration: underline;
+    .folder-modal-cancel {
+      background: var(--border-color);
+      color: var(--text-primary);
     }
 
-    .social-icon {
-      width: 20px;
-      height: 20px;
-      fill: var(--green-medium);
+    .folder-modal-create {
+      background: var(--green-medium);
+      color: white;
     }
 
-    .social-link:hover .social-icon {
-      fill: var(--green-dark);
+    .folder-modal-cancel:hover {
+      background: var(--text-muted);
     }
 
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
+    .folder-modal-create:hover {
+      background: var(--green-dark);
+    }
+
+    .skeleton-loader {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 16px;
-      padding-top: 16px;
-      border-top: 1px solid var(--border-color);
     }
 
-    .footer-brand {
-      font-size: 14px;
-      color: var(--text-secondary);
-      font-weight: 500;
-      font-family: 'Google Sans', sans-serif;
+    .skeleton-item {
+      background: var(--surface-white);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      height: 120px;
+      animation: pulse 1.5s infinite;
     }
 
-    .footer-nav {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .footer-nav a {
-      color: var(--green-medium);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      font-family: 'Google Sans', sans-serif;
-      transition: color 0.2s;
-    }
-
-    .footer-nav a:hover {
-      color: var(--green-dark);
-      text-decoration: underline;
-    }
-
-    .help-icon {
-      width: 16px;
-      height: 16px;
-      fill: var(--green-medium);
-      vertical-align: middle;
-      margin-right: 4px;
-    }
-
-    .footer-nav a:hover .help-icon {
-      fill: var(--green-dark);
-    }
-
-    .upload-progress {
-      margin-top: 16px;
-      font-size: 14px;
-      color: var(--text-secondary);
-      display: none;
-    }
-
-    .upload-progress.active {
-      display: block;
+    @keyframes pulse {
+      0% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0.6;
+      }
     }
 
     @media (max-width: 768px) {
-      .menu-icon {
-        display: block;
+      .header {
+        flex-wrap: wrap;
+        gap: 12px;
+        padding: 8px 12px;
       }
 
-      .header {
-        padding: 12px 16px;
-        flex-wrap: wrap;
+      .header-left {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .header-right {
+        gap: 8px;
       }
 
       .logo {
         font-size: 18px;
       }
 
-      .user-name {
-        display: none;
+      .logo-img {
+        width: 20px;
+        height: 20px;
       }
 
-      .subjects-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      
-      .hero-title {
-        font-size: 28px;
-        margin-bottom: 20px;
-      }
-      
-      .main-container {
-        padding: 20px 16px;
+      .main-content {
+        padding: 12px;
       }
 
-      .search-box {
-        height: 44px;
-        font-size: 16px;
-      }
-
-      .subject-page {
-        padding: 16px;
-      }
-
-      .subject-header {
-        min-height: 60vh;
-        padding: 60px 0;
-        width: 100%;
-        margin-left: 0;
-        margin-right: 0;
-      }
-
-      .subject-page-title {
-        font-size: 36px;
-      }
-
-      .subject-description {
-        font-size: 16px;
-      }
-
-      .upload-section, .upload-section-guest {
-        padding: 20px 16px;
-      }
-
-      .file-list-header {
-        flex-direction: column;
-        align-items: flex-start;
+      .year-grid, .semester-grid, .subject-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 12px;
       }
 
-      .file-item {
-        padding: 12px 16px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
+      .year-card, .semester-card, .subject-card {
+        min-height: 150px;
       }
 
-      .file-info {
-        width: 100%;
+      .year-title, .semester-title, .subject-title {
+        font-size: 16px;
       }
 
-      .file-actions {
-        width: 100%;
-        justify-content: space-between;
-        flex-wrap: wrap;
-      }
-
-      .uploaded-by {
-        margin: 0;
-        font-size: 11px;
-      }
-
-      .delete-btn, .preview-btn, .share-btn {
-        font-size: 11px;
-        padding: 4px 6px;
-      }
-
-      .auth-card {
-        margin: 20px;
-        padding: 32px 24px;
-      }
-
-      .dropdown-menu {
-        right: 0;
-        left: auto;
-        min-width: 250px;
-      }
-
-      .toast {
-        bottom: 20px;
-        left: 16px;
-        right: 16px;
-        transform: none;
-        max-width: none;
+      .file-list {
+        grid-template-columns: 1fr;
       }
 
       .file-controls {
         flex-direction: column;
-        align-items: flex-start;
+        align-items: stretch;
+      }
+
+      .file-controls-left, .file-controls-right {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .file-search-input, .file-sort {
+        width: 100%;
+      }
+
+      .subject-title {
+        font-size: 24px;
+      }
+
+      .subject-header {
+        padding: 20px;
+      }
+
+      .folder-modal-content {
+        width: 95%;
+        padding: 16px;
+      }
+
+      .upload-section {
+        padding: 16px;
+      }
+
+      .upload-buttons {
+        flex-direction: column;
         gap: 8px;
-        width: 100%;
-      }
-
-      .file-search {
-        width: 100%;
-      }
-
-      .file-sort {
-        width: 100%;
-      }
-
-      .footer-bottom {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-
-      .footer-nav {
-        flex-direction: column;
-        gap: 12px;
       }
     }
 
     @media (max-width: 480px) {
-      .hero-title {
-        font-size: 24px;
+      .header {
+        padding: 8px;
       }
 
-      .main-container {
-        padding: 16px 12px;
+      .logo {
+        font-size: 16px;
       }
 
-      .subject-card {
-        padding: 12px;
-        height: 150px;
+      .logo-img {
+        width: 18px;
+        height: 18px;
+      }
+
+      .main-content {
+        padding: 8px;
+      }
+
+      .year-grid, .semester-grid, .subject-grid {
+        grid-template-columns: 1fr;
       }
 
       .subject-title {
+        font-size: 20px;
+      }
+
+      .subject-description {
         font-size: 14px;
-      }
-
-      .search-container {
-        margin-bottom: 24px;
-      }
-
-      .file-link {
-        font-size: 13px;
-        word-break: break-word;
-      }
-
-      .footer-social h3 {
-        font-size: 14px;
-      }
-
-      .social-link {
-        font-size: 13px;
-      }
-
-      .footer-brand {
-        font-size: 13px;
-      }
-
-      .footer-nav a {
-        font-size: 13px;
-      }
-
-      .pagination {
-        gap: 4px;
-      }
-
-      .pagination-btn {
-        padding: 6px 8px;
-        font-size: 12px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="header">
+  <div class="header">
     <div class="header-left">
+      <button class="back-button" id="backButton">
+        <svg viewBox="0 0 24 24">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+        </svg>
+      </button>
       <svg class="menu-icon" viewBox="0 0 24 24">
         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
       </svg>
       <div class="logo">
-        <img src="/src/helpdesk.png" alt="Student Help Logo" style="width: 24px; height: 24px;">
-        Access Point | Hall of Notes
+        <img src="/src/helpdesk.png" alt="Logo" class="logo-img">
+        Access Point
       </div>
     </div>
-    <div class="auth-section">
-      <button id="darkModeToggle" class="dark-mode-toggle">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98.37-2.03.57-3.1.57-4.97 0-9-4.03-9-9 0-1.07.2-2.12.57-3.1C3.92 3.04 3.46 3 3 3z"/>
-        </svg>
-      </button>
-      <button id="loginBtn" class="btn btn-primary">Sign in with Google</button>
-      <div id="userProfile" class="user-profile" style="display:none;">
-        <span id="userName" class="user-name"></span>
-        <div class="profile-dropdown">
-          <img id="userAvatar" class="user-avatar" alt="User Avatar">
-          <div id="dropdownMenu" class="dropdown-menu">
-            <div class="dropdown-header">
-              <img id="dropdownAvatar" class="dropdown-avatar" alt="User Avatar">
-              <div id="dropdownName" class="dropdown-name"></div>
-              <div id="dropdownEmail" class="dropdown-email"></div>
-            </div>
-            <button class="dropdown-item" onclick="window.location.href='/pages/ToS.html'">Privacy and Terms</button>
-            <button id="logoutBtn" class="dropdown-item">Sign out</button>
+    
+    <div class="header-right">
+      <button class="login-btn" id="loginBtn">Sign In</button>
+      
+      <div class="user-profile" id="userProfile">
+        <img class="user-avatar" id="userAvatar" src="/placeholder.svg" alt="User Avatar">
+        <span class="user-name" id="userName"></span>
+        
+        <div class="dropdown-menu" id="dropdownMenu">
+          <div class="dropdown-header">
+            <img class="user-avatar" id="dropdownAvatar" src="/placeholder.svg" alt="User Avatar" style="width: 40px; height: 40px; margin-bottom: 8px;">
+            <div class="dropdown-name" id="dropdownName"></div>
+            <div class="dropdown-email" id="dropdownEmail"></div>
           </div>
-        </div>
-      </div>
-    </div>
-  </header>
-  
-  <!-- Auth Overlay -->
-  <div id="authOverlay" class="auth-overlay" style="display: none;">
-    <div class="auth-card">
-      <div class="google-logo" style="margin: 0 auto 24px;"></div>
-      <h2 class="auth-title">Access Point - Hall of Notes</h2>
-      <p class="auth-description">Sign in with your Google account to access course materials and share files with your classmates.</p>
-      <button id="overlayLoginBtn" class="btn btn-primary">Sign in with Google</button>
-    </div>
-  </div>
-
-  <!-- Toast Notification -->
-  <div id="toast" class="toast" style="display: none;">
-    <svg class="toast-icon" viewBox="0 0 24 24">
-      <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"/>
-    </svg>
-    <div class="toast-message">Want to upload files? Sign in with Google to share course materials.</div>
-    <button id="toastAction" class="toast-action">Sign In</button>
-    <button id="toastClose" class="toast-close">×</button>
-  </div>
-
-  <!-- Main Page -->
-  <div id="mainPage" style="display:none;">
-    <div class="main-container">
-      <div class="hero-section">
-        <h1 class="hero-title">Search for Notes</h1>
-        <div class="search-container">
-          <input type="text" class="search-box" placeholder="Search for course materials or subjects">
-          <svg class="search-icon" viewBox="0 0 24 24">
-            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5S13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
-          </svg>
-          <svg class="clear-icon" viewBox="0 0 24 24" style="display: none;">
-            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
-          </svg>
-        </div>
-      </div>
-      <div class="subjects-grid" id="subjectCards"></div>
-    </div>
-  </div>
-
-  <!-- Subject Page -->
-  <div id="subjectPage" class="subject-page">
-    <div class="subject-header" id="subjectHeader">
-      <button id="backBtn" class="back-button">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
-        </svg>
-        Back to subjects
-      </button>
-      <h2 id="subjectTitle" class="subject-page-title"></h2>
-      <p class="subject-description">Share and access course materials</p>
-    </div>
-
-    <div class="upload-section" id="uploadSectionAuth" style="display: none;">
-      <svg class="upload-icon" viewBox="0 0 24 24">
-        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-      </svg>
-      <h3 style="margin-bottom: 8px; color: var(--text-primary);">Upload Files</h3>
-      <p style="color: var(--text-secondary); margin-bottom: 16px;">Drag and drop files (PDF, DOC, PPT, images) or click to browse</p>
-      <button id="fileUploader" class="btn btn-primary">Upload Files</button>
-      <div id="uploadProgress" class="upload-progress"></div>
-    </div>
-
-    <div class="upload-section-guest" id="uploadSectionGuest" style="display: none;">
-      <div class="login-prompt">
-        <svg class="login-prompt-icon" viewBox="0 0 24 24">
-          <path d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"/>
-        </svg>
-        <div class="login-prompt-text">Sign in to upload files</div>
-        <div class="login-prompt-subtext">You need to be logged in to share course materials</div>
-        <button class="btn btn-primary" onclick="signInWithGoogle()">Sign in with Google</button>
-      </div>
-    </div>
-
-    <div class="file-list">
-      <div class="file-list-header">
-        Course Materials
-        <div class="file-controls">
-          <div class="file-search">
-            <input type="text" class="file-search-input" placeholder="Search files...">
-            <svg class="file-search-icon" viewBox="0 0 24 24">
-              <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5S13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+          <button class="dropdown-item" id="darkModeToggle">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/>
             </svg>
-          </div>
+            Toggle Dark Mode
+          </button>
+          <button class="dropdown-item" id="logoutBtn">Sign Out</button>
+          <a href="/pages/ToS" class="dropdown-item">Privacy</a>
+          <a href="/Sprout" class="dropdown-item">Sprout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="breadcrumb" id="breadcrumb"></div>
+    <div id="mainPage">
+      <div class="year-grid-container" id="yearGridContainer">
+        <div class="year-grid" id="yearGrid"></div>
+      </div>
+      
+      <div class="semester-grid-container" id="semesterGridContainer">
+        <div class="semester-grid" id="semesterGrid"></div>
+      </div>
+      
+      <div class="subject-grid-container" id="subjectGridContainer">
+        <div class="subject-grid" id="subjectGrid"></div>
+      </div>
+    </div>
+
+    <div class="subject-page" id="subjectPage">
+      <div class="subject-header" id="subjectHeader">
+        <div class="subject-header-content">
+          <h1 class="subject-title" id="subjectTitle"></h1>
+          <p class="subject-description">Explore and manage files for this subject. Upload, organize, and share your content seamlessly.</p>
+        </div>
+      </div>
+
+      <div class="upload-section upload-section-auth" id="uploadSectionAuth">
+        <h3>Manage Files</h3>
+        <p>Upload files or create folders to organize your course materials</p>
+        <div class="upload-buttons">
+          <button class="upload-btn" id="uploadBtn">
+            <svg viewBox="0 0 24 24">
+              <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z"/>
+            </svg>
+            Upload File
+          </button>
+          <button class="new-folder-btn" id="newFolderBtn">
+            <svg viewBox="0 0 24 24">
+              <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
+            </svg>
+            New Folder
+          </button>
+        </div>
+        <div class="upload-progress" id="uploadProgress"></div>
+      </div>
+
+      <div class="upload-section upload-section-guest" id="uploadSectionGuest">
+        <h3>Want to contribute?</h3>
+        <p>Sign in with Google to upload files and organize course materials</p>
+        <div class="upload-buttons">
+          <button class="login-btn" id="overlayLoginBtn">Sign In with Google</button>
+        </div>
+      </div>
+
+      <div class="file-controls">
+        <div class="file-controls-left">
+          <input type="text" class="file-search-input" placeholder="Search files...">
           <select class="file-sort">
             <option value="name-asc">Name (A-Z)</option>
             <option value="name-desc">Name (Z-A)</option>
-            <option value="date-asc">Date (Oldest)</option>
-            <option value="date-desc">Date (Newest)</option>
+            <option value="date-desc">Newest First</option>
+            <option value="date-asc">Oldest First</option>
             <option value="uploader-asc">Uploader (A-Z)</option>
             <option value="uploader-desc">Uploader (Z-A)</option>
           </select>
-          <button id="downloadAllBtn" class="btn btn-secondary">Download All</button>
+        </div>
+        <div class="file-controls-right">
+          <button class="new-folder-btn" id="downloadAllBtn">
+            <svg viewBox="0 0 24 24">
+              <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z"/>
+            </svg>
+            Download All
+          </button>
         </div>
       </div>
-      <div id="fileList"></div>
+
+      <div class="breadcrumb" id="subjectBreadcrumb"></div>
+      
+      <div class="file-list" id="fileList"></div>
+      
       <div class="pagination" id="pagination"></div>
     </div>
+  </div>
 
-    <!-- Preview Modal -->
-    <div id="previewModal" class="preview-modal">
-      <div class="preview-content">
-        <button id="previewClose" class="preview-close">×</button>
-        <div id="previewContent"></div>
+  <div class="folder-modal" id="folderModal">
+    <div class="folder-modal-content">
+      <h3 class="folder-modal-title">Create New Folder</h3>
+      <input type="text" class="folder-input" id="folderNameInput" placeholder="Enter folder name...">
+      <div class="folder-modal-buttons">
+        <button class="folder-modal-cancel" id="folderModalCancel">Cancel</button>
+        <button class="folder-modal-create" id="folderModalCreate">Create</button>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer>
-    <div class="footer-container">
-      <div class="footer-social">
-        <h3>Follow Us</h3>
-        <div class="social-links">
-          <a href="https://www.facebook.com/ctudevcomofficial" class="social-link">
-            <svg class="social-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-            </svg>
-            Guild of Development Communicators
-          </a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <div class="footer-brand">CTU-MC | BS-DEVCOM | ACCESS POINT</div>
-        <div class="footer-nav">
-          <a href="/pages/ToS.html">Privacy and Terms</a>
-          <a href="/error.html">About Access Point</a>
-          <a href="/pages/help.html">
-            <svg class="help-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-            </svg>
-            Help
-          </a>
-        </div>
-      </div>
+  <div class="preview-modal" id="previewModal">
+    <div class="preview-content" id="previewContent">
+      <button class="preview-close" id="previewClose">×</button>
     </div>
-  </footer>
+  </div>
 
-  <script>
-    // ===== Firebase Setup =====
-    const firebaseConfig = {
-      apiKey: "AIzaSyAsynsRyRVwNYzOtqG4yDdcy5HWw74aOzY",
-      authDomain: "student-s-helpdesk.firebaseapp.com",
-      databaseURL: "https://student-s-helpdesk-default-rtdb.firebaseio.com",
-      projectId: "student-s-helpdesk",
-      storageBucket: "student-s-helpdesk.appspot.com",
-      messagingSenderId: "270861175145",
-      appId: "1:270861175145:web:b66a5f9fef8ac3104855f8",
-      measurementId: "G-VRKD5P955F"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.database();
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-modal">
+      <h2 class="auth-title">Welcome to Access Point</h2>
+      <p class="auth-description">Sign in with your Google account to access course materials and contribute to the community.</p>
+      <button class="overlay-login-btn" id="overlayLoginBtn">Sign In with Google</button>
+    </div>
+  </div>
 
-    // Subjects with associated image URLs
-    const subjects = [
-      { name: "PHYSICAL ACTIVITY TOWARDS HEALTH AND FITNESS", image: "/src/subject1.png" },
-      { name: "COMMUNICIATE, CULTURE & SOCIETY", image: "/src/subject2.png" },
-      { name: "INTERPERSONAL COMMUNICATION IN DEVELOPMENT", image: "/src/subject3.png" },
-      { name: "G.E.C.-THE CONTEMPORARY WORLD", image: "/src/subject4.png" },
-      { name: "PURPOSIVE COMMUNICATION", image: "/src/subject5.png" },
-      { name: "ETHICS", image: "/src/subject6.png" },
-      { name: "INTRODUCTION TO COMMUNICATION MEDIA", image: "/src/hero.png" }
-    ];
+  <div class="toast" id="toast">
+    <span class="toast-message">Want to upload files? Sign in with Google to share course materials.</span>
+    <button class="toast-action" id="toastAction">Sign In</button>
+    <button class="toast-close" id="toastClose">×</button>
+  </div>
+<script>
+  // Firebase Setup
+  const firebaseConfig = {
+    apiKey: "AIzaSyAsynsRyRVwNYzOtqG4yDdcy5HWw74aOzY",
+    authDomain: "student-s-helpdesk.firebaseapp.com",
+    databaseURL: "https://student-s-helpdesk-default-rtdb.firebaseio.com",
+    projectId: "student-s-helpdesk",
+    storageBucket: "student-s-helpdesk.appspot.com",
+    messagingSenderId: "270861175145",
+    appId: "1:270861175145:web:b66a5f9fef8ac3104855f8",
+    measurementId: "G-VRKD5P955F"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.database();
 
-    // Elements
-    const loginBtn = document.getElementById("loginBtn");
-    const overlayLoginBtn = document.getElementById("overlayLoginBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const userProfile = document.getElementById("userProfile");
-    const userName = document.getElementById("userName");
-    const userAvatar = document.getElementById("userAvatar");
-    const dropdownMenu = document.getElementById("dropdownMenu");
-    const dropdownName = document.getElementById("dropdownName");
-    const dropdownEmail = document.getElementById("dropdownEmail");
-    const dropdownAvatar = document.getElementById("dropdownAvatar");
-    const authOverlay = document.getElementById("authOverlay");
-    const mainPage = document.getElementById("mainPage");
-    const subjectPage = document.getElementById("subjectPage");
-    const subjectTitle = document.getElementById("subjectTitle");
-    const subjectHeader = document.getElementById("subjectHeader");
-    const fileList = document.getElementById("fileList");
-    const backBtn = document.getElementById("backBtn");
-    const uploadSectionAuth = document.getElementById("uploadSectionAuth");
-    const uploadSectionGuest = document.getElementById("uploadSectionGuest");
-    const toast = document.getElementById("toast");
-    const toastAction = document.getElementById("toastAction");
-    const toastClose = document.getElementById("toastClose");
-    const fileUploader = document.getElementById("fileUploader");
-    const uploadProgress = document.getElementById("uploadProgress");
-    const fileSearchInput = document.querySelector(".file-search-input");
-    const fileSort = document.querySelector(".file-sort");
-    const downloadAllBtn = document.getElementById("downloadAllBtn");
-    const previewModal = document.getElementById("previewModal");
-    const previewContent = document.getElementById("previewContent");
-    const previewClose = document.getElementById("previewClose");
-    const pagination = document.getElementById("pagination");
-    const darkModeToggle = document.getElementById("darkModeToggle");
-    const toastMessage = document.querySelector(".toast-message");
-
-    // Dark mode toggle
-    darkModeToggle.onclick = () => {
-      document.body.classList.toggle('dark-mode');
-      localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
-    };
-
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.body.classList.add('dark-mode');
-    }
-
-    // Auth functions
-    const signInWithGoogle = () => {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider);
-    };
-
-    loginBtn.onclick = signInWithGoogle;
-    overlayLoginBtn.onclick = signInWithGoogle;
-    toastAction.onclick = signInWithGoogle;
-
-    // Initialize Cloudinary upload widget
-    const cloudinaryWidget = cloudinary.createUploadWidget(
-      {
-        cloudName: "dnfy4mgoh",
-        uploadPreset: "Access Point",
-        apiKey: "369439718827736",
-        multiple: true,
-        maxFiles: 5,
-        maxFileSize: 10000000, // 10MB limit
-        resourceType: "auto",
-        clientAllowedFormats: ["pdf", "doc", "docx", "ppt", "pptx", "png", "jpg", "jpeg"],
-        cropping: false,
-        folder: "hall_of_notes",
-        theme: "minimal",
-        showPoweredBy: false,
-        buttonClass: "btn btn-primary"
-      },
-      (error, result) => {
-        if (!error && result && result.event === "success") {
-          handleUploadSuccess(result.info);
-        } else if (error) {
-          console.error("Upload error:", error);
-          showToast("Error uploading file. Please try again.");
-        } else if (result && result.event === "progress") {
-          const percent = Math.round((result.info.loaded / result.info.total) * 100);
-          uploadProgress.textContent = `Uploading: ${percent}%`;
-          uploadProgress.classList.add("active");
-        } else if (result && result.event === "close") {
-          uploadProgress.classList.remove("active");
-          uploadProgress.textContent = "";
-        }
+  // Cloudinary Widget Setup
+  const cloudinaryWidget = cloudinary.createUploadWidget({
+    cloudName: 'dnfy4mgoh',
+    uploadPreset: 'Access Point',
+    folder: () => currentSubject ? (currentFolder ? `${currentSubject}/${currentFolder}` : currentSubject) : '',
+    multiple: true,
+    cropping: false,
+    sources: ['local', 'url', 'camera', 'dropbox', 'google_drive'],
+    styles: {
+      palette: {
+        window: '#FFFFFF',
+        sourceBg: '#F4F4F9',
+        windowBorder: '#006936',
+        tabIcon: '#006936',
+        inactiveTabIcon: '#5f6368',
+        menuIcons: '#006936',
+        link: '#006936',
+        action: '#006936',
+        textDark: '#202124',
+        textLight: '#FFFFFF'
       }
-    );
-
-    fileUploader.onclick = () => {
-      cloudinaryWidget.open();
-    };
-
-    // Auth state observer
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        console.log("User logged in:", user);
-        
-        loginBtn.style.display = "none";
-        authOverlay.style.display = "none";
-        
-        userProfile.style.display = "flex";
-        userName.textContent = user.displayName || "User";
-        
-        const avatarUrl = user.photoURL || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'%3E%3Cpath fill='%235f6368' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E";
-        userAvatar.src = avatarUrl;
-        
-        dropdownName.textContent = user.displayName || "User";
-        dropdownEmail.textContent = user.email || "";
-        dropdownAvatar.src = avatarUrl;
-        
-        logoutBtn.onclick = () => {
-          auth.signOut();
-          dropdownMenu.classList.remove('show');
-        };
-        
-        userAvatar.onclick = (e) => {
-          e.stopPropagation();
-          dropdownMenu.classList.toggle('show');
-        };
-        
-        document.addEventListener('click', (e) => {
-          if (!userProfile.contains(e.target)) {
-            dropdownMenu.classList.remove('show');
-          }
+    }
+  }, (error, result) => {
+    if (!error && result && result.event === "success") {
+      const fileMetadata = {
+        name: result.info.original_filename + '.' + result.info.format,
+        subject: currentSubject,
+        folder: currentFolder || '',
+        url: result.info.secure_url,
+        uploadedAt: Date.now(),
+        uploaderId: auth.currentUser.uid,
+        uploaderName: auth.currentUser.displayName || auth.currentUser.email,
+        uploaderEmail: auth.currentUser.email,
+        isFolder: false
+      };
+      db.ref("files").push(fileMetadata)
+        .then(() => {
+          showToast(`File "${fileMetadata.name}" uploaded successfully!`);
+          uploadProgress.classList.remove('active');
+          uploadProgress.textContent = '';
+        })
+        .catch(error => {
+          console.error("Error saving file metadata:", error);
+          showToast(`Error uploading "${fileMetadata.name}". Please try again.`, null, true);
         });
-        
-        mainPage.style.display = "block";
-        updateUploadSection();
-        
-      } else {
-        console.log("User logged out");
-        
-        loginBtn.style.display = "inline-block";
-        authOverlay.style.display = "none";
-        mainPage.style.display = "block";
-        subjectPage.style.display = "none";
-        
-        userProfile.style.display = "none";
-        dropdownMenu.classList.remove('show');
-        
-        updateUploadSection();
-      }
+    } else if (error) {
+      console.error("Cloudinary upload error:", error);
+      showToast("Error uploading file. Please try again.", null, true);
+      uploadProgress.classList.remove('active');
+      uploadProgress.textContent = '';
+    }
+  });
+
+  // Categories structure with placeholder image for Second Semester
+  const categories = [
+    {
+      year: "1st Year DevCom Materials",
+      semesters: [
+        {
+          name: "First Semester",
+          subjects: [
+            { name: "PHYSICAL ACTIVITY TOWARDS HEALTH AND FITNESS", image: "/src/subject1.png" },
+            { name: "COMMUNICIATE, CULTURE & SOCIETY", image: "/src/subject2.png" },
+            { name: "INTERPERSONAL COMMUNICATION IN DEVELOPMENT", image: "/src/subject3.png" },
+            { name: "G.E.C.-THE CONTEMPORARY WORLD", image: "/src/subject4.png" },
+            { name: "PURPOSIVE COMMUNICATION", image: "/src/subject5.png" },
+            { name: "ETHICS", image: "/src/subject6.png" },
+            { name: "INTRODUCTION TO COMMUNICATION MEDIA", image: "/src/hero.png" }
+          ],
+          image: "/src/semester.png"
+        },
+        {
+          name: "Second Semester",
+          subjects: [],
+          image: "/src/semester-placeholder.png" // Added placeholder image
+        }
+      ],
+      image: "/src/year1.png"
+    },
+    {
+      year: "2nd Year DevCom Materials",
+      semesters: [
+        {
+          name: "First Semester",
+          subjects: [],
+          image: "/src/semester.png"
+        },
+        {
+          name: "Second Semester",
+          subjects: [],
+          image: "/src/semester-placeholder.png" // Added placeholder image
+        }
+      ],
+      image: "/src/year2.png"
+    },
+    {
+      year: "3rd Year DevCom Materials",
+      semesters: [
+        {
+          name: "First Semester",
+          subjects: [],
+          image: "/src/semester.png"
+        },
+        {
+          name: "Second Semester",
+          subjects: [],
+          image: "/src/semester-placeholder.png" // Added placeholder image
+        }
+      ],
+      image: "/src/year3.png"
+    },
+    {
+      year: "4th Year DevCom Materials",
+      semesters: [
+        {
+          name: "First Semester",
+          subjects: [],
+          image: "/src/semester.png"
+        },
+        {
+          name: "Second Semester",
+          subjects: [],
+          image: "/src/semester-placeholder.png" // Added placeholder image
+        }
+      ],
+      image: "/src/year4.png"
+    }
+  ];
+
+  // Elements
+  const loginBtn = document.getElementById("loginBtn");
+  const overlayLoginBtn = document.getElementById("overlayLoginBtn");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const userProfile = document.getElementById("userProfile");
+  const userName = document.getElementById("userName");
+  const userAvatar = document.getElementById("userAvatar");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+  const dropdownName = document.getElementById("dropdownName");
+  const dropdownEmail = document.getElementById("dropdownEmail");
+  const dropdownAvatar = document.getElementById("dropdownAvatar");
+  const authOverlay = document.getElementById("authOverlay");
+  const mainPage = document.getElementById("mainPage");
+  const subjectPage = document.getElementById("subjectPage");
+  const subjectTitle = document.getElementById("subjectTitle");
+  const subjectHeader = document.getElementById("subjectHeader");
+  const fileList = document.getElementById("fileList");
+  const backButton = document.getElementById("backButton");
+  const uploadSectionAuth = document.getElementById("uploadSectionAuth");
+  const uploadSectionGuest = document.getElementById("uploadSectionGuest");
+  const toast = document.getElementById("toast");
+  const toastAction = document.getElementById("toastAction");
+  const toastClose = document.getElementById("toastClose");
+  const newFolderBtn = document.getElementById("newFolderBtn");
+  const uploadBtn = document.getElementById("uploadBtn");
+  const uploadProgress = document.getElementById("uploadProgress");
+  const fileSearchInput = document.querySelector(".file-search-input");
+  const fileSort = document.querySelector(".file-sort");
+  const downloadAllBtn = document.getElementById("downloadAllBtn");
+  const previewModal = document.getElementById("previewModal");
+  const previewContent = document.getElementById("previewContent");
+  const previewClose = document.getElementById("previewClose");
+  const pagination = document.getElementById("pagination");
+  const darkModeToggle = document.getElementById("darkModeToggle");
+  const toastMessage = document.querySelector(".toast-message");
+  const yearGridContainer = document.getElementById("yearGridContainer");
+  const semesterGridContainer = document.getElementById("semesterGridContainer");
+  const subjectGridContainer = document.getElementById("subjectGridContainer");
+  const yearGrid = document.getElementById("yearGrid");
+  const semesterGrid = document.getElementById("semesterGrid");
+  const subjectGrid = document.getElementById("subjectGrid");
+  const breadcrumb = document.getElementById("breadcrumb");
+  const subjectBreadcrumb = document.getElementById("subjectBreadcrumb");
+  const folderModal = document.getElementById("folderModal");
+  const folderNameInput = document.getElementById("folderNameInput");
+  const folderModalCancel = document.getElementById("folderModalCancel");
+  const folderModalCreate = document.getElementById("folderModalCreate");
+
+  // Global variables
+  let currentSubject = null;
+  let currentYear = null;
+  let currentSemester = null;
+  let fileData = [];
+  let currentFolder = '';
+  const itemsPerPage = 12;
+  let currentPage = 1;
+  let navigationStack = [{ view: 'years', render: renderYears }];
+  let isLoading = false;
+
+  // Dark mode toggle
+  darkModeToggle.onclick = () => {
+    document.body.classList.toggle('dark-mode');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+  };
+
+  if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-mode');
+  }
+
+  // Auth functions
+  const signInWithGoogle = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider).catch(error => {
+      showToast("Error signing in: " + error.message, null, true);
     });
+  };
 
-    // Toast functionality
-    function showToast(message = "Want to upload files? Sign in with Google to share course materials.", action = signInWithGoogle) {
-      toastMessage.textContent = message;
-      toastAction.onclick = action;
-      toast.style.display = 'flex';
-      toast.classList.add('show');
+  loginBtn.onclick = signInWithGoogle;
+  overlayLoginBtn.onclick = signInWithGoogle;
+  toastAction.onclick = signInWithGoogle;
+
+  // File upload handling
+  uploadBtn.onclick = () => {
+    if (!auth.currentUser) {
+      showToast("Please sign in to upload files.");
+      return;
+    }
+    if (!currentSubject) {
+      showToast("Please select a subject to upload files.");
+      return;
+    }
+    uploadProgress.textContent = 'Preparing upload...';
+    uploadProgress.classList.add('active');
+    cloudinaryWidget.open();
+  };
+
+  newFolderBtn.onclick = () => {
+    if (!auth.currentUser || !currentSubject) {
+      showToast("Please sign in and select a subject first.");
+      return;
+    }
+    folderModal.classList.add('show');
+    folderNameInput.focus();
+  };
+
+  folderModalCancel.onclick = () => {
+    folderModal.classList.remove('show');
+    folderNameInput.value = '';
+  };
+
+  folderModalCreate.onclick = async () => {
+    const folderName = folderNameInput.value.trim();
+    if (!folderName) {
+      showToast("Please enter a folder name.");
+      return;
+    }
+
+    const sanitizedName = folderName.replace(/[^a-zA-Z0-9\s\-_]/g, '');
+    if (sanitizedName === '') {
+      showToast("Please enter a valid folder name.");
+      return;
+    }
+
+    const folderPath = currentFolder ? `${currentFolder}/${sanitizedName}` : sanitizedName;
+
+    const folderData = {
+      name: sanitizedName,
+      subject: currentSubject,
+      folder: currentFolder,
+      uploadedAt: Date.now(),
+      uploaderId: auth.currentUser.uid,
+      uploaderName: auth.currentUser.displayName || auth.currentUser.email,
+      uploaderEmail: auth.currentUser.email,
+      isFolder: true,
+      path: folderPath
+    };
+
+    try {
+      await db.ref("files").push(folderData);
+      showToast(`Folder "${sanitizedName}" created successfully!`);
+      folderModal.classList.remove('show');
+      folderNameInput.value = '';
+    } catch (error) {
+      console.error("Error creating folder:", error);
+      showToast("Error creating folder. Please try again.", null, true);
+    }
+  };
+
+  folderModal.onclick = (e) => {
+    if (e.target === folderModal) {
+      folderModal.classList.remove('show');
+      folderNameInput.value = '';
+    }
+  };
+
+  folderNameInput.onkeypress = (e) => {
+    if (e.key === 'Enter') {
+      folderModalCreate.click();
+    } else if (e.key === 'Escape') {
+      folderModalCancel.click();
+    }
+  };
+
+  // Auth state observer
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      loginBtn.style.display = "none";
+      authOverlay.style.display = "none";
+      userProfile.style.display = "flex";
+      userName.textContent = user.displayName || "User";
       
+      const avatarUrl = user.photoURL || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24'%3E%3Cpath fill='%235f6368' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z'/%3E%3C/svg%3E";
+      userAvatar.src = avatarUrl;
+      dropdownName.textContent = user.displayName || "User";
+      dropdownEmail.textContent = user.email || "";
+      dropdownAvatar.src = avatarUrl;
+      
+      logoutBtn.onclick = () => {
+        auth.signOut();
+        dropdownMenu.classList.remove('show');
+      };
+      
+      userProfile.onclick = (e) => {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('show');
+      };
+      
+      document.addEventListener('click', (e) => {
+        if (!userProfile.contains(e.target)) {
+          dropdownMenu.classList.remove('show');
+        }
+      });
+      
+      mainPage.style.display = "block";
+      updateUploadSection();
+    } else {
+      loginBtn.style.display = "inline-block";
+      authOverlay.style.display = "none";
+      mainPage.style.display = "block";
+      subjectPage.style.display = "none";
+      userProfile.style.display = "none";
+      dropdownMenu.classList.remove('show');
+      updateUploadSection();
+    }
+  });
+
+  // Toast functionality
+  function showToast(message = "Want to upload files? Sign in with Google to share course materials.", action = null, isError = false) {
+    toastMessage.textContent = message;
+    if (action) {
+      toastAction.style.display = 'block';
+      toastAction.onclick = action;
+    } else {
+      toastAction.style.display = 'none';
+    }
+    toast.style.display = 'flex';
+    toast.classList.add('show');
+    if (isError) {
+      toast.style.borderColor = '#dc3545';
+      toastMessage.style.color = '#dc3545';
+    } else {
+      toast.style.borderColor = getComputedStyle(document.documentElement).getPropertyValue('--border-color');
+      toastMessage.style.color = getComputedStyle(document.documentElement).getPropertyValue('--text-primary');
+    }
+    
+    setTimeout(() => {
+      hideToast();
+    }, 5000);
+  }
+
+  function hideToast() {
+    toast.classList.remove('show');
+    toast.classList.add('hide');
+    setTimeout(() => {
+      toast.style.display = 'none';
+      toast.classList.remove('hide');
+    }, 300);
+  }
+
+  toastClose.onclick = hideToast;
+
+  function checkFirstVisit() {
+    const hasVisited = localStorage.getItem('hasVisitedStudentHelp');
+    if (!hasVisited && !auth.currentUser) {
       setTimeout(() => {
-        hideToast();
-      }, 8000);
+        showToast();
+      }, 2000);
+      localStorage.setItem('hasVisitedStudentHelp', 'true');
+    }
+  }
+
+  function updateUploadSection() {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      uploadSectionAuth.style.display = "block";
+      uploadSectionGuest.style.display = "none";
+    } else {
+      uploadSectionAuth.style.display = "none";
+      uploadSectionGuest.style.display = "block";
+    }
+  }
+
+  setTimeout(checkFirstVisit, 1000);
+
+  // Render breadcrumb navigation
+  function renderBreadcrumb() {
+    breadcrumb.innerHTML = '';
+    subjectBreadcrumb.innerHTML = '';
+    
+    const homeLink = document.createElement('a');
+    homeLink.className = 'breadcrumb-item';
+    homeLink.textContent = 'Home';
+    homeLink.onclick = () => {
+      navigationStack = [{ view: 'years', render: renderYears }];
+      renderYears();
+      history.pushState({ view: 'years' }, '', '?view=years');
+    };
+    breadcrumb.appendChild(homeLink);
+
+    if (currentYear) {
+      const separator = document.createElement('span');
+      separator.className = 'breadcrumb-separator';
+      separator.textContent = ' / ';
+      breadcrumb.appendChild(separator);
+
+      const yearLink = document.createElement('a');
+      yearLink.className = 'breadcrumb-item';
+      yearLink.textContent = currentYear.year;
+      yearLink.onclick = () => openYear(currentYear);
+      breadcrumb.appendChild(yearLink);
     }
 
-    function hideToast() {
-      toast.classList.remove('show');
-      toast.classList.add('hide');
-      setTimeout(() => {
-        toast.style.display = 'none';
-        toast.classList.remove('hide');
-      }, 300);
+    if (currentSemester) {
+      const separator = document.createElement('span');
+      separator.className = 'breadcrumb-separator';
+      separator.textContent = ' / ';
+      breadcrumb.appendChild(separator);
+
+      const semesterLink = document.createElement('a');
+      semesterLink.className = 'breadcrumb-item';
+      semesterLink.textContent = currentSemester.name;
+      semesterLink.onclick = () => openSemester(currentSemester, currentYear);
+      breadcrumb.appendChild(semesterLink);
     }
 
-    toastClose.onclick = hideToast;
+    if (currentSubject) {
+      const separator = document.createElement('span');
+      separator.className = 'breadcrumb-separator';
+      separator.textContent = ' / ';
+      breadcrumb.appendChild(separator);
 
-    function checkFirstVisit() {
-      const hasVisited = localStorage.getItem('hasVisitedStudentHelp');
-      if (!hasVisited && !auth.currentUser) {
-        setTimeout(() => {
-          showToast();
-        }, 2000);
-        localStorage.setItem('hasVisitedStudentHelp', 'true');
-      }
+      const subjectLink = document.createElement('span');
+      subjectLink.className = 'breadcrumb-current';
+      subjectLink.textContent = currentSubject;
+      breadcrumb.appendChild(subjectLink);
+
+      // Subject page breadcrumb
+      const subjectRootLink = document.createElement('a');
+      subjectRootLink.className = 'breadcrumb-item';
+      subjectRootLink.textContent = currentSubject;
+      subjectRootLink.onclick = () => navigateToFolder('');
+      subjectBreadcrumb.appendChild(subjectRootLink);
+
+      const parts = currentFolder.split('/');
+      let path = '';
+      parts.forEach((part, index) => {
+        if (part) {
+          const separator = document.createElement('span');
+          separator.className = 'breadcrumb-separator';
+          separator.textContent = ' / ';
+          subjectBreadcrumb.appendChild(separator);
+          
+          path += (path ? '/' : '') + part;
+          
+          if (index === parts.length - 1) {
+            const current = document.createElement('span');
+            current.className = 'breadcrumb-current';
+            current.textContent = part;
+            subjectBreadcrumb.appendChild(current);
+          } else {
+            const link = document.createElement('a');
+            link.className = 'breadcrumb-item';
+            link.textContent = part;
+            const folderPath = path;
+            link.onclick = () => navigateToFolder(folderPath);
+            subjectBreadcrumb.appendChild(link);
+          }
+        }
+      });
     }
+  }
 
-    function updateUploadSection() {
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        uploadSectionAuth.style.display = "block";
-        uploadSectionGuest.style.display = "none";
-      } else {
-        uploadSectionAuth.style.display = "none";
-        uploadSectionGuest.style.display = "block";
-      }
+  function navigateToFolder(folderPath) {
+    currentFolder = folderPath;
+    currentPage = 1;
+    renderFiles();
+    renderBreadcrumb();
+    updateBackButton();
+    const params = new URLSearchParams();
+    params.set('view', 'subject');
+    params.set('year', currentYear.year);
+    params.set('semester', currentSemester.name);
+    params.set('subject', currentSubject);
+    if (folderPath) params.set('folder', folderPath);
+    history.pushState({ view: 'subject', year: currentYear.year, semester: currentSemester.name, subject: currentSubject, folder: folderPath }, '', `?${params.toString()}`);
+  }
+
+  function updateBackButton() {
+    if (navigationStack.length > 1 || currentFolder || subjectPage.style.display === "block") {
+      backButton.style.display = "flex";
+    } else {
+      backButton.style.display = "none";
     }
+  }
 
-    setTimeout(checkFirstVisit, 1000);
-
-    const subjectCards = document.getElementById("subjectCards");
-    subjects.forEach(subject => {
+  // Render Year Levels
+  function renderYears() {
+    yearGrid.innerHTML = "";
+    categories.forEach(year => {
       const card = document.createElement("div");
-      card.className = "subject-card";
-      card.style.backgroundImage = `url(${subject.image})`;
-      card.innerHTML = `
-        <div class="subject-title">${subject.name}</div>
-      `;
+      card.className = "year-card";
+      card.style.backgroundImage = `url(${year.image})`;
+      card.innerHTML = `<div class="year-title">${year.year}</div>`;
       card.onclick = () => {
         card.style.transform = 'scale(0.98)';
         setTimeout(() => {
           card.style.transform = '';
-          openSubject(subject.name, subject.image);
+          openYear(year);
         }, 150);
       };
-      subjectCards.appendChild(card);
+      yearGrid.appendChild(card);
     });
+    yearGridContainer.style.display = "block";
+    semesterGridContainer.style.display = "none";
+    subjectGridContainer.style.display = "none";
+    subjectPage.style.display = "none";
+    currentYear = null;
+    currentSemester = null;
+    currentSubject = null;
+    navigationStack = [{ view: 'years', render: renderYears }];
+    updateBackButton();
+    renderBreadcrumb();
+  }
 
-    const searchBox = document.querySelector(".search-box");
-    const clearIcon = document.querySelector(".clear-icon");
-
-    searchBox.addEventListener("input", () => {
-      const query = searchBox.value.trim().toLowerCase();
-      const subjectCards = document.querySelectorAll(".subject-card");
-
-      clearIcon.style.display = query ? "block" : "none";
-
-      subjectCards.forEach(card => {
-        const subjectName = card.querySelector(".subject-title").textContent.toLowerCase();
-        if (subjectName.includes(query)) {
-          card.style.display = "block";
-        } else {
-          card.style.display = "none";
-        }
-      });
+  // Render Semesters
+  function openYear(yearObj) {
+    currentYear = yearObj;
+    semesterGrid.innerHTML = "";
+    yearObj.semesters.forEach(semester => {
+      const card = document.createElement("div");
+      card.className = "semester-card";
+      card.style.backgroundImage = `url(${semester.image || '/src/semester.png'})`; // Use semester.image if available
+      card.innerHTML = `<div class="semester-title">${semester.name}</div>`;
+      card.onclick = () => {
+        card.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          card.style.transform = '';
+          openSemester(semester, yearObj);
+        }, 150);
+      };
+      semesterGrid.appendChild(card);
     });
+    yearGridContainer.style.display = "none";
+    semesterGridContainer.style.display = "block";
+    subjectGridContainer.style.display = "none";
+    subjectPage.style.display = "none";
+    currentSemester = null;
+    currentSubject = null;
+    if (!navigationStack.some(nav => nav.view === 'semesters' && nav.yearObj === yearObj)) {
+      navigationStack.push({ view: 'semesters', yearObj });
+    }
+    updateBackButton();
+    renderBreadcrumb();
+    const params = new URLSearchParams();
+    params.set('view', 'semesters');
+    params.set('year', yearObj.year);
+    history.pushState({ view: 'semesters', year: yearObj.year }, '', `?${params.toString()}`);
+  }
 
-    clearIcon.addEventListener("click", () => {
-      searchBox.value = "";
-      clearIcon.style.display = "none";
-      const subjectCards = document.querySelectorAll(".subject-card");
-      subjectCards.forEach(card => {
-        card.style.display = "block";
-      });
-      searchBox.focus();
+  // Render Subjects
+  function openSemester(semester, yearObj) {
+    currentSemester = semester;
+    subjectGrid.innerHTML = "";
+    semester.subjects.forEach(subject => {
+      const card = document.createElement("div");
+      card.className = "subject-card";
+      card.style.backgroundImage = `url(${subject.image})`;
+      card.innerHTML = `<div class="subject-title">${subject.name}</div>`;
+      card.onclick = () => {
+        card.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+          card.style.transform = '';
+          openSubject(subject.name, subject.image, semester, yearObj);
+        }, 150);
+      };
+      subjectGrid.appendChild(card);
     });
+    yearGridContainer.style.display = "none";
+    semesterGridContainer.style.display = "none";
+    subjectGridContainer.style.display = "block";
+    subjectPage.style.display = "none";
+    currentSubject = null;
+    if (!navigationStack.some(nav => nav.view === 'subjects' && nav.semester === semester && nav.yearObj === yearObj)) {
+      navigationStack.push({ view: 'subjects', semester, yearObj });
+    }
+    updateBackButton();
+    renderBreadcrumb();
+    const params = new URLSearchParams();
+    params.set('view', 'subjects');
+    params.set('year', yearObj.year);
+    params.set('semester', semester.name);
+    history.pushState({ view: 'subjects', year: yearObj.year, semester: semester.name }, '', `?${params.toString()}`);
+  }
 
-    let currentSubject = null;
-    let fileData = [];
-    const itemsPerPage = 10;
-    let currentPage = 1;
+  function openSubject(subject, imageUrl, semester, yearObj) {
+    currentSubject = subject;
+    currentFolder = '';
+    fileData = [];
+    currentPage = 1;
+    subjectTitle.textContent = subject;
+    const subjectDesc = document.querySelector('.subject-description');
+    if (subjectDesc) {
+      subjectDesc.textContent = `Explore and manage files for ${subject}. Upload, organize, and share your content seamlessly.`;
+    }
+    subjectHeader.style.backgroundImage = `url(${imageUrl})`;
+    mainPage.style.display = "none";
+    subjectPage.style.display = "block";
+    fileList.innerHTML = "";
+    
+    updateUploadSection();
+    loadFiles(subject);
+    renderBreadcrumb();
+    if (!navigationStack.some(nav => nav.view === 'subject' && nav.subject === subject)) {
+      navigationStack.push({ view: 'subject', subject, imageUrl, semester, yearObj });
+    }
+    updateBackButton();
+    const params = new URLSearchParams();
+    params.set('view', 'subject');
+    params.set('year', yearObj.year);
+    params.set('semester', semester.name);
+    params.set('subject', subject);
+    history.pushState({ view: 'subject', year: yearObj.year, semester: semester.name, subject: subject }, '', `?${params.toString()}`);
+  }
 
-    function openSubject(subject, imageUrl) {
-      currentSubject = subject;
+  function showSkeleton() {
+    fileList.innerHTML = '';
+    const skeletonContainer = document.createElement('div');
+    skeletonContainer.className = 'skeleton-loader';
+    for (let i = 0; i < 6; i++) {
+      const skeletonItem = document.createElement('div');
+      skeletonItem.className = 'skeleton-item';
+      skeletonContainer.appendChild(skeletonItem);
+    }
+    fileList.appendChild(skeletonContainer);
+    isLoading = true;
+  }
+
+  function hideSkeleton() {
+    const skeleton = fileList.querySelector('.skeleton-loader');
+    if (skeleton) skeleton.remove();
+    isLoading = false;
+  }
+
+  function loadFiles(subject) {
+    showSkeleton();
+    fileList.innerHTML = "";
+    db.ref("files").orderByChild("subject").equalTo(subject).on("value", snap => {
       fileData = [];
-      currentPage = 1;
-      subjectTitle.textContent = subject;
-      const subjectDesc = document.querySelector('.subject-description');
-      if (subjectDesc) {
-        subjectDesc.textContent = `Explore and manage files for ${subject}. Upload, organize, and share your content seamlessly.`;
-      }
-      subjectHeader.style.backgroundImage = `url(${imageUrl})`;
-      mainPage.style.display = "none";
-      subjectPage.style.display = "block";
-      fileList.innerHTML = "";
+      snap.forEach(childSnap => {
+        const data = childSnap.val();
+        data.id = childSnap.key;
+        fileData.push(data);
+      });
+      hideSkeleton();
+      renderFiles();
+    }, error => {
+      console.error("Error loading files:", error);
+      hideSkeleton();
+      showToast("Error loading files. Please try again.", null, true);
+    });
+  }
+
+  function renderFiles() {
+    fileList.innerHTML = "";
+    const query = fileSearchInput.value.trim().toLowerCase();
+    const sortOption = fileSort.value;
+
+    let filteredFiles = fileData.filter(file => {
+      const fileFolder = file.folder || '';
+      const inCurrentFolder = fileFolder === currentFolder;
+      const matchesSearch = file.name.toLowerCase().includes(query);
+      return inCurrentFolder && matchesSearch;
+    });
+
+    if (filteredFiles.length === 0) {
+      const noContent = document.createElement('div');
+      noContent.className = 'no-content';
+      noContent.textContent = 'Woooo! Nothing to see here!';
+      fileList.appendChild(noContent);
+      pagination.innerHTML = '';
+      return;
+    }
+
+    filteredFiles.sort((a, b) => {
+      if (a.isFolder && !b.isFolder) return -1;
+      if (!a.isFolder && b.isFolder) return 1;
       
-      updateUploadSection();
-      loadFiles(subject);
-    }
+      switch (sortOption) {
+        case 'name-asc': return a.name.localeCompare(b.name);
+        case 'name-desc': return b.name.localeCompare(a.name);
+        case 'date-asc': return a.uploadedAt - b.uploadedAt;
+        case 'date-desc': return b.uploadedAt - a.uploadedAt;
+        case 'uploader-asc': return (a.uploaderName || a.uploaderEmail).localeCompare(b.uploaderName || b.uploaderEmail);
+        case 'uploader-desc': return (b.uploaderName || b.uploaderEmail).localeCompare(a.uploaderName || b.uploaderEmail);
+        default: return 0;
+      }
+    });
 
-    function loadFiles(subject) {
-      fileList.innerHTML = "";
-      db.ref("files").orderByChild("subject").equalTo(subject).on("value", snap => {
-        fileData = [];
-        snap.forEach(childSnap => {
-          const data = childSnap.val();
-          data.id = childSnap.key;
-          fileData.push(data);
-        });
-        renderFiles();
-      });
-    }
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    const paginatedFiles = filteredFiles.slice(startIndex, endIndex);
 
-    function renderFiles() {
-      fileList.innerHTML = "";
-      const query = fileSearchInput.value.trim().toLowerCase();
-      const sortOption = fileSort.value;
-
-      let filteredFiles = fileData.filter(file => 
-        file.name.toLowerCase().includes(query)
-      );
-
-      filteredFiles.sort((a, b) => {
-        switch (sortOption) {
-          case 'name-asc': return a.name.localeCompare(b.name);
-          case 'name-desc': return b.name.localeCompare(a.name);
-          case 'date-asc': return a.uploadedAt - b.uploadedAt;
-          case 'date-desc': return b.uploadedAt - a.uploadedAt;
-          case 'uploader-asc': return (a.uploaderName || a.uploaderEmail).localeCompare(b.uploaderName || b.uploaderEmail);
-          case 'uploader-desc': return (b.uploaderName || b.uploaderEmail).localeCompare(a.uploaderName || a.uploaderEmail);
-          default: return 0;
-        }
-      });
-
-      const startIndex = (currentPage - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-      const paginatedFiles = filteredFiles.slice(startIndex, endIndex);
-
-      paginatedFiles.forEach(data => {
-        const fileId = data.id;
-        const currentUser = auth.currentUser;
+    paginatedFiles.forEach(data => {
+      const fileId = data.id;
+      const currentUser = auth.currentUser;
+      
+      const div = document.createElement("div");
+      div.className = data.isFolder ? "file-item folder-item" : "file-item";
+      
+      const isOwner = currentUser && data.uploaderId === currentUser.uid;
+      const uploaderName = data.uploaderName || data.uploaderEmail || "Unknown";
+      const fileExtension = data.isFolder ? 'folder' : (data.name.split('.').pop() || '').toLowerCase();
+      
+      if (data.isFolder) {
+        div.innerHTML = `
+          <div class="file-info">
+            <svg class="folder-icon-small" viewBox="0 0 24 24">
+              <path d="M10,4H4C2.89,4 2,4.89 2,6V18A2,2 0 0,0 4,20H20A2,2 0 0,0 22,18V8C22,6.89 21.1,6 20,6H12L10,4Z"/>
+            </svg>
+            <span class="file-link" style="cursor: pointer;">${data.name}</span>
+          </div>
+          <div class="file-actions">
+            <span class="uploaded-by">by ${uploaderName}</span>
+            <div class="file-action-buttons">
+              ${isOwner ? `
+                <button class="delete-btn" data-file-id="${fileId}" data-file-name="${data.name}">
+                  <svg class="delete-icon" viewBox="0 0 24 24">
+                    <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+                  </svg>
+                  Delete
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
         
-        const div = document.createElement("div");
-        div.className = "file-item";
-        
-        const isOwner = currentUser && data.uploaderId === currentUser.uid;
-        const uploaderName = data.uploaderName || data.uploaderEmail || "Unknown";
-        const fileExtension = data.name.split('.').pop().toLowerCase();
-        
+        const folderLink = div.querySelector('.file-link');
+        folderLink.onclick = () => {
+          const newPath = currentFolder ? `${currentFolder}/${data.name}` : data.name;
+          navigateToFolder(newPath);
+        };
+      } else {
         div.innerHTML = `
           <div class="file-info">
             <svg class="file-icon" viewBox="0 0 24 24">
@@ -1738,41 +1928,44 @@
           </div>
           <div class="file-actions">
             <span class="uploaded-by">by ${uploaderName}</span>
-            <button class="preview-btn" data-file-url="${data.url}" data-file-type="${fileExtension}">
-              <svg class="preview-icon" viewBox="0 0 24 24">
-                <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
-              </svg>
-              Preview
-            </button>
-            <button class="share-btn" data-file-url="${data.url}">
-              <svg class="share-icon" viewBox="0 0 24 24">
-                <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2c0 .24.04.47.09.7L8.04 11.81C7.5 11.31 6.79 11 6 11c-1.1 0-2 .9-2 2s.9 2 2 2c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.23-.09.46-.09.7 0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2zm0-4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-12 0c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/>
-              </svg>
-              Share
-            </button>
-            ${isOwner ? `
-              <button class="delete-btn" data-file-id="${fileId}" data-file-name="${data.name}" data-public-id="${data.publicId}">
-                <svg class="delete-icon" viewBox="0 0 24 24">
-                  <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+            <div class="file-action-buttons">
+              <button class="preview-btn" data-file-url="${data.url}" data-file-type="${fileExtension}">
+                <svg class="preview-icon" viewBox="0 0 24 24">
+                  <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
                 </svg>
-                Delete
+                Preview
               </button>
-            ` : ''}
+              <button class="share-btn" data-file-url="${data.url}">
+                <svg class="share-icon" viewBox="0 0 24 24">
+                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2c0 .24.04.47.09.7L8.04 11.81C7.5 11.31 6.79 11 6 11c-1.1 0-2 .9-2 2s.9 2 2 2c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.23-.09.46-.09.7 0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2zm0-4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-12 0c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/>
+                </svg>
+                Share
+              </button>
+              ${isOwner ? `
+                <button class="delete-btn" data-file-id="${fileId}" data-file-name="${data.name}">
+                  <svg class="delete-icon" viewBox="0 0 24 24">
+                    <path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z"/>
+                  </svg>
+                  Delete
+                </button>
+              ` : ''}
+            </div>
           </div>
         `;
-        
-        fileList.appendChild(div);
-        
-        const deleteBtn = div.querySelector('.delete-btn');
-        if (deleteBtn) {
-          deleteBtn.addEventListener('click', function() {
-            const fileId = this.getAttribute('data-file-id');
-            const fileName = this.getAttribute('data-file-name');
-            const publicId = this.getAttribute('data-public-id');
-            deleteFile(fileId, fileName, publicId);
-          });
-        }
+      }
+      
+      fileList.appendChild(div);
+      
+      const deleteBtn = div.querySelector('.delete-btn');
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', function() {
+          const fileId = this.getAttribute('data-file-id');
+          const fileName = this.getAttribute('data-file-name');
+          deleteFile(fileId, fileName, data.isFolder);
+        });
+      }
 
+      if (!data.isFolder) {
         const previewBtn = div.querySelector('.preview-btn');
         previewBtn.addEventListener('click', function() {
           const fileUrl = this.getAttribute('data-file-url');
@@ -1786,165 +1979,313 @@
           navigator.clipboard.writeText(fileUrl).then(() => {
             showToast("Link copied to clipboard!");
           }).catch(() => {
-            showToast("Failed to copy link.");
+            showToast("Failed to copy link.", null, true);
           });
         });
-      });
+      }
+    });
 
-      renderPagination(filteredFiles.length);
+    renderPagination(filteredFiles.length);
+  }
+
+  function renderPagination(totalItems) {
+    pagination.innerHTML = "";
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    
+    if (totalPages <= 1) return;
+    
+    const prevBtn = document.createElement("button");
+    prevBtn.className = "pagination-btn";
+    prevBtn.textContent = "Previous";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.classList.toggle("disabled", currentPage === 1);
+    prevBtn.onclick = () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderFiles();
+      }
+    };
+    pagination.appendChild(prevBtn);
+
+    const nextBtn = document.createElement("button");
+    nextBtn.className = "pagination-btn";
+    nextBtn.textContent = "Next";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.classList.toggle("disabled", currentPage === totalPages);
+    nextBtn.onclick = () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderFiles();
+      }
+    };
+    pagination.appendChild(nextBtn);
+  }
+
+  function showPreview(fileUrl, fileType) {
+    previewContent.innerHTML = "";
+    previewContent.appendChild(previewClose);
+    
+    if (["png", "jpg", "jpeg"].includes(fileType)) {
+      const img = document.createElement("img");
+      img.src = fileUrl;
+      img.className = "preview-image";
+      img.onerror = () => showToast("Error loading image preview.", null, true);
+      previewContent.appendChild(img);
+      previewModal.classList.add("show");
+    } else if (fileType === "pdf") {
+      const iframe = document.createElement("iframe");
+      iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
+      iframe.className = "preview-iframe";
+      iframe.onerror = () => showToast("Error loading PDF preview.", null, true);
+      previewContent.appendChild(iframe);
+      previewModal.classList.add("show");
+    } else {
+      showToast("Preview not available for this file type.");
+    }
+  }
+
+  previewClose.onclick = () => {
+    previewModal.classList.remove("show");
+    previewContent.innerHTML = "";
+    previewContent.appendChild(previewClose);
+  };
+
+  async function deleteFile(fileId, fileName, isFolder) {
+    if (!auth.currentUser) {
+      showToast("Please sign in to delete files.");
+      return;
     }
 
-    function renderPagination(totalItems) {
-      pagination.innerHTML = "";
-      const totalPages = Math.ceil(totalItems / itemsPerPage);
-      const prevBtn = document.createElement("button");
-      prevBtn.className = "pagination-btn";
-      prevBtn.textContent = "Previous";
-      prevBtn.disabled = currentPage === 1;
-      prevBtn.classList.toggle("disabled", currentPage === 1);
-      prevBtn.onclick = () => {
-        if (currentPage > 1) {
-          currentPage--;
-          renderFiles();
-        }
-      };
-      pagination.appendChild(prevBtn);
+    const itemType = isFolder ? "folder" : "file";
+    if (confirm(`Are you sure you want to delete the ${itemType} "${fileName}"?`)) {
+      try {
+        // Only delete the file reference from Firebase
+        await db.ref(`files/${fileId}`).remove();
+        showToast(`${itemType.charAt(0).toUpperCase() + itemType.slice(1)} "${fileName}" deleted successfully!`);
+      } catch (error) {
+        console.error(`Error deleting ${itemType}:`, error);
+        showToast(`Error deleting ${itemType} "${fileName}". Please try again.`, null, true);
+      }
+    }
+  }
 
-      const nextBtn = document.createElement("button");
-      nextBtn.className = "pagination-btn";
-      nextBtn.textContent = "Next";
-      nextBtn.disabled = currentPage === totalPages;
-      nextBtn.classList.toggle("disabled", currentPage === totalPages);
-      nextBtn.onclick = () => {
-        if (currentPage < totalPages) {
-          currentPage++;
-          renderFiles();
-        }
-      };
-      pagination.appendChild(nextBtn);
+  async function downloadAllFiles() {
+    if (!currentSubject) {
+      showToast("Please select a subject to download files.");
+      return;
     }
 
-    backBtn.onclick = () => {
-      subjectPage.style.display = "none";
-      mainPage.style.display = "block";
+    const zip = new JSZip();
+    const filteredFiles = fileData.filter(file => !file.isFolder && (file.folder || '') === currentFolder);
+    
+    if (filteredFiles.length === 0) {
+      showToast("No files available to download.");
+      return;
+    }
+
+    showToast("Preparing download...");
+    try {
+      for (const file of filteredFiles) {
+        const response = await fetch(file.url);
+        const blob = await response.blob();
+        zip.file(file.name, blob);
+      }
+
+      const content = await zip.generateAsync({ type: "blob" });
+      const url = window.URL.createObjectURL(content);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${currentSubject}${currentFolder ? '_' + currentFolder.replace('/', '_') : ''}_files.zip`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      showToast("Files downloaded successfully!");
+    } catch (error) {
+      console.error("Error downloading files:", error);
+      showToast("Error downloading files. Please try again.", null, true);
+    }
+  }
+
+  downloadAllBtn.onclick = downloadAllFiles;
+
+  // File search and sort
+  fileSearchInput.oninput = () => {
+    currentPage = 1;
+    renderFiles();
+  };
+
+  fileSort.onchange = () => {
+    currentPage = 1;
+    renderFiles();
+  };
+
+  // Update back button handler to fix year and semester not loading
+  backButton.onclick = () => {
+    if (currentFolder) {
+      // Navigate up one folder level
+      const parts = currentFolder.split('/');
+      parts.pop();
+      currentFolder = parts.join('/');
+      currentPage = 1;
+      renderFiles();
+      renderBreadcrumb();
+      updateBackButton();
+      const params = new URLSearchParams();
+      params.set('view', 'subject');
+      params.set('year', currentYear.year);
+      params.set('semester', currentSemester.name);
+      params.set('subject', currentSubject);
+      if (currentFolder) params.set('folder', currentFolder);
+      history.pushState({ view: 'subject', year: currentYear.year, semester: currentSemester.name, subject: currentSubject, folder: currentFolder }, '', `?${params.toString()}`);
+    } else if (subjectPage.style.display === "block") {
+      // Navigate back from subject page to subjects grid
+      navigationStack.pop();
+      const previous = navigationStack[navigationStack.length - 1];
+      if (previous.view === 'subjects') {
+        currentYear = previous.yearObj;
+        currentSemester = previous.semester;
+        openSemester(previous.semester, previous.yearObj);
+      } else if (previous.view === 'semesters') {
+        currentYear = previous.yearObj;
+        currentSemester = null;
+        openYear(previous.yearObj);
+      } else if (previous.view === 'years') {
+        currentYear = null;
+        currentSemester = null;
+        renderYears();
+      }
       db.ref("files").off();
       fileSearchInput.value = "";
-    };
-
-    fileSearchInput.addEventListener("input", () => {
+      currentSubject = null;
+      currentFolder = '';
+      fileData = [];
       currentPage = 1;
-      renderFiles();
-    });
-
-    fileSort.addEventListener("change", () => {
-      currentPage = 1;
-      renderFiles();
-    });
-
-    downloadAllBtn.addEventListener("click", () => {
-      if (fileData.length === 0) {
-        showToast("No files to download.");
-        return;
+      updateUploadSection();
+      renderBreadcrumb();
+      updateBackButton();
+      const params = new URLSearchParams();
+      params.set('view', previous.view);
+      if (previous.yearObj) params.set('year', previous.yearObj.year);
+      if (previous.semester) params.set('semester', previous.semester.name);
+      history.pushState({ view: 'previous.view', year: previous.yearObj?.year, semester: previous.semester?.name }, '', `?${params.toString()}`);
+    } else if (navigationStack.length > 1) {
+      // Navigate back through year/semester views
+      navigationStack.pop();
+      const previous = navigationStack[navigationStack.length - 1];
+      if (previous.view === 'years') {
+        currentYear = null;
+        currentSemester = null;
+        renderYears();
+      } else if (previous.view === 'semesters') {
+        currentYear = previous.yearObj;
+        currentSemester = null;
+        openYear(previous.yearObj);
+      } else if (previous.view === 'subjects') {
+        currentYear = previous.yearObj;
+        currentSemester = previous.semester;
+        openSemester(previous.semester, previous.yearObj);
       }
-      showToast("Downloading all files... (Simulated)");
-      fileData.forEach(file => {
-        const link = document.createElement("a");
-        link.href = file.url;
-        link.download = file.name;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      });
-    });
+      const params = new URLSearchParams();
+      params.set('view', previous.view);
+      if (previous.yearObj) params.set('year', previous.yearObj.year);
+      if (previous.semester) params.set('semester', previous.semester.name);
+      history.pushState({ view: previous.view, year: previous.yearObj?.year, semester: previous.semester?.name }, '', `?${params.toString()}`);
+    }
+    updateBackButton();
+  };
 
-    function showPreview(fileUrl, fileType) {
-      previewContent.innerHTML = "";
-      if (['png', 'jpg', 'jpeg'].includes(fileType)) {
-        previewContent.innerHTML = `<img src="${fileUrl}" class="preview-image" alt="File Preview">`;
-      } else if (fileType === 'pdf') {
-        previewContent.innerHTML = `<iframe src="${fileUrl}" class="preview-iframe"></iframe>`;
+  // Update popstate handler to ensure correct state restoration
+  window.addEventListener('popstate', () => {
+    const params = new URLSearchParams(window.location.search);
+    const view = params.get('view');
+    const year = params.get('year');
+    const semester = params.get('semester');
+    const subject = params.get('subject');
+    const folder = params.get('folder');
+
+    navigationStack = [{ view: 'years', render: renderYears }];
+
+    if (subject) {
+      const yearObj = categories.find(y => y.year === year);
+      const semesterObj = yearObj?.semesters.find(s => s.name === semester);
+      const subjectObj = semesterObj?.subjects.find(s => s.name === subject);
+      if (yearObj && semesterObj && subjectObj) {
+        currentYear = yearObj;
+        currentSemester = semesterObj;
+        currentSubject = subject;
+        currentFolder = folder || '';
+        navigationStack.push({ view: 'semesters', yearObj });
+        navigationStack.push({ view: 'subjects', semester: semesterObj, yearObj });
+        navigationStack.push({ view: 'subject', subject, imageUrl: subjectObj.image, semester: semesterObj, yearObj });
+        openSubject(subject, subjectObj.image, semesterObj, yearObj);
       } else {
-        showToast("Preview not supported for this file type.");
-        return;
+        currentYear = null;
+        currentSemester = null;
+        currentSubject = null;
+        renderYears();
       }
-      previewModal.classList.add('show');
+    } else if (semester && year) {
+      const yearObj = categories.find(y => y.year === year);
+      const semesterObj = yearObj?.semesters.find(s => s.name === semester);
+      if (yearObj && semesterObj) {
+        currentYear = yearObj;
+        currentSemester = semesterObj;
+        navigationStack.push({ view: 'semesters', yearObj });
+        navigationStack.push({ view: 'subjects', semester: semesterObj, yearObj });
+        openSemester(semesterObj, yearObj);
+      } else {
+        currentYear = null;
+        currentSemester = null;
+        renderYears();
+      }
+    } else if (year) {
+      const yearObj = categories.find(y => y.year === year);
+      if (yearObj) {
+        currentYear = yearObj;
+        currentSemester = null;
+        navigationStack.push({ view: 'semesters', yearObj });
+        openYear(yearObj);
+      } else {
+        currentYear = null;
+        currentSemester = null;
+        renderYears();
+      }
+    } else {
+      currentYear = null;
+      currentSemester = null;
+      currentSubject = null;
+      renderYears();
     }
+    updateBackButton();
+    renderBreadcrumb();
+  });
 
-    previewClose.addEventListener('click', () => {
-      previewModal.classList.remove('show');
+  // Handle clicks outside preview modal
+  previewModal.onclick = (e) => {
+    if (e.target === previewModal) {
+      previewModal.classList.remove("show");
       previewContent.innerHTML = "";
-    });
-
-    document.addEventListener('click', (e) => {
-      if (e.target === previewModal) {
-        previewModal.classList.remove('show');
-        previewContent.innerHTML = "";
-      }
-    });
-
-    function handleUploadSuccess(fileInfo) {
-      if (!currentSubject) {
-        showToast("Please select a subject before uploading.");
-        return;
-      }
-      
-      const currentUser = auth.currentUser;
-      if (!currentUser) {
-        showToast("Please sign in to upload files.");
-        return;
-      }
-      
-      db.ref("files").push({
-        subject: currentSubject,
-        url: fileInfo.secure_url,
-        name: fileInfo.original_filename + '.' + fileInfo.format,
-        uploadedAt: Date.now(),
-        uploaderId: currentUser.uid,
-        uploaderName: currentUser.displayName || "Anonymous",
-        uploaderEmail: currentUser.email,
-        publicId: fileInfo.public_id
-      }).then(() => {
-        console.log("File uploaded successfully");
-        showToast("File uploaded successfully!", () => {});
-        uploadProgress.classList.remove("active");
-        uploadProgress.textContent = "";
-      }).catch((error) => {
-        console.error("Error uploading file:", error);
-        showToast("Error uploading file. Please try again.");
-      });
+      previewContent.appendChild(previewClose);
     }
+  };
 
-    async function deleteFile(fileId, fileName, publicId) {
-      const currentUser = auth.currentUser;
-      if (!currentUser) {
-        showToast("Please sign in to delete files.");
-        return;
-      }
-
-      if (confirm(`Are you sure you want to delete "${fileName}"?`)) {
-        try {
-          // Delete from Firebase
-          await db.ref("files/" + fileId).remove();
-          
-          // Delete from Cloudinary
-          const response = await fetch('/api/delete', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ public_id: publicId })
-          });
-          
-          if (response.ok) {
-            console.log("File deleted successfully");
-            showToast("File deleted successfully!", () => {});
-          } else {
-            throw new Error("Failed to delete from Cloudinary");
-          }
-        } catch (error) {
-          console.error("Error deleting file:", error);
-          showToast("Error deleting file. Please try again.");
-        }
+  // Keyboard navigation for accessibility
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (previewModal.classList.contains('show')) {
+        previewClose.click();
+      } else if (folderModal.classList.contains('show')) {
+        folderModalCancel.click();
+      } else if (dropdownMenu.classList.contains('show')) {
+        dropdownMenu.classList.remove('show');
       }
     }
-  </script>
+  });
+
+  // Initialize
+  renderYears();
+
+  // Ensure initial URL state
+  history.replaceState({ view: 'years' }, '', '?view=years');
+</script>
 </body>
 </html>
