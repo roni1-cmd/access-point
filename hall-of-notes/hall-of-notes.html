@@ -1579,7 +1579,7 @@
     if (currentYear) {
       const separator = document.createElement('span');
       separator.className = 'breadcrumb-separator';
-      separator.textContent = ' / ';
+      separator.textContent = ' > ';
       breadcrumb.appendChild(separator);
 
       const yearLink = document.createElement('a');
@@ -1592,7 +1592,7 @@
     if (currentSemester) {
       const separator = document.createElement('span');
       separator.className = 'breadcrumb-separator';
-      separator.textContent = ' / ';
+      separator.textContent = ' > ';
       breadcrumb.appendChild(separator);
 
       const semesterLink = document.createElement('a');
@@ -1605,7 +1605,7 @@
     if (currentSubject) {
       const separator = document.createElement('span');
       separator.className = 'breadcrumb-separator';
-      separator.textContent = ' / ';
+      separator.textContent = ' > ';
       breadcrumb.appendChild(separator);
 
       const subjectLink = document.createElement('span');
@@ -1620,17 +1620,17 @@
       subjectRootLink.onclick = () => navigateToFolder('');
       subjectBreadcrumb.appendChild(subjectRootLink);
 
-      const parts = currentFolder.split('/');
+      const parts = currentFolder.split('>');
       let path = '';
       parts.forEach((part, index) => {
         if (part) {
           const separator = document.createElement('span');
           separator.className = 'breadcrumb-separator';
-          separator.textContent = ' / ';
+          separator.textContent = ' > ';
           subjectBreadcrumb.appendChild(separator);
-          
-          path += (path ? '/' : '') + part;
-          
+
+          path += (path ? '>' : '') + part;
+
           if (index === parts.length - 1) {
             const current = document.createElement('span');
             current.className = 'breadcrumb-current';
