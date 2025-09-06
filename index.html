@@ -19,12 +19,11 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-dark': '#353539',
-                        'green-dark': '#0e3521',
-                        'green-medium': '#006936',
-                        'green-light': '#5fb14c',
-                        'accent-yellow': '#f1ec33',
-                        'green-muted': '#4a7c59'
+                        'primary-dark': '#1a202c',
+                        'green-dark': '#276749',
+                        'green-medium': '#48bb78',
+                        'green-light': '#68d391',
+                        'accent-yellow': '#ecc94b'
                     },
                     fontFamily: {
                         'sans': ['Google Sans', 'sans-serif']
@@ -76,7 +75,6 @@
             transform: translateY(0);
         }
 
-        /* Smaller illustrations with reduced spacing to text content */
         .illustration-hero {
             width: 200px;
             height: 200px;
@@ -110,9 +108,122 @@
                 margin-bottom: 2.5rem;
             }
         }
+
+        .toast {
+            transition: all 0.3s ease-in-out;
+            transform: translateY(100px);
+            opacity: 0;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .desktop-dropdown {
+            transition: all 0.3s ease-in-out;
+            opacity: 0;
+            transform: translateY(10px);
+            display: none;
+        }
+
+        .desktop-dropdown.active {
+            opacity: 1;
+            transform: translateY(0);
+            display: block;
+        }
+
+        /* Loader styles */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 32, 44, 0.8); /* primary-dark with opacity */
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loader-overlay.active {
+            display: flex;
+        }
+
+        .loader {
+            position: relative;
+            font-size: 16px;
+            width: 5.5em;
+            height: 5.5em;
+        }
+
+        .loader:before {
+            content: '';
+            position: absolute;
+            transform: translate(-50%, -50%) rotate(45deg);
+            height: 100%;
+            width: 4px;
+            background: #48bb78; /* green-medium */
+            left: 50%;
+            top: 50%;
+        }
+
+        .loader:after {
+            content: '';
+            position: absolute;
+            left: 0.2em;
+            bottom: 0.18em;
+            width: 1em;
+            height: 1em;
+            background-color: #ecc94b; /* accent-yellow */
+            border-radius: 15%;
+            animation: rollingRock 2.5s cubic-bezier(.79, 0, .47, .97) infinite;
+        }
+
+        @keyframes rollingRock {
+            0% {
+                transform: translate(0, -1em) rotate(-45deg)
+            }
+            5% {
+                transform: translate(0, -1em) rotate(-50deg)
+            }
+            20% {
+                transform: translate(1em, -2em) rotate(47deg)
+            }
+            25% {
+                transform: translate(1em, -2em) rotate(45deg)
+            }
+            30% {
+                transform: translate(1em, -2em) rotate(40deg)
+            }
+            45% {
+                transform: translate(2em, -3em) rotate(137deg)
+            }
+            50% {
+                transform: translate(2em, -3em) rotate(135deg)
+            }
+            55% {
+                transform: translate(2em, -3em) rotate(130deg)
+            }
+            70% {
+                transform: translate(3em, -4em) rotate(217deg)
+            }
+            75% {
+                transform: translate(3em, -4em) rotate(220deg)
+            }
+            100% {
+                transform: translate(0, -1em) rotate(-225deg)
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans">
+    <!-- Loader Overlay -->
+    <div id="loaderOverlay" class="loader-overlay">
+        <div class="loader"></div>
+    </div>
+
     <header class="bg-white shadow-sm sticky top-0 z-40">
         <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
@@ -124,41 +235,88 @@
                     <button id="mobileMenuBtn" class="md:hidden p-2 rounded-md text-primary-dark hover:bg-gray-100">
                         <span class="material-icons">menu</span>
                     </button>
-                    <div class="hidden md:flex space-x-6">
-                        <a href="#" onclick="showPage('home')" class="nav-link text-primary-dark hover:text-green-medium transition-colors">Home</a>
-                        </a>
-                        <a href="/pages/about" class="text-primary-dark hover:text-green-medium transition-colors">About</a>
-                        <a href="/inquire/inquire" class="text-primary-dark hover:text-green-medium transition-colors">Message</a>
-                        <a href="/hall-of-notes/hall-of-notes" class="text-primary-dark hover:text-green-medium transition-colors">Notes</a>
-                        <a href="/pages/help" class="text-primary-dark hover:text-green-medium transition-colors">Help Center</a>
-                        <a href="/sprout" class="text-primary-dark hover:text-green-medium transition-colors">Sprout</a>
-                        <a href="/pages/faq" class="text-primary-dark hover:text-green-medium transition-colors">FAQs</a>
-                        <a href="/freedom-wall/login" class="text-primary-dark hover:text-green-medium transition-colors">Commons</a>
-                        <a href="/announcements" class="text-primary-dark hover:text-green-medium transition-colors">Announcements</a>
-                        </a>
+                    <div class="hidden md:flex space-x-6 items-center">
+                        <a href="#" onclick="showPageWithLoader('home')" class="nav-link text-primary-dark hover:text-green-medium transition-colors">Home</a>
+                        <!-- Information Dropdown -->
+                        <div class="relative">
+                            <button onclick="toggleDesktopDropdown('info')" class="desktop-dropdown-button text-primary-dark hover:text-green-medium transition-colors flex items-center">
+                                Information
+                                <span id="info-dropdown-icon-desktop" class="material-icons text-sm ml-1 transition-transform">expand_more</span>
+                            </button>
+                            <div id="info-desktop-dropdown" class="desktop-dropdown absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                                <a href="/pages/about" onclick="showLoaderAndRedirect('/pages/about')" class="block px-4 py-2 text-primary-dark hover:bg-gray-100 hover:text-green-medium transition-colors">About</a>
+                                <a href="/freedom-wall/login" onclick="showLoaderAndRedirect('/freedom-wall/login')" class="block px-4 py-2 text-primary-dark hover:bg-gray-100 hover:text-green-medium transition-colors">Commons</a>
+                            </div>
+                        </div>
+                        <!-- Tools Dropdown -->
+                        <div class="relative">
+                            <button onclick="toggleDesktopDropdown('tools')" class="desktop-dropdown-button text-primary-dark hover:text-green-medium transition-colors flex items-center">
+                                Tools
+                                <span id="tools-dropdown-icon-desktop" class="material-icons text-sm ml-1 transition-transform">expand_more</span>
+                            </button>
+                            <div id="tools-desktop-dropdown" class="desktop-dropdown absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                                <a href="/inquire/inquire" onclick="showLoaderAndRedirect('/inquire/inquire')" class="block px-4 py-2 text-primary-dark hover:bg-gray-100 hover:text-green-medium transition-colors">Message</a>
+                                <a href="/hall-of-notes/hall-of-notes" onclick="showLoaderAndRedirect('/hall-of-notes/hall-of-notes')" class="block px-4 py-2 text-primary-dark hover:bg-gray-100 hover:text-green-medium transition-colors">Notes</a>
+                            </div>
+                        </div>
+                        <!-- Support Dropdown -->
+                        <div class="relative">
+                            <button onclick="toggleDesktopDropdown('support')" class="desktop-dropdown-button text-primary-dark hover:text-green-medium transition-colors flex items-center">
+                                Support
+                                <span id="support-dropdown-icon-desktop" class="material-icons text-sm ml-1 transition-transform">expand_more</span>
+                            </button>
+                            <div id="support-desktop-dropdown" class="desktop-dropdown absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                                <a href="/pages/help" onclick="showLoaderAndRedirect('/pages/help')" class="block px-4 py-2 text-primary-dark hover:bg-gray-100 hover:text-green-medium transition-colors">Help Center</a>
+                                <a href="/pages/faq" onclick="showLoaderAndRedirect('/pages/faq')" class="block px-4 py-2 text-primary-dark hover:bg-gray-100 hover:text-green-medium transition-colors">FAQs</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
                 <div class="flex items-center space-x-2 lg:space-x-4">
-                    <button onclick="window.location.href='/pages/login'" class="bg-green-medium text-white px-3 py-2 lg:px-4 lg:py-2 rounded font-medium hover:bg-green-dark transition-colors text-sm lg:text-base">LOGIN</button>
+                    <button onclick="showLoaderAndRedirect('/pages/login')" class="bg-green-medium text-white px-3 py-2 lg:px-4 lg:py-2 rounded font-medium hover:bg-green-dark transition-colors text-sm lg:text-base">LOGIN</button>
                 </div>
             </div>
             
             <div id="mobileMenu" class="hidden md:hidden border-t border-gray-200 py-4">
                 <div class="flex flex-col space-y-3">
-                    <a href="#" onclick="showPage('home')" class="text-primary-dark hover:text-green-medium transition-colors">Home</a>
-                      <a href="/pages/about" class="text-primary-dark hover:text-green-medium transition-colors">About</a>
-                        <a href="/inquire/inquire" class="text-primary-dark hover:text-green-medium transition-colors">Message</a>
-                        <a href="/hall-of-notes/hall-of-notes" class="text-primary-dark hover:text-green-medium transition-colors">Notes</a>
-                        <a href="/pages/help" class="text-primary-dark hover:text-green-medium transition-colors">Help Center</a>
-                       <a href="/sprout" class="text-primary-dark hover:text-green-medium transition-colors">Sprout</a>
-                        <a href="/pages/faq" class="text-primary-dark hover:text-green-medium transition-colors">FAQs</a>
-                        <a href="/freedom-wall/login" class="text-primary-dark hover:text-green-medium transition-colors">Commons</a>
-                        <a href="/announcements" class="text-primary-dark hover:text-green-medium transition-colors">Announcements</a>
+                    <a href="#" onclick="showPageWithLoader('home')" class="text-primary-dark hover:text-green-medium transition-colors">Home</a>
+                    <div>
+                        <button onclick="toggleMobileDropdown('info')" class="w-full text-left text-primary-dark hover:text-green-medium transition-colors flex items-center justify-between">
+                            Information
+                            <span id="info-dropdown-icon" class="material-icons text-gray-600 transition-transform">expand_more</span>
+                        </button>
+                        <div id="info-dropdown" class="dropdown-content pl-4">
+                            <a href="/pages/about" onclick="showLoaderAndRedirect('/pages/about')" class="block py-2 text-primary-dark hover:text-green-medium transition-colors">About</a>
+                            <a href="/freedom-wall/login" onclick="showLoaderAndRedirect('/freedom-wall/login')" class="block py-2 text-primary-dark hover:text-green-medium transition-colors">Commons</a>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="toggleMobileDropdown('tools')" class="w-full text-left text-primary-dark hover:text-green-medium transition-colors flex items-center justify-between">
+                            Tools
+                            <span id="tools-dropdown-icon" class="material-icons text-gray-600 transition-transform">expand_more</span>
+                        </button>
+                        <div id="tools-dropdown" class="dropdown-content pl-4">
+                            <a href="/inquire/inquire" onclick="showLoaderAndRedirect('/inquire/inquire')" class="block py-2 text-primary-dark hover:text-green-medium transition-colors">Message</a>
+                            <a href="/hall-of-notes/hall-of-notes" onclick="showLoaderAndRedirect('/hall-of-notes/hall-of-notes')" class="block py-2 text-primary-dark hover:text-green-medium transition-colors">Notes</a>
+                        </div>
+                    </div>
+                    <div>
+                        <button onclick="toggleMobileDropdown('support')" class="w-full text-left text-primary-dark hover:text-green-medium transition-colors flex items-center justify-between">
+                            Support
+                            <span id="support-dropdown-icon" class="material-icons text-gray-600 transition-transform">expand_more</span>
+                        </button>
+                        <div id="support-dropdown" class="dropdown-content pl-4">
+                            <a href="/pages/help" onclick="showLoaderAndRedirect('/pages/help')" class="block py-2 text-primary-dark hover:text-green-medium transition-colors">Help Center</a>
+                            <a href="/pages/faq" onclick="showLoaderAndRedirect('/pages/faq')" class="block py-2 text-primary-dark hover:text-green-medium transition-colors">FAQs</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
     </header>
+
+    <div id="toastContainer" class="fixed bottom-4 right-4 z-50"></div>
 
     <div id="pageContainer">
         <div id="homePage" class="page-content">
@@ -167,8 +325,8 @@
                     <div class="slider-slide absolute inset-0 opacity-100 transition-opacity duration-500">
                         <div class="relative h-full cursor-pointer" onclick="redirectToPage('services')">
                             <img src="/src/hero.png" 
-                                 alt="Digital Services" 
-                                 class="w-full h-full object-cover">
+                                alt="Digital Services" 
+                                class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-r from-green-dark/80 to-transparent">
                                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
                                     <div class="text-white max-w-2xl">
@@ -188,8 +346,8 @@
                     <div class="slider-slide absolute inset-0 opacity-0 transition-opacity duration-500">
                         <div class="relative h-full cursor-pointer" onclick="redirectToPage('about')">
                             <img src="/src/hero2.png" 
-                                 alt="Community Engagement" 
-                                 class="w-full h-full object-cover">
+                                alt="Community Engagement" 
+                                class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-r from-primary-dark/80 to-transparent">
                                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
                                     <div class="text-white max-w-2xl">
@@ -209,8 +367,8 @@
                     <div class="slider-slide absolute inset-0 opacity-0 transition-opacity duration-500">
                         <div class="relative h-full cursor-pointer" onclick="redirectToPage('contact')">
                             <img src="/src/hero3.png" 
-                                 alt="Digital Office" 
-                                 class="w-full h-full object-cover">
+                                alt="Digital Office" 
+                                class="w-full h-full object-cover">
                             <div class="absolute inset-0 bg-gradient-to-r from-green-medium/80 to-transparent">
                                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
                                     <div class="text-white max-w-2xl">
@@ -240,27 +398,25 @@
                 </div>
             </section>
 
-            <!-- Restructured Just for you Section with illustration above title -->
             <section class="py-20 bg-white">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <img src="/src/person.png" 
-                         alt="Personalized Services Icon" 
-                         class="illustration-hero">
+                        alt="Personalized Services Icon" 
+                        class="illustration-hero">
                     <h2 class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-800 mb-8">Just for you</h2>
                     <div class="max-w-4xl mx-auto">
                         <p class="text-xl md:text-2xl text-gray-600 leading-relaxed">
-                          Just reach out through the platform to find guidance, answers, and a safe space where your concerns are heard. From tips and resources to anonymous sharing, everything is designed to make your student journey easier, connected, and supported—anytime, anywhere.
+                        Just reach out through the platform to find guidance, answers, and a safe space where your concerns are heard. From tips and resources to anonymous sharing, everything is designed to make your student journey easier, connected, and supported—anytime, anywhere.
                         </p>
                     </div>
                 </div>
             </section>
 
-            <!-- Restructured Security Section with illustration above title -->
             <section class="py-20 bg-gray-50">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <img src="/src/ill.png" 
-                         alt="Security Shield Icon" 
-                         class="illustration-hero">
+                        alt="Security Shield Icon" 
+                        class="illustration-hero">
                     <h2 class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-800 mb-8">
                         Keeping your information<br>
                         private, safe, and anonymous
@@ -271,7 +427,6 @@
                         </p>
                     </div>
 
-                    <!-- Desktop tabs (hidden on mobile) -->
                     <div class="hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                         <div class="text-center">
                             <button onclick="showSecurityTab('builtin')" id="builtin-tab" class="security-tab border-b-4 border-blue-500 pb-4 mb-8 w-full">
@@ -290,60 +445,57 @@
                         </div>
                     </div>
 
-                    <!-- Mobile dropdown (hidden on desktop) -->
                     <div class="lg:hidden mb-12">
                         <button onclick="toggleSecurityDropdown()" class="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                            <span id="security-dropdown-label" class="font-semibold text-gray-800">Built-in Support</span>
+                            <span id="security-dropdown-label" class="font-semibold text-gray-800">Built-in security</span>
                             <span id="security-dropdown-icon" class="material-icons text-gray-600 transition-transform">expand_more</span>
                         </button>
                         <div id="security-dropdown-content" class="dropdown-content bg-white border border-t-0 border-gray-300 rounded-b-lg">
-                            <button onclick="selectSecurityOption('builtin', 'Built-in security')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-200">Built-in support</button>
-                            <button onclick="selectSecurityOption('checkup', 'Security Checkup')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-200">Guidance Checkup</button>
-                            <button onclick="selectSecurityOption('password', 'Government Password Manager')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors">Access Point Companion</button>
+                            <button onclick="selectSecurityOption('builtin', 'Built-in security')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-200">Built-in security</button>
+                            <button onclick="selectSecurityOption('checkup', 'Security Checkup')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-200">Security Checkup</button>
+                            <button onclick="selectSecurityOption('password', 'Government Password Manager')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors">Government Password Manager</button>
                         </div>
                     </div>
 
-                    <!-- Security Content Panels -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                         <div>
                             <div id="builtin-content" class="security-content">
                                 <p class="text-gray-700 leading-relaxed text-lg">
-                                   Access Point automatically looks out for your well-being and keeps your concerns safe. Every feature is designed to give you a trusted space—whether it’s sharing emotions in the drop box, finding guidance for school processes, or connecting with reliable information you need.
+                                Access Point automatically looks out for your well-being and keeps your concerns safe. Every feature is designed to give you a trusted space—whether it’s sharing emotions in the drop box, finding guidance for school processes, or connecting with reliable information you need.
                                 </p>
                             </div>
                             <div id="checkup-content" class="security-content hidden">
                                 <p class="text-gray-700 leading-relaxed text-lg">
-                                  Guidance Checkup gives you step-by-step support to make your student journey smoother. From navigating enrollment and exams to managing stress and personal concerns, Access Point helps you find the right path with practical tips and caring advice.
+                                Guidance Checkup gives you step-by-step support to make your student journey smoother. From navigating enrollment and exams to managing stress and personal concerns, Access Point helps you find the right path with practical tips and caring advice.
                                 </p>
                             </div>
                             <div id="password-content" class="security-content hidden">
                                 <p class="text-gray-700 leading-relaxed text-lg">
-                                  The Access Point Companion helps you keep track of everything that matters in school life. It gives you a safe place to store your questions, share your worries, and access helpful resources when you need them—making it easier to feel supported and connected every day.
+                                The Access Point Companion helps you keep track of everything that matters in school life. It gives you a safe place to store your questions, share your worries, and access helpful resources when you need them—making it easier to feel supported and connected every day.
+                                </p>
                             </div>
                         </div>
                         <div class="flex justify-center">
                             <img src="/src/soc.png" 
-                                 alt="Security Features Dashboard" 
-                                 class="w-full max-w-md">
+                                alt="Security Features Dashboard" 
+                                class="w-full max-w-md">
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Restructured Ready to help Section with illustration above title -->
             <section class="py-20 bg-white">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
                     <img src="/src/help.png" 
-                         alt="Ready to Help Icon" 
-                         class="illustration-hero">
+                        alt="Ready to Help Icon" 
+                        class="illustration-hero">
                     <h2 class="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-800 mb-8">Ready to help</h2>
                     <div class="max-w-4xl mx-auto mb-16">
                         <p class="text-xl md:text-2xl text-gray-600 leading-relaxed">
-                           By connecting with the platform, you unlock features that make student life easier—like quick guides for enrollment, tips for exams, helpful resources, and even a safe space to share what you’re going through. Everything is here for you, anytime you need it.
+                        By connecting with the platform, you unlock features that make student life easier—like quick guides for enrollment, tips for exams, helpful resources, and even a safe space to share what you’re going through. Everything is here for you, anytime you need it.
                         </p>
                     </div>
 
-                    <!-- Desktop tabs (hidden on mobile) -->
                     <div class="hidden lg:grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
                         <div class="text-center">
                             <button onclick="showHelpTab('autofill')" id="autofill-tab" class="help-tab border-b-4 border-blue-500 pb-4 mb-8 w-full">
@@ -362,30 +514,28 @@
                         </div>
                     </div>
 
-                    <!-- Mobile dropdown (hidden on desktop) -->
                     <div class="lg:hidden mb-12">
                         <button onclick="toggleHelpDropdown()" class="w-full bg-white border border-gray-300 rounded-lg px-4 py-3 text-left flex items-center justify-between hover:bg-gray-50 transition-colors">
-                            <span id="help-dropdown-label" class="font-semibold text-gray-800">Quick Guides</span>
+                            <span id="help-dropdown-label" class="font-semibold text-gray-800">Autofill</span>
                             <span id="help-dropdown-icon" class="material-icons text-gray-600 transition-transform">expand_more</span>
                         </button>
                         <div id="help-dropdown-content" class="dropdown-content bg-white border border-t-0 border-gray-300 rounded-b-lg">
-                            <button onclick="selectHelpOption('autofill', 'Autofill')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-200">Quick Guides</button>
-                            <button onclick="selectHelpOption('better', 'Works better for you')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-200">Support that fits you</button>
-                            <button onclick="selectHelpOption('connected', 'Stay connected, across the internet')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors">Stay connected, wherever you are</button>
+                            <button onclick="selectHelpOption('autofill', 'Autofill')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-200">Autofill</button>
+                            <button onclick="selectHelpOption('better', 'Works better for you')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors border-b border-gray-200">Works better for you</button>
+                            <button onclick="selectHelpOption('connected', 'Stay connected, across the internet')" class="w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors">Stay connected, across the internet</button>
                         </div>
                     </div>
 
-                    <!-- Help Content Panels -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
                         <div>
                             <div id="autofill-content" class="help-content">
                                 <p class="text-gray-700 leading-relaxed text-lg">
-                                   Access Point helps you save time by giving you ready-made tips, step-by-step guides, and resources for school processes—so you don’t have to search everywhere for answers.
+                                Access Point helps you save time by giving you ready-made tips, step-by-step guides, and resources for school processes—so you don’t have to search everywhere for answers.
                                 </p>
                             </div>
                             <div id="better-content" class="help-content hidden">
                                 <p class="text-gray-700 leading-relaxed text-lg">
-                                   When you reach out, Access Point works better for you. Get personalized guidance, practical advice, and resources that match what you’re going through—helping you move forward with less stress.
+                                When you reach out, Access Point works better for you. Get personalized guidance, practical advice, and resources that match what you’re going through—helping you move forward with less stress.
                                 </p>
                             </div>
                             <div id="connected-content" class="help-content hidden">
@@ -396,8 +546,8 @@
                         </div>
                         <div class="flex justify-center">
                             <img src="/src/info.png" 
-                                 alt="Autofill and Connected Services" 
-                                 class="w-full max-w-md">
+                                alt="Autofill and Connected Services" 
+                                class="w-full max-w-md">
                         </div>
                     </div>
                 </div>
@@ -410,10 +560,9 @@
             <div class="mb-8">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Follow Us</h3>
                 <div class="flex space-x-4">
-                    <a href="https://www.facebook.com/ctudevcomofficial" class="w-auto h-10 bg-gray-100 rounded-full flex items-center px-4 hover:bg-gray-200 transition-colors">
+                    <a href="https://www.facebook.com/ctudevcomofficial" onclick="showLoaderAndRedirect('https://www.facebook.com/ctudevcomofficial')" class="w-auto h-10 bg-gray-100 rounded-full flex items-center px-4 hover:bg-gray-200 transition-colors">
                         <span class="material-icons text-gray-600 mr-2">facebook</span>
                         <span class="text-gray-700 font-medium">Guild of Development Communicators</span>
-                    </a>
                     </a>
                 </div>
             </div>
@@ -424,13 +573,13 @@
                         <div class="text-xl font-bold text-primary-dark mr-8">CTU-MC | BS-DEVCOM | ACCESS POINT</div>
                     </div>
                     <div class="flex flex-wrap gap-6 text-sm text-gray-600">
-                        <a href="/pages/ToS" class="hover:text-gray-800 transition-colors">Privacy and Terms</a>
-                        <a href="/error" class="hover:text-gray-800 transition-colors">About Access Point</a>
-                         <a href="/sitemap" class="hover:text-gray-800 transition-colors flex items-center">
+                        <a href="/pages/ToS" onclick="showLoaderAndRedirect('/pages/ToS')" class="hover:text-gray-800 transition-colors">Privacy and Terms</a>
+                        <a href="/error" onclick="showLoaderAndRedirect('/error')" class="hover:text-gray-800 transition-colors">About Access Point</a>
+                        <a href="/sitemap" onclick="showLoaderAndRedirect('/sitemap')" class="hover:text-gray-800 transition-colors flex items-center">
                             <span class="material-icons text-sm mr-1">add_location_alt</span>
                             Sitemap
                         </a>
-                        <a href="/contributors" class="hover:text-gray-800 transition-colors flex items-center">
+                        <a href="/contributors" onclick="showLoaderAndRedirect('/contributors')" class="hover:text-gray-800 transition-colors flex items-center">
                             <span class="material-icons text-sm mr-1">diversity_2</span>
                             Contributors
                         </a>
@@ -440,6 +589,34 @@
         </div>
     </footer>
     <script>
+        // Loader functions
+        function showLoader() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            loaderOverlay.classList.add('active');
+        }
+
+        function hideLoader() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            loaderOverlay.classList.remove('active');
+        }
+
+        function showLoaderAndRedirect(url) {
+            event.preventDefault(); // Prevent immediate navigation
+            showLoader();
+            setTimeout(() => {
+                hideLoader();
+                window.location.href = url;
+            }, 1000); // 1-second delay to show loader
+        }
+
+        function showPageWithLoader(pageName) {
+            showLoader();
+            setTimeout(() => {
+                hideLoader();
+                showPage(pageName);
+            }, 1000); // 1-second delay to show loader
+        }
+
         // Page navigation system
         function showPage(pageName) {
             const pages = document.querySelectorAll('.page-content');
@@ -453,17 +630,52 @@
             const navLinks = document.querySelectorAll('.nav-link');
             navLinks.forEach(link => link.classList.remove('text-green-medium', 'font-semibold'));
             
-            const activeLink = document.querySelector(`[onclick="showPage('${pageName}')"]`);
+            const activeLink = document.querySelector(`[onclick="showPageWithLoader('${pageName}')"]`);
             if (activeLink) {
                 activeLink.classList.add('text-green-medium', 'font-semibold');
             }
             
             console.log('Switched to page:', pageName);
+            closeDesktopDropdowns(); // Close dropdowns after navigation
         }
 
         document.addEventListener('DOMContentLoaded', function() {
             showPage('home');
+
+            // Close desktop dropdowns when clicking outside
+            document.addEventListener('click', function(event) {
+                const dropdowns = document.querySelectorAll('.desktop-dropdown');
+                const dropdownButtons = document.querySelectorAll('.desktop-dropdown-button');
+                let isDropdownOrButton = false;
+
+                dropdowns.forEach(dropdown => {
+                    if (dropdown.contains(event.target)) {
+                        isDropdownOrButton = true;
+                    }
+                });
+
+                dropdownButtons.forEach(button => {
+                    if (button.contains(event.target)) {
+                        isDropdownOrButton = true;
+                    }
+                });
+
+                if (!isDropdownOrButton) {
+                    closeDesktopDropdowns();
+                }
+            });
         });
+
+        function closeDesktopDropdowns() {
+            const dropdowns = document.querySelectorAll('.desktop-dropdown');
+            const icons = document.querySelectorAll('[id$="-dropdown-icon-desktop"]');
+            dropdowns.forEach(dropdown => {
+                dropdown.classList.remove('active');
+            });
+            icons.forEach(icon => {
+                icon.style.transform = 'rotate(0deg)';
+            });
+        }
 
         function showSecurityTab(tabName) {
             const contents = document.querySelectorAll('.security-content');
@@ -532,18 +744,43 @@
             const activeTab = document.getElementById(tabName + '-tab');
             if (activeTab) {
                 activeTab.classList.add('border-b-4', 'border-blue-500');
-                activeTab.querySelector('h3').classList.remove('text-gray-600');
-                activeTab.querySelector('h3').classList.add('text-gray-800');
+                tab.querySelector('h3').classList.remove('text-gray-600');
+                tab.querySelector('h3').classList.add('text-gray-800');
             }
+        }
+
+        function showToast(message) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = 'toast bg-green-medium text-white px-4 py-3 rounded-lg shadow-lg flex items-center';
+            toast.innerHTML = `
+                <span class="material-icons mr-2">info</span>
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" class="ml-auto text-white hover:text-gray-200">
+                    <span class="material-icons text-sm">close</span>
+                </button>
+            `;
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 3000);
         }
 
         function redirectToPage(page) {
             if (page === 'services') {
                 document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
             } else if (page === 'about') {
-                alert('About page - Coming soon!');
+                showToast('About page - Coming soon!');
             } else if (page === 'contact') {
-                alert('Contact page - Coming soon!');
+                showToast('Contact page - Coming soon!');
             }
         }
 
@@ -585,6 +822,42 @@
             document.getElementById('help-dropdown-content').classList.remove('active');
             document.getElementById('help-dropdown-icon').style.transform = 'rotate(0deg)';
             showHelpTab(tabName);
+        }
+
+        function toggleMobileDropdown(id) {
+            const dropdown = document.getElementById(`${id}-dropdown`);
+            const icon = document.getElementById(`${id}-dropdown-icon`);
+            
+            if (dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                dropdown.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function toggleDesktopDropdown(id) {
+            event.stopPropagation(); // Prevent click from bubbling to document
+            const dropdown = document.getElementById(`${id}-desktop-dropdown`);
+            const icon = document.getElementById(`${id}-dropdown-icon-desktop`);
+            const allDropdowns = document.querySelectorAll('.desktop-dropdown');
+            const allIcons = document.querySelectorAll('[id$="-dropdown-icon-desktop"]');
+            
+            allDropdowns.forEach(d => {
+                if (d !== dropdown) {
+                    d.classList.remove('active');
+                    document.getElementById(`${d.id.split('-')[0]}-dropdown-icon-desktop`).style.transform = 'rotate(0deg)';
+                }
+            });
+            
+            if (dropdown.classList.contains('active')) {
+                dropdown.classList.remove('active');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                dropdown.classList.add('active');
+                icon.style.transform = 'rotate(180deg)';
+            }
         }
 
         // Slider functionality
@@ -652,6 +925,3 @@
     </script>
 </body>
 </html>
-
-
-
