@@ -362,12 +362,20 @@
       margin-bottom: 16px;
       font-size: 14px;
       color: var(--text-secondary);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
     }
 
     .breadcrumb-item {
       color: var(--green-medium);
       cursor: pointer;
       text-decoration: none;
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .breadcrumb-item:hover {
@@ -375,12 +383,17 @@
     }
 
     .breadcrumb-separator {
-      margin: 0 8px;
+      margin: 0 4px;
+      flex-shrink: 0;
     }
 
     .breadcrumb-current {
       color: var(--text-primary);
       font-weight: 500;
+      max-width: 150px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .upload-section {
@@ -962,6 +975,35 @@
         flex-direction: column;
         gap: 8px;
       }
+
+      .breadcrumb {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+
+      .breadcrumb-item, .breadcrumb-current {
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .breadcrumb-separator {
+        display: none;
+      }
+
+      .breadcrumb-item::before {
+        content: '› ';
+        color: var(--text-secondary);
+        margin-right: 4px;
+      }
+
+      .breadcrumb-item:first-child::before {
+        content: none;
+      }
     }
 
     @media (max-width: 480px) {
@@ -992,6 +1034,10 @@
 
       .subject-description {
         font-size: 14px;
+      }
+
+      .breadcrumb {
+        font-size: 11px;
       }
     }
   </style>
@@ -1221,7 +1267,7 @@
     }
   });
 
-  // Categories structure with placeholder image for Second Semester
+  // Categories structure with new subjects and shuffled images
   const categories = [
     {
       year: "1st Year DevCom Materials",
@@ -1229,20 +1275,28 @@
         {
           name: "First Semester",
           subjects: [
-            { name: "PHYSICAL ACTIVITY TOWARDS HEALTH AND FITNESS", image: "/src/subject1.png" },
-            { name: "COMMUNICIATE, CULTURE & SOCIETY", image: "/src/subject2.png" },
-            { name: "INTERPERSONAL COMMUNICATION IN DEVELOPMENT", image: "/src/subject3.png" },
-            { name: "G.E.C.-THE CONTEMPORARY WORLD", image: "/src/subject4.png" },
-            { name: "PURPOSIVE COMMUNICATION", image: "/src/subject5.png" },
-            { name: "ETHICS", image: "/src/subject6.png" },
-            { name: "INTRODUCTION TO COMMUNICATION MEDIA", image: "/src/hero.png" }
+            { name: "Physical Education 1", image: "/src/subject1.png" },
+            { name: "Communicate, Culture, and Society", image: "/src/subject2.png" },
+            { name: "Interpersonal Communication in Development", image: "/src/subject3.png" },
+            { name: "G.E.C.-The Contemporary World", image: "/src/subject4.png" },
+            { name: "Purposive Communication", image: "/src/subject5.png" },
+            { name: "Ethics", image: "/src/subject6.png" },
+            { name: "Introduction to Communication Media", image: "/src/hero.png" }
           ],
           image: "/src/semester.png"
         },
         {
           name: "Second Semester",
-          subjects: [],
-          image: "/src/semester-placeholder.png" // Added placeholder image
+          subjects: [
+            { name: "Mathematics in the Modern World", image: "/src/subject6.png" },
+            { name: "Readings in Philippine History", image: "/src/subject1.png" },
+            { name: "Knowledge Management", image: "/src/subject2.png" },
+            { name: "Chemistry", image: "/src/subject3.png" },
+            { name: "Introduction in Development Communication", image: "/src/subject4.png" },
+            { name: "Culture & Psychology", image: "/src/subject5.png" },
+            { name: "Physical Education 2", image: "/src/hero.png" }
+          ],
+          image: "/src/semester-placeholder.png"
         }
       ],
       image: "/src/year1.png"
@@ -1252,13 +1306,30 @@
       semesters: [
         {
           name: "First Semester",
-          subjects: [],
+          subjects: [
+            { name: "Science, Technology & Society", image: "/src/subject2.png" },
+            { name: "Kontekstuwalisadong Komunikasyon sa Filipino", image: "/src/subject3.png" },
+            { name: "Social Psychology", image: "/src/subject4.png" },
+            { name: "Literatures for Development", image: "/src/subject5.png" },
+            { name: "Communication, Media Laws, and Ethics", image: "/src/subject6.png" },
+            { name: "Communication Theory", image: "/src/hero.png" },
+            { name: "Computer Graphics 1", image: "/src/subject1.png" },
+            { name: "Physical Education 3", image: "/src/subject2.png" }
+          ],
           image: "/src/semester.png"
         },
         {
           name: "Second Semester",
-          subjects: [],
-          image: "/src/semester-placeholder.png" // Added placeholder image
+          subjects: [
+            { name: "Physics", image: "/src/subject3.png" },
+            { name: "Functional English", image: "/src/subject4.png" },
+            { name: "Communication Science for Development with Emphasis on Cebuan Writing", image: "/src/subject5.png" },
+            { name: "Environmental Science", image: "/src/subject6.png" },
+            { name: "Computer Graphics 2", image: "/src/hero.png" },
+            { name: "Fundamentals in Community Broadcasting", image: "/src/subject1.png" },
+            { name: "Physical Education 4", image: "/src/subject2.png" }
+          ],
+          image: "/src/semester-placeholder.png"
         }
       ],
       image: "/src/year2.png"
@@ -1268,13 +1339,28 @@
       semesters: [
         {
           name: "First Semester",
-          subjects: [],
+          subjects: [
+            { name: "Advanced Community Broadcasting", image: "/src/subject4.png" },
+            { name: "Living in the IT Era", image: "/src/subject5.png" },
+            { name: "Communication Research", image: "/src/subject6.png" },
+            { name: "Cross Cultural Communication", image: "/src/hero.png" },
+            { name: "Radio Drama and Documentary", image: "/src/subject1.png" },
+            { name: "Descriptive and Inferential Statistics", image: "/src/subject2.png" },
+            { name: "Fundamentals in Development Journalism", image: "/src/subject3.png" }
+          ],
           image: "/src/semester.png"
         },
         {
           name: "Second Semester",
-          subjects: [],
-          image: "/src/semester-placeholder.png" // Added placeholder image
+          subjects: [
+            { name: "Community Media Management", image: "/src/subject5.png" },
+            { name: "Fundamentals of Video Production", image: "/src/subject6.png" },
+            { name: "Multimedia Based Learning Systems", image: "/src/hero.png" },
+            { name: "Communication Programs & Campaigns", image: "/src/subject1.png" },
+            { name: "Participatory Development Communication", image: "/src/subject2.png" },
+            { name: "Thesis 1", image: "/src/subject3.png" }
+          ],
+          image: "/src/semester-placeholder.png"
         }
       ],
       image: "/src/year3.png"
@@ -1284,13 +1370,23 @@
       semesters: [
         {
           name: "First Semester",
-          subjects: [],
+          subjects: [
+            { name: "Risk, Disaster and Humanitarian Communication", image: "/src/subject6.png" },
+            { name: "Understanding the Self", image: "/src/hero.png" },
+            { name: "Communication in the ASEAN Setting", image: "/src/subject1.png" },
+            { name: "Thesis 2", image: "/src/subject2.png" }
+          ],
           image: "/src/semester.png"
         },
         {
           name: "Second Semester",
-          subjects: [],
-          image: "/src/semester-placeholder.png" // Added placeholder image
+          subjects: [
+            { name: "The Entrepreneurial Mind", image: "/src/subject3.png" },
+            { name: "Art Appreciation", image: "/src/subject4.png" },
+            { name: "Life and Works of Rizal", image: "/src/subject5.png" },
+            { name: "E-commerce and Internet Marketing", image: "/src/subject6.png" }
+          ],
+          image: "/src/semester-placeholder.png"
         }
       ],
       image: "/src/year4.png"
@@ -1708,7 +1804,7 @@
     yearObj.semesters.forEach(semester => {
       const card = document.createElement("div");
       card.className = "semester-card";
-      card.style.backgroundImage = `url(${semester.image || '/src/semester.png'})`; // Use semester.image if available
+      card.style.backgroundImage = `url(${semester.image || '/src/semester.png'})`;
       card.innerHTML = `<div class="semester-title">${semester.name}</div>`;
       card.onclick = () => {
         card.style.transform = 'scale(0.98)';
@@ -1838,7 +1934,6 @@
       showToast("Error loading files. Please try again.", null, true);
     });
   }
-
   function renderFiles() {
     fileList.innerHTML = "";
     const query = fileSearchInput.value.trim().toLowerCase();
@@ -1937,7 +2032,7 @@
               </button>
               <button class="share-btn" data-file-url="${data.url}">
                 <svg class="share-icon" viewBox="0 0 24 24">
-                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2c0 .24.04.47.09.7L8.04 11.81C7.5 11.31 6.79 11 6 11c-1.1 0-2 .9-2 2s.9 2 2 2c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.23-.09.46-.09.7 0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2zm0-4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm-12 0c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2z"/>
+                  <path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/>
                 </svg>
                 Share
               </button>
@@ -1955,117 +2050,152 @@
       }
       
       fileList.appendChild(div);
-      
-      const deleteBtn = div.querySelector('.delete-btn');
-      if (deleteBtn) {
-        deleteBtn.addEventListener('click', function() {
-          const fileId = this.getAttribute('data-file-id');
-          const fileName = this.getAttribute('data-file-name');
-          deleteFile(fileId, fileName, data.isFolder);
-        });
-      }
+    });
 
-      if (!data.isFolder) {
-        const previewBtn = div.querySelector('.preview-btn');
-        previewBtn.addEventListener('click', function() {
-          const fileUrl = this.getAttribute('data-file-url');
-          const fileType = this.getAttribute('data-file-type');
-          showPreview(fileUrl, fileType);
-        });
+    // Add event listeners for action buttons
+    fileList.querySelectorAll('.preview-btn').forEach(btn => {
+      btn.onclick = () => {
+        const url = btn.dataset.fileUrl;
+        const fileType = btn.dataset.fileType;
+        previewFile(url, fileType);
+      };
+    });
 
-        const shareBtn = div.querySelector('.share-btn');
-        shareBtn.addEventListener('click', function() {
-          const fileUrl = this.getAttribute('data-file-url');
-          navigator.clipboard.writeText(fileUrl).then(() => {
-            showToast("Link copied to clipboard!");
-          }).catch(() => {
-            showToast("Failed to copy link.", null, true);
-          });
-        });
-      }
+    fileList.querySelectorAll('.share-btn').forEach(btn => {
+      btn.onclick = () => {
+        const url = btn.dataset.fileUrl;
+        shareFile(url);
+      };
+    });
+
+    fileList.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.onclick = () => {
+        const fileId = btn.dataset.fileId;
+        const fileName = btn.dataset.fileName;
+        deleteFile(fileId, fileName);
+      };
     });
 
     renderPagination(filteredFiles.length);
   }
 
   function renderPagination(totalItems) {
-    pagination.innerHTML = "";
+    pagination.innerHTML = '';
     const totalPages = Math.ceil(totalItems / itemsPerPage);
-    
+
     if (totalPages <= 1) return;
-    
-    const prevBtn = document.createElement("button");
-    prevBtn.className = "pagination-btn";
-    prevBtn.textContent = "Previous";
-    prevBtn.disabled = currentPage === 1;
-    prevBtn.classList.toggle("disabled", currentPage === 1);
+
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'pagination-btn';
+    prevBtn.textContent = 'Previous';
+    prevBtn.classList.toggle('disabled', currentPage === 1);
     prevBtn.onclick = () => {
       if (currentPage > 1) {
         currentPage--;
         renderFiles();
+        updateURL();
       }
     };
     pagination.appendChild(prevBtn);
 
-    const nextBtn = document.createElement("button");
-    nextBtn.className = "pagination-btn";
-    nextBtn.textContent = "Next";
-    nextBtn.disabled = currentPage === totalPages;
-    nextBtn.classList.toggle("disabled", currentPage === totalPages);
+    const pageInfo = document.createElement('span');
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    pagination.appendChild(pageInfo);
+
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'pagination-btn';
+    nextBtn.textContent = 'Next';
+    nextBtn.classList.toggle('disabled', currentPage === totalPages);
     nextBtn.onclick = () => {
       if (currentPage < totalPages) {
         currentPage++;
         renderFiles();
+        updateURL();
       }
     };
     pagination.appendChild(nextBtn);
   }
 
-  function showPreview(fileUrl, fileType) {
-    previewContent.innerHTML = "";
-    previewContent.appendChild(previewClose);
-    
-    if (["png", "jpg", "jpeg"].includes(fileType)) {
-      const img = document.createElement("img");
-      img.src = fileUrl;
-      img.className = "preview-image";
-      img.onerror = () => showToast("Error loading image preview.", null, true);
-      previewContent.appendChild(img);
-      previewModal.classList.add("show");
-    } else if (fileType === "pdf") {
-      const iframe = document.createElement("iframe");
-      iframe.src = `https://docs.google.com/viewer?url=${encodeURIComponent(fileUrl)}&embedded=true`;
-      iframe.className = "preview-iframe";
-      iframe.onerror = () => showToast("Error loading PDF preview.", null, true);
-      previewContent.appendChild(iframe);
-      previewModal.classList.add("show");
+  function updateURL() {
+    const params = new URLSearchParams();
+    params.set('view', subjectPage.style.display === 'block' ? 'subject' : navigationStack[navigationStack.length - 1].view);
+    if (currentYear) params.set('year', currentYear.year);
+    if (currentSemester) params.set('semester', currentSemester.name);
+    if (currentSubject) params.set('subject', currentSubject);
+    if (currentFolder) params.set('folder', currentFolder);
+    if (currentPage > 1) params.set('page', currentPage);
+    history.pushState({
+      view: params.get('view'),
+      year: currentYear?.year,
+      semester: currentSemester?.name,
+      subject: currentSubject,
+      folder: currentFolder,
+      page: currentPage
+    }, '', `?${params.toString()}`);
+  }
+
+  function previewFile(url, fileType) {
+    previewContent.innerHTML = `<button class="preview-close" id="previewClose">×</button>`;
+    const closeBtn = previewContent.querySelector('#previewClose');
+    closeBtn.onclick = () => {
+      previewModal.classList.remove('show');
+      previewContent.innerHTML = `<button class="preview-close" id="previewClose">×</button>`;
+    };
+
+    const previewableImages = ['png', 'jpg', 'jpeg', 'gif', 'bmp'];
+    const previewableDocs = ['pdf'];
+
+    if (previewableImages.includes(fileType)) {
+      const img = document.createElement('img');
+      img.src = url;
+      img.className = 'preview-image';
+      previewContent.insertBefore(img, closeBtn);
+    } else if (previewableDocs.includes(fileType)) {
+      const iframe = document.createElement('iframe');
+      iframe.src = url;
+      iframe.className = 'preview-iframe';
+      previewContent.insertBefore(iframe, closeBtn);
     } else {
-      showToast("Preview not available for this file type.");
+      showToast("This file type cannot be previewed.");
+      return;
+    }
+
+    previewModal.classList.add('show');
+  }
+
+  function shareFile(url) {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Share File from Access Point',
+        url: url
+      }).catch(error => {
+        console.error('Error sharing:', error);
+        showToast("Error sharing file.", null, true);
+      });
+    } else {
+      navigator.clipboard.writeText(url).then(() => {
+        showToast("File URL copied to clipboard!");
+      }).catch(error => {
+        console.error('Error copying URL:', error);
+        showToast("Error copying URL.", null, true);
+      });
     }
   }
 
-  previewClose.onclick = () => {
-    previewModal.classList.remove("show");
-    previewContent.innerHTML = "";
-    previewContent.appendChild(previewClose);
-  };
-
-  async function deleteFile(fileId, fileName, isFolder) {
+  async function deleteFile(fileId, fileName) {
     if (!auth.currentUser) {
       showToast("Please sign in to delete files.");
       return;
     }
 
-    const itemType = isFolder ? "folder" : "file";
-    if (confirm(`Are you sure you want to delete the ${itemType} "${fileName}"?`)) {
-      try {
-        // Only delete the file reference from Firebase
-        await db.ref(`files/${fileId}`).remove();
-        showToast(`${itemType.charAt(0).toUpperCase() + itemType.slice(1)} "${fileName}" deleted successfully!`);
-      } catch (error) {
-        console.error(`Error deleting ${itemType}:`, error);
-        showToast(`Error deleting ${itemType} "${fileName}". Please try again.`, null, true);
-      }
+    if (!confirm(`Are you sure you want to delete "${fileName}"?`)) return;
+
+    try {
+      await db.ref(`files/${fileId}`).remove();
+      showToast(`"${fileName}" deleted successfully!`);
+    } catch (error) {
+      console.error("Error deleting file:", error);
+      showToast("Error deleting file. Please try again.", null, true);
     }
   }
 
@@ -2075,39 +2205,40 @@
       return;
     }
 
+    showToast("Preparing download... This may take a moment.");
     const zip = new JSZip();
-    const filteredFiles = fileData.filter(file => !file.isFolder && (file.folder || '') === currentFolder);
-    
-    if (filteredFiles.length === 0) {
-      showToast("No files available to download.");
+    const folder = zip.folder(currentSubject);
+
+    const filesToDownload = fileData.filter(file => !file.isFolder && (!currentFolder || file.folder === currentFolder));
+
+    if (filesToDownload.length === 0) {
+      showToast("No files available to download.", null, true);
       return;
     }
 
-    showToast("Preparing download...");
     try {
-      for (const file of filteredFiles) {
+      for (const file of filesToDownload) {
         const response = await fetch(file.url);
         const blob = await response.blob();
-        zip.file(file.name, blob);
+        folder.file(file.name, blob);
       }
 
-      const content = await zip.generateAsync({ type: "blob" });
-      const url = window.URL.createObjectURL(content);
-      const a = document.createElement("a");
+      const content = await zip.generateAsync({ type: 'blob' });
+      const url = URL.createObjectURL(content);
+      const a = document.createElement('a');
       a.href = url;
-      a.download = `${currentSubject}${currentFolder ? '_' + currentFolder.replace('/', '_') : ''}_files.zip`;
+      a.download = `${currentSubject}${currentFolder ? '_' + currentFolder.replace('/', '_') : ''}.zip`;
       a.click();
-      window.URL.revokeObjectURL(url);
+      URL.revokeObjectURL(url);
       showToast("Files downloaded successfully!");
     } catch (error) {
       console.error("Error downloading files:", error);
-      showToast("Error downloading files. Please try again.", null, true);
+      showToast("Error downloading files.", null, true);
     }
   }
 
   downloadAllBtn.onclick = downloadAllFiles;
 
-  // File search and sort
   fileSearchInput.oninput = () => {
     currentPage = 1;
     renderFiles();
@@ -2118,10 +2249,8 @@
     renderFiles();
   };
 
-  // Update back button handler to fix year and semester not loading
   backButton.onclick = () => {
     if (currentFolder) {
-      // Navigate up one folder level
       const parts = currentFolder.split('/');
       parts.pop();
       currentFolder = parts.join('/');
@@ -2129,163 +2258,83 @@
       renderFiles();
       renderBreadcrumb();
       updateBackButton();
-      const params = new URLSearchParams();
-      params.set('view', 'subject');
-      params.set('year', currentYear.year);
-      params.set('semester', currentSemester.name);
-      params.set('subject', currentSubject);
-      if (currentFolder) params.set('folder', currentFolder);
-      history.pushState({ view: 'subject', year: currentYear.year, semester: currentSemester.name, subject: currentSubject, folder: currentFolder }, '', `?${params.toString()}`);
-    } else if (subjectPage.style.display === "block") {
-      // Navigate back from subject page to subjects grid
-      navigationStack.pop();
-      const previous = navigationStack[navigationStack.length - 1];
-      if (previous.view === 'subjects') {
-        currentYear = previous.yearObj;
-        currentSemester = previous.semester;
-        openSemester(previous.semester, previous.yearObj);
-      } else if (previous.view === 'semesters') {
-        currentYear = previous.yearObj;
-        currentSemester = null;
-        openYear(previous.yearObj);
-      } else if (previous.view === 'years') {
-        currentYear = null;
-        currentSemester = null;
-        renderYears();
-      }
-      db.ref("files").off();
-      fileSearchInput.value = "";
-      currentSubject = null;
-      currentFolder = '';
-      fileData = [];
-      currentPage = 1;
-      updateUploadSection();
-      renderBreadcrumb();
-      updateBackButton();
-      const params = new URLSearchParams();
-      params.set('view', previous.view);
-      if (previous.yearObj) params.set('year', previous.yearObj.year);
-      if (previous.semester) params.set('semester', previous.semester.name);
-      history.pushState({ view: 'previous.view', year: previous.yearObj?.year, semester: previous.semester?.name }, '', `?${params.toString()}`);
+      updateURL();
     } else if (navigationStack.length > 1) {
-      // Navigate back through year/semester views
       navigationStack.pop();
       const previous = navigationStack[navigationStack.length - 1];
-      if (previous.view === 'years') {
-        currentYear = null;
-        currentSemester = null;
-        renderYears();
-      } else if (previous.view === 'semesters') {
-        currentYear = previous.yearObj;
-        currentSemester = null;
-        openYear(previous.yearObj);
-      } else if (previous.view === 'subjects') {
-        currentYear = previous.yearObj;
-        currentSemester = previous.semester;
-        openSemester(previous.semester, previous.yearObj);
-      }
-      const params = new URLSearchParams();
-      params.set('view', previous.view);
-      if (previous.yearObj) params.set('year', previous.yearObj.year);
-      if (previous.semester) params.set('semester', previous.semester.name);
-      history.pushState({ view: previous.view, year: previous.yearObj?.year, semester: previous.semester?.name }, '', `?${params.toString()}`);
+      previous.render();
+      updateBackButton();
+      updateURL();
     }
-    updateBackButton();
   };
 
-  // Update popstate handler to ensure correct state restoration
-  window.addEventListener('popstate', () => {
-    const params = new URLSearchParams(window.location.search);
-    const view = params.get('view');
-    const year = params.get('year');
-    const semester = params.get('semester');
-    const subject = params.get('subject');
-    const folder = params.get('folder');
+  window.onpopstate = (event) => {
+    const state = event.state || {};
+    currentPage = parseInt(state.page) || 1;
 
-    navigationStack = [{ view: 'years', render: renderYears }];
-
-    if (subject) {
-      const yearObj = categories.find(y => y.year === year);
-      const semesterObj = yearObj?.semesters.find(s => s.name === semester);
-      const subjectObj = semesterObj?.subjects.find(s => s.name === subject);
-      if (yearObj && semesterObj && subjectObj) {
-        currentYear = yearObj;
-        currentSemester = semesterObj;
-        currentSubject = subject;
-        currentFolder = folder || '';
-        navigationStack.push({ view: 'semesters', yearObj });
-        navigationStack.push({ view: 'subjects', semester: semesterObj, yearObj });
-        navigationStack.push({ view: 'subject', subject, imageUrl: subjectObj.image, semester: semesterObj, yearObj });
-        openSubject(subject, subjectObj.image, semesterObj, yearObj);
-      } else {
-        currentYear = null;
-        currentSemester = null;
-        currentSubject = null;
-        renderYears();
-      }
-    } else if (semester && year) {
-      const yearObj = categories.find(y => y.year === year);
-      const semesterObj = yearObj?.semesters.find(s => s.name === semester);
-      if (yearObj && semesterObj) {
-        currentYear = yearObj;
-        currentSemester = semesterObj;
-        navigationStack.push({ view: 'semesters', yearObj });
-        navigationStack.push({ view: 'subjects', semester: semesterObj, yearObj });
-        openSemester(semesterObj, yearObj);
-      } else {
-        currentYear = null;
-        currentSemester = null;
-        renderYears();
-      }
-    } else if (year) {
-      const yearObj = categories.find(y => y.year === year);
+    if (state.view === 'years') {
+      navigationStack = [{ view: 'years', render: renderYears }];
+      renderYears();
+    } else if (state.view === 'semesters' && state.year) {
+      const yearObj = categories.find(y => y.year === state.year);
       if (yearObj) {
         currentYear = yearObj;
-        currentSemester = null;
-        navigationStack.push({ view: 'semesters', yearObj });
+        navigationStack = [
+          { view: 'years', render: renderYears },
+          { view: 'semesters', yearObj, render: () => openYear(yearObj) }
+        ];
         openYear(yearObj);
       } else {
-        currentYear = null;
-        currentSemester = null;
+        renderYears();
+      }
+    } else if (state.view === 'subjects' && state.year && state.semester) {
+      const yearObj = categories.find(y => y.year === state.year);
+      const semester = yearObj?.semesters.find(s => s.name === state.semester);
+      if (yearObj && semester) {
+        currentYear = yearObj;
+        currentSemester = semester;
+        navigationStack = [
+          { view: 'years', render: renderYears },
+          { view: 'semesters', yearObj, render: () => openYear(yearObj) },
+          { view: 'subjects', semester, yearObj, render: () => openSemester(semester, yearObj) }
+        ];
+        openSemester(semester, yearObj);
+      } else {
+        renderYears();
+      }
+    } else if (state.view === 'subject' && state.year && state.semester && state.subject) {
+      const yearObj = categories.find(y => y.year === state.year);
+      const semester = yearObj?.semesters.find(s => s.name === state.semester);
+      const subjectObj = semester?.subjects.find(s => s.name === state.subject);
+      if (yearObj && semester && subjectObj) {
+        currentYear = yearObj;
+        currentSemester = semester;
+        currentSubject = state.subject;
+        currentFolder = state.folder || '';
+        navigationStack = [
+          { view: 'years', render: renderYears },
+          { view: 'semesters', yearObj, render: () => openYear(yearObj) },
+          { view: 'subjects', semester, yearObj, render: () => openSemester(semester, yearObj) },
+          { view: 'subject', subject: state.subject, imageUrl: subjectObj.image, semester, yearObj, render: () => openSubject(state.subject, subjectObj.image, semester, yearObj) }
+        ];
+        openSubject(state.subject, subjectObj.image, semester, yearObj);
+      } else {
         renderYears();
       }
     } else {
-      currentYear = null;
-      currentSemester = null;
-      currentSubject = null;
       renderYears();
-    }
-    updateBackButton();
-    renderBreadcrumb();
-  });
-
-  // Handle clicks outside preview modal
-  previewModal.onclick = (e) => {
-    if (e.target === previewModal) {
-      previewModal.classList.remove("show");
-      previewContent.innerHTML = "";
-      previewContent.appendChild(previewClose);
     }
   };
 
-  // Keyboard navigation for accessibility
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (previewModal.classList.contains('show')) {
-        previewClose.click();
-      } else if (folderModal.classList.contains('show')) {
-        folderModalCancel.click();
-      } else if (dropdownMenu.classList.contains('show')) {
-        dropdownMenu.classList.remove('show');
-      }
-    }
-  });
-
-  // Initialize
+  // Initial render
   renderYears();
 
-  // Ensure initial URL state
-  history.replaceState({ view: 'years' }, '', '?view=years');
+  // Handle initial URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialView = urlParams.get('view');
+  if (initialView) {
+    window.dispatchEvent(new PopStateEvent('popstate', { state: Object.fromEntries(urlParams) }));
+  }
 </script>
 </body>
 </html>
